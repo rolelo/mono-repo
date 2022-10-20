@@ -19,7 +19,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "REACT_APP_ENV=dev craco start",
+    "start": "PORT=3000 PORTREACT_APP_ENV=dev HTTPS=true craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject"
