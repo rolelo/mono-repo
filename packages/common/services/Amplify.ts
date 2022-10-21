@@ -59,10 +59,8 @@ async function resendConfirmationCode(email: string) {
 }
 
 async function verifyUser() {
-  // const user = await Auth.currentSession();
-  // console.log(user);
+  const user = await Auth.currentSession();
   const ui = await Auth.currentUserInfo();
-  console.log(ui);
   userInfo.next({ ...ui.attributes });
 
   return user.getIdToken().getJwtToken();
