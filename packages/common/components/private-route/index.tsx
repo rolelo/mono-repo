@@ -17,7 +17,7 @@ const PrivateRoute: React.FC = () => {
     },
     onError: () => {
       if (!location.pathname.includes('/auth')) {
-        navigator('/auth/login');
+        // window.location.href = "https://localhost:3000/auth/login"
       }
     },
   });
