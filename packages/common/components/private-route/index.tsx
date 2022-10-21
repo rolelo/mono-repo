@@ -5,19 +5,17 @@ import Amplify, { UserAttributes } from 'common/services/Amplify';
 
 export const UserInformationContext = React.createContext<UserAttributes | null>(null);
 
-const PrivateRoute: React.FC = () => {
+type Props = {
+  redirectUrl?: string
+}
+const PrivateRoute: React.FC<Props> = ({ redirectUrl }) => {
   const [userAttributes, setUserAttributes] = React.useState<UserAttributes | null>(null);
   const navigator = useNavigate();
   const location = useLocation();
   const { mutate } = useMutation(() => Amplify.verifyUser(), {
-    onSuccess: () => {
-      if (location.pathname === '/') {
-        navigator('/dashboard');
-      }
-    },
     onError: () => {
       if (!location.pathname.includes('/auth')) {
-        window.location.href = "https://localhost:3000/auth/login"
+        window.location.href = `https://localhost:3000/auth/login?redirectUrl=${redirectUrl}`
       }
     },
   });

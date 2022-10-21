@@ -38,10 +38,6 @@ const Auth: React.FC = () => {
     });
     const userSignedInSubscription = Amplify.userSignedIn.subscribe((b) => {
       if (b === false) navigate('/auth/login');
-      if (b === true) {
-        Amplify.userSignedIn.next(null);
-        navigate('/dashboard');
-      }
     });
     return () => {
       subscription.unsubscribe();

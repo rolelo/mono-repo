@@ -7,7 +7,7 @@ import React from 'react';
 import GoogleButton from 'react-google-button';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const CustomForm = styled('form')({
@@ -35,9 +35,14 @@ type TLogin = {
 }
 
 const Login: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const mutation = useMutation(({ email, password }: TLogin) => Amplify.login(email, password), {
     onSuccess: () => {
       toast.success('Successfully logged in');
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUrl = urlParams.get('redirectUrl');
+      console.log(searchParams, window.location.pathname);
+      if(redirectUrl) window.location.href = redirectUrl;
     },
     onError: (error) => {
       toast.error(error instanceof Error ? error.message : 'Login Error');

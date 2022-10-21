@@ -6,7 +6,7 @@ const Routes = () => {
   const element = useRoutes([
     {
       path: '/',
-      element: <PrivateRoute />,
+      element: <PrivateRoute redirectUrl="https://localhost:3001" />,
       children: [{
         path: '/',
         element: <DashboardLayout />,
