@@ -4,7 +4,13 @@ const awsExports = {
   Auth: {
     userPoolId: environmentVars.REACT_APP_COGNITO.poolId,
     userPoolWebClientId: environmentVars.REACT_APP_COGNITO.clientId,
-    storage: environmentVars.REACT_APP_COGNITO.storage,
+    cookieStorage: {
+      domain: 'localhost', //localhost or .<domain>.com
+      path: "/",
+      expires: 365,
+      sameSite: "strict",
+      secure: false,
+    },
   },
 };
 
