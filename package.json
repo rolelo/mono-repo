@@ -1,5 +1,5 @@
 {
-  "name": "fe-monorepo",
+  "name": "monorepo",
   "private": true,
   "devDependencies": {
     "lerna": "^6.0.1"

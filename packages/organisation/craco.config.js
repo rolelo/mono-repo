@@ -1,7 +1,7 @@
 const { getLoader, loaderByName } = require("@craco/craco");
 
 const packages = [];
-packages.push("/Users/amir/projects/rolelo/fe-monorepo/packages/common");
+packages.push("/Users/amir/projects/rolelo/monorepo/packages/common");
 
 module.exports = {
   webpack: {
