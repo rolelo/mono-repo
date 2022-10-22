@@ -11,7 +11,7 @@ import {CognitoJwtVerifier} from 'aws-jwt-verify/cognito-verifier';
 import mongoose from 'mongoose';
 import {makeExecutableSchema} from '@graphql-tools/schema';
 import * as resolvers from './resolvers';
-import {Context} from './models';
+import {Context} from '../../common/models';
 
 const {loadFiles} = require('@graphql-tools/load-files');
 const cors = require('cors');

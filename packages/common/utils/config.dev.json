@@ -4,5 +4,6 @@
     "clientId": "5t5ggnle0r2p29g8tv9r1p9cd3",
     "storage": "localStorage"
   },
-  "SERVER_URL": "http://localhost:8080/graphql"
+  "SERVER_URL": "http://localhost:8080/graphql",
+  "S3_URL": "https://rolelo-s3stack-rolelepublica15da819-1u1mmpqwpvjc6.s3.eu-west-1.amazonaws.com/"
 }

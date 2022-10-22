@@ -4,8 +4,8 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
-    "dev": "nodemon",
-    "start": "ts-node src/app.ts",
+    "start": "nodemon",
+    "start-tsc": "ts-node src/app.ts",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [],

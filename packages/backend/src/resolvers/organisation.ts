@@ -1,4 +1,4 @@
-import {Context, CreateOrganisationInput, Organisation, User} from '../models';
+import {Context, CreateOrganisationInput, Organisation, User} from '../../../common/models';
 import {v4 as uuidv4} from 'uuid';
 
 export const resolvers = {

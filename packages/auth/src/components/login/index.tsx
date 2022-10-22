@@ -41,7 +41,6 @@ const Login: React.FC = () => {
       toast.success('Successfully logged in');
       const urlParams = new URLSearchParams(window.location.search);
       const redirectUrl = urlParams.get('redirectUrl');
-      console.log(searchParams, window.location.pathname);
       if(redirectUrl) window.location.href = redirectUrl;
     },
     onError: (error) => {

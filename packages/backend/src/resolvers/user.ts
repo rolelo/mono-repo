@@ -1,4 +1,4 @@
-import {Context, IOrganisation, IUser, Organisation, User} from '../models';
+import {Context, IOrganisation, IUser, Organisation, User} from '../../../common/models';
 
 export const resolvers = {
   Query: {
