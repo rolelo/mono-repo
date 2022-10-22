@@ -1,22 +1,22 @@
 import PrivateRoute from "common/components/private-route";
 import { useRoutes } from 'react-router-dom';
 import DashboardLayout from "../dashboard/layout";
+import Organisation from "../organisation";
 
 const Routes = () => {
   const element = useRoutes([
     {
       path: '/',
-      element: <PrivateRoute redirectUrl="https://localhost:3001" />,
+      element: <PrivateRoute />,
       children: [{
         path: '/',
         element: <DashboardLayout />,
         children: [{
-          path: 'dashboard',
-          index: true,
-          element: <h2>Hello World</h2>,
+          path: 'organisation',
+          element: <Organisation />,
         }],
       }],
-    },
+    }
   ]);
   return element;
 };

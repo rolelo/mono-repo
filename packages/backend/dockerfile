@@ -1,0 +1,8 @@
+FROM node:18-alpine
+
+#create app directory
+WORKDIR /app
+
+EXPOSE 8080
+
+CMD ["npm", "run", "start"];
