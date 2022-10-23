@@ -1,5 +1,5 @@
 import {model, Model, Schema} from 'mongoose';
-import {IUser} from './User';
+import {IUser, User} from './User';
 
 export interface CreateOrganisationInput {
   name: string,
@@ -8,6 +8,26 @@ export interface CreateOrganisationInput {
   companyDescription: string,
   email: string,
   totalPositions: number,
+}
+
+export interface CreateOrganisation {
+  name: string;
+  website: string;
+  companyLogo: string;
+  companyDescription: string;
+  email: string;
+}
+
+export interface Organisation {
+  _id: string;
+  admin: User;
+  name: string;
+  website: string;
+  companyLogo: string;
+  companyDescription: string;
+  email: string;
+  totalPositions: number;
+  createdDate: string;
 }
 
 export interface IOrganisation {

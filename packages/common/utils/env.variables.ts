@@ -22,7 +22,7 @@ const environmentVars = {
     clientId: env.REACT_APP_COGNITO.clientId,
   },
   lambdaUrl: env.lambdaUrl,
-  s3BucketUrl: env.s3BucketUrl,
+  s3BucketUrl: env.S3_URL,
   serverUrl: env.SERVER_URL,
   serverUrlBase: env.SERVER_URL_BASE
 };

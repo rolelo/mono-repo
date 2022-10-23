@@ -1,4 +1,5 @@
 import {model, Model, Schema} from 'mongoose';
+import { Organisation } from './Organisation';
 
 export interface IUser {
   _id: string;
@@ -6,6 +7,13 @@ export interface IUser {
   name: string;
   phoneNumber?: string;
   organisationIds: string[];
+}
+
+export interface User {
+  name: string
+  email: string
+  phoneNumber: string
+  organisations: Organisation[]
 }
 
 const userSchema = new Schema<IUser>({
