@@ -82,10 +82,10 @@ const ImageUpload: React.FC<Props> = ({
         sx={{
           width: '110px',
           height: '110px',
-          backgroundColor: '#dbdbdb52',
           borderRadius: '50%',
           display: 'flex',
           flexDirection: 'column',
+          border: '2px solid black',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
@@ -96,8 +96,8 @@ const ImageUpload: React.FC<Props> = ({
           src={imageUrl || EmptyProfileImage}
           alt="Profile"
           style={{
-            width: '130px',
-            height: '130px',
+            width: '110px',
+            height: '110px',
             position: 'absolute',
             borderRadius: '50%',
           }}
