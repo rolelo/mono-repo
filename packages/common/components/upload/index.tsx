@@ -1,15 +1,14 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-  Box, Button, CircularProgress, styled,
+  Box, Button, CircularProgress, styled
 } from '@mui/material';
-import React, { useRef } from 'react';
+import React from 'react';
+import { gql, useMutation } from '@apollo/client';
+import axios from 'axios';
 //@ts-ignore
 import EmptyProfileImage from 'common/logo/empty-profile-image.png';
 import environmentVars from 'common/utils/env.variables';
 import { toast } from 'react-toastify';
-import instance from '../../utils/instance';
-import { gql, useMutation } from '@apollo/client';
-import axios from 'axios';
 
 const Input = styled('input')({
   display: 'none',
