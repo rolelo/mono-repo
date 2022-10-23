@@ -1,8 +1,38 @@
 import {Context, CreateOrganisationInput, Organisation, User} from '../../../common/models';
 import {v4 as uuidv4} from 'uuid';
+import AWS from 'aws-sdk';
+
+const s3Client = new AWS.S3({
+  region: 'eu-west-1'
+});
 
 export const resolvers = {
   Mutation: {
+    async createOrganisationS3PreSignedUrl(
+      _, { contentType }) {
+          const uuid = uuidv4();
+          const { url, fields } = s3Client.createPresignedPost({
+            Bucket: process.env.BUCKET_NAME,
+            Conditions: [
+              { acl: "public-read" },
+              { bucket: process.env.BUCKET_NAME },
+              ["starts-with", "$key", "organisation-logos/"],
+              ["starts-with", "$Content-Type", "image/"],
+            ],
+            Fields: {
+              acl: "public-read",
+              key: `organisation-logos/${uuid}`,
+              // contentType,
+            },
+          });
+
+          return {
+            url,
+            uuid,
+            fields: JSON.stringify(fields),
+          };
+  
+    },
     async createOrganisation(
         _, {input}: { input: CreateOrganisationInput }, {sub}: Context) {
       const user = await User.findById(sub);

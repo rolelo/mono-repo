@@ -5,5 +5,6 @@
     "storage": "localStorage"
   },
   "SERVER_URL": "http://localhost:8080/graphql",
+  "SERVER_URL_BASE": "http://localhost:8080",
   "S3_URL": "https://rolelo-s3stack-rolelepublica15da819-1u1mmpqwpvjc6.s3.eu-west-1.amazonaws.com/"
 }

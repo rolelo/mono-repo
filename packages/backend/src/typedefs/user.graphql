@@ -26,9 +26,16 @@ type Query {
   user: User!
 }
 
+type SignedUrl {
+  url: String!
+  uuid: String!
+  fields: String!
+}
+
 type Mutation {
   createUser: User!
   updateUser: User!
+  createOrganisationS3PreSignedUrl(content: String!): SignedUrl!
   createOrganisation(input: CreateOrganisationInput!): Organisation!
   deleteOrganisation(_id: String!): String!
 }

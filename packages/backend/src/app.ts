@@ -12,11 +12,14 @@ import mongoose from 'mongoose';
 import {makeExecutableSchema} from '@graphql-tools/schema';
 import * as resolvers from './resolvers';
 import {Context} from '../../common/models';
-
+import { v4 } from "uuid";
+import AWS from 'aws-sdk';
 const {loadFiles} = require('@graphql-tools/load-files');
 const cors = require('cors');
 
 dotenv.config();
+
+const s3Client = new AWS.S3();
 
 const verifier = CognitoJwtVerifier.create({
   userPoolId: process.env.USERPOOL_ID,
@@ -63,7 +66,6 @@ const startApolloServer = async () => {
   });
 
   app.use(cors());
-
   await server.start();
   server.applyMiddleware({
     app,

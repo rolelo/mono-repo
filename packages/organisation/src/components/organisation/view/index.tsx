@@ -32,12 +32,12 @@ const View: React.FC = () => {
     fetchPolicy: 'cache-and-network',
   });
 
-  useEffect(() => {
-    startPolling(3000);
-    return () => {
-      stopPolling();
-    };
-  }, []);
+  // useEffect(() => {
+  //   startPolling(3000);
+  //   return () => {
+  //     stopPolling();
+  //   };
+  // }, []);
   const gridRef = useRef<AgGridReact>();
   const [rowData, setRowData] = useState([]);
 

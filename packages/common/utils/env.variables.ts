@@ -24,6 +24,7 @@ const environmentVars = {
   lambdaUrl: env.lambdaUrl,
   s3BucketUrl: env.s3BucketUrl,
   serverUrl: env.SERVER_URL,
+  serverUrlBase: env.SERVER_URL_BASE
 };
 
 export default environmentVars;
