@@ -1,5 +1,5 @@
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 import { gql, useQuery } from '@apollo/client';
 import { CircularProgress } from '@mui/material';
@@ -32,24 +32,24 @@ const View: React.FC = () => {
     fetchPolicy: 'cache-and-network',
   });
 
-  // useEffect(() => {
-  //   startPolling(3000);
-  //   return () => {
-  //     stopPolling();
-  //   };
-  // }, []);
+  useEffect(() => {
+    startPolling(3000);
+    return () => {
+      stopPolling();
+    };
+  }, [startPolling, stopPolling]);
+
   const gridRef = useRef<AgGridReact>();
-  const [rowData, setRowData] = useState([]);
 
   // Each Column Definition results in one Column.
-  const [columnDefs, setColumnDefs] = useState<ColDef[]>([
+  const columnDefs = useMemo<ColDef[]>(() => ([
     { headerName: 'Name', field: 'name' },
     { headerName: 'Owner', field: 'admin.name' },
     { headerName: 'Website', field: 'website' },
     { headerName: 'Email', field: 'email' },
     { headerName: 'Created Date', field: 'createdDate' },
     { headerName: 'Total Positions', field: 'totalPositions' },
-  ]);
+  ]), []);
 
   // DefaultColDef sets props common to all Columns
   const defaultColDef = React.useMemo(() => ({

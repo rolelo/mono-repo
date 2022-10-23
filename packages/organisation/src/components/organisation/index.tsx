@@ -50,7 +50,7 @@ const Organisation = () => {
           open={tabValue === 1}
           onClose={() => setTabValue(0)}
         >
-          <Create />
+          <Create callback={() => handleTabChange(undefined as any, 0)} />
         </RDrawer>
       </Box>
     </>

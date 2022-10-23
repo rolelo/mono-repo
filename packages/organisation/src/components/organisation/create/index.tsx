@@ -25,14 +25,18 @@ const CREATE_ORGANISATION = gql`
   }
 `;
 
-const Create: React.FC = () => {
-  const [mutation] = useMutation<{ createOrganisation: Organisation }>(CREATE_ORGANISATION, {
-    onCompleted: (data) => {
-      console.log(data);
-    }
-  });
-  const { handleSubmit, register, formState: { errors, isValid }, setValue, watch } = useForm<CreateOrganisation>({
+type Props = {
+  callback?: Function
+}
+const Create: React.FC<Props> = ({ callback }) => {
+  const { handleSubmit, register, formState: { errors, isValid }, setValue, watch, reset } = useForm<CreateOrganisation>({
     mode: 'onBlur',
+  });
+  const [mutation, { loading }] = useMutation<{ createOrganisation: Organisation }>(CREATE_ORGANISATION, {
+    onCompleted: (data) => {
+      reset();
+      if (callback) callback();
+    }
   });
 
   const onSubmit = (data: CreateOrganisation) => {
@@ -73,7 +77,7 @@ const Create: React.FC = () => {
         <div className="wrapper">
           <TextField label="Company Description" variant="outlined" multiline minRows={4} fullWidth {...register('companyDescription')} />
         </div>
-        <Button type="submit" variant='contained' size='large' color='success'>Submit</Button>
+        <Button type="submit" variant='contained' size='large' color='success' disabled={loading || !isValid}>Submit</Button>
       </form>
     </Container>
   );

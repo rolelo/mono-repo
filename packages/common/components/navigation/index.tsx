@@ -8,7 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Logo from '../../logo/logo.png';
 import Amplify from '../../services/Amplify';
@@ -83,10 +83,15 @@ export default function Navigation() {
             <img src={Logo} alt="Rolelo" style={{ width: 25 }} />
           </IconButton>
           <MenuItem key="New Listing">
-            <Typography textAlign="center">New Listing</Typography>
+            <Typography textAlign="center">
+              <Link to="/new-listing" style={{ color: 'inherit', textDecoration: 'none'}}>New Listing</Link>
+            </Typography>
           </MenuItem>
           <MenuItem key="View All Listings">
-            <Typography textAlign="center">View All Listings</Typography>
+            <Typography textAlign="center">
+              <Link to="/view-listings" style={{ color: 'inherit', textDecoration: 'none' }}>View Listings</Link>
+            </Typography>
+
           </MenuItem>
           <Box sx={{ flexGrow: 1, justifyContent: 'flex-end', textAlign: 'right' }}>
             <AvatarMenu />
