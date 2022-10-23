@@ -22,7 +22,6 @@ export const resolvers = {
             Fields: {
               acl: "public-read",
               key: `organisation-logos/${uuid}`,
-              // contentType,
             },
           });
 
