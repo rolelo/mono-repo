@@ -1,14 +1,27 @@
+import { gql, makeVar, useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
 import { Fade } from '@mui/material';
+import Navigation from 'common/components/navigation';
+import { User } from 'common/models';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import {
-  ApolloClient, ApolloProvider, createHttpLink, InMemoryCache,
-} from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-import Amplify from 'common/services/Amplify';
-import Navigation from 'common/components/navigation';
-import environmentVars from 'common/utils/env.variables';
+
+const GET_USER = gql`
+  query GET_USER {
+    user {
+      name,
+      email,
+      phoneNumber,
+      organisations {
+        _id,
+        name,
+        website,
+        email,
+        companyDescription
+      }
+    }
+  }
+`;
 
 const Container = styled('div')({
   display: 'flex',
@@ -20,25 +33,14 @@ const Container = styled('div')({
   },
 });
 
-const httpLink = createHttpLink({
-  uri: environmentVars.serverUrl,
-});
-const authLink = setContext(async (_, { headers }) => {
-  const token = await Amplify.verifyUser();
-  return {
-    headers: {
-      ...headers,
-      authorization: token || '',
-    },
-  };
-});
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-});
-
-const DashboardLayout: React.FC = () => (
-  <ApolloProvider client={client}>
+export const userVar = makeVar<User | null>(null);
+const DashboardLayout: React.FC = () => {
+  useQuery<{ user: User }>(GET_USER, {
+    onCompleted: ({ user }) => {
+      userVar(user);
+    }
+  });
+  return (
     <Fade in timeout={600}>
       <Container>
         <Navigation />
@@ -47,7 +49,6 @@ const DashboardLayout: React.FC = () => (
         </div>
       </Container>
     </Fade>
-  </ApolloProvider>
-);
-
+  );
+}
 export default DashboardLayout;

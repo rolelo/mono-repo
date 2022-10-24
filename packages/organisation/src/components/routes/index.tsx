@@ -1,13 +1,14 @@
 import PrivateRoute from "common/components/private-route";
 import { useRoutes } from 'react-router-dom';
 import DashboardLayout from "../dashboard/layout";
+import NewListing from "../new-listing";
 import Organisation from "../organisation";
 
 const Routes = () => {
   const element = useRoutes([
     {
       path: '/',
-      element: <PrivateRoute />,
+      element: <PrivateRoute redirectUrl="https://localhost:3001" />,
       children: [{
         path: '/',
         element: <DashboardLayout />,
@@ -16,7 +17,7 @@ const Routes = () => {
           element: <Organisation />,
         }, {
           path: 'new-listing',
-          element: <h2>Hello world</h2>
+          element: <NewListing />
         }],
       }],
     }

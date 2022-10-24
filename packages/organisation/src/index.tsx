@@ -1,22 +1,49 @@
+import {
+  ApolloClient, ApolloProvider, createHttpLink, InMemoryCache
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import Amplify from 'common/services/Amplify';
+import { Amplify as AmplifyMain } from 'aws-amplify';
+import awsExports from 'common/utils/aws-exports';
+import environmentVars from 'common/utils/env.variables';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import { QueryClientProvider, QueryClient } from 'react-query';
-import { Amplify } from 'aws-amplify';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import App from './App';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
-import awsExports from 'common/utils/aws-exports';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
+const httpLink = createHttpLink({
+  uri: environmentVars.serverUrl,
+});
+
+const authLink = setContext(async (_, { headers }) => {
+  const token = await Amplify.verifyUser();
+  return {
+    headers: {
+      ...headers,
+      authorization: token || '',
+    },
+  };
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+
 const queryClient = new QueryClient();
-Amplify.configure(awsExports);
+AmplifyMain.configure(awsExports);
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 );
