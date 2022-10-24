@@ -1,4 +1,7 @@
+import { Organisation } from "./Organisation";
+
 export interface Listing {
+  organisationId?: string;
   jobPostingOperationType: "CREATE" | "UPDATE" | "REVIEW" | "CLOSE"
   title: string;
   description: string;
