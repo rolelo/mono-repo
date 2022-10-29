@@ -2,24 +2,30 @@ import { Organisation } from "./Organisation";
 
 export interface Listing {
   organisationId?: string;
-  jobPostingOperationType: "CREATE" | "UPDATE" | "REVIEW" | "CLOSE"
+  jobPostingOperationType: "CREATE" | "UPDATE" | "REVIEW" | "CLOSE";
   title: string;
+  advertisingMediums: [AdvertisingMedium]
   description: string;
   listedAt: string;
   location: string;
-  categories: [LinkedInJobFunctionCodes],
+  categories: [LinkedInJobFunctionCodes];
   skillsDescription: string;
   workRemoteAllowed: boolean;
   workplaceTypes: WorkPlaceType[];
   // industries:
   employmentStatus: EmploymentStatus;
-  experienceLeve: ExperienceLevel;
+  experienceLevel: ExperienceLevel;
   companyDescription: string;
   companyName: string;
   expireAt: string;
   listingType: ListingType;
 }
 
+export enum AdvertisingMedium {
+  "LinkedIn" = "LinkedIn",
+  "Indeed" = "Indeed",
+  "Google" = "Google"
+}
 export enum LinkedInJobFunctionCodes {
   "acct" = "Accounting / Auditing",
   "adm" = "Administrative",
@@ -59,13 +65,22 @@ export enum LinkedInJobFunctionCodes {
 }
 
 export type WorkPlaceType = "On-site" | "Hybrid" | "Remote";
-export type EmploymentStatus =
-  | "FULL_TIME"
-  | "PART_TIME"
-  | "CONTRACT"
-  | "INTERNSHIP"
-  | "TEMPORARY"
-  | "VOLUNTEER"
-  | "OTHER";
-export type ExperienceLevel = "ENTRY_LEVEL" | "MID_SENIOR_LEVEL" | "DIRECTOR" | "EXECUTIVE" | "INTERNSHIP" | "ASSOCIATE" | "NOT_APPLICABLE"
+export enum EmploymentStatus {
+  "FULL_TIME" = "FULL TIME",
+  "PART_TIME" = "PART TIME",
+  "CONTRACT" = "CONTRACT",
+  "INTERNSHIP" = "INTERNSHIP",
+  "TEMPORARY" = "TEMPORARY",
+  "VOLUNTEER" = "VOLUNTEER",
+  "OTHER" = "OTHER",
+}
+export enum ExperienceLevel {
+  "ENTRY_LEVEL" = "ENTRY LEVEL",
+  "MID_SENIOR_LEVEL" = "MID SENIOR LEVEL",
+  "DIRECTOR" = "DIRECTOR",
+  "EXECUTIVE" = "EXECUTIVE",
+  "INTERNSHIP" = "INTERNSHIP",
+  "ASSOCIATE" = "ASSOCIATE",
+  "NOT_APPLICABLE" = "NOT APPLICABLE",
+}
 export type ListingType = "BASIC" | "PREMIUM";
