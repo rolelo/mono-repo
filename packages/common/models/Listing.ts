@@ -11,7 +11,7 @@ export interface Listing {
   categories: [LinkedInJobFunctionCodes];
   skillsDescription: string;
   workRemoteAllowed: boolean;
-  workplaceTypes: WorkPlaceType[];
+  workplaceType: WorkPlaceType;
   // industries:
   employmentStatus: EmploymentStatus;
   experienceLevel: ExperienceLevel;

@@ -1,22 +1,39 @@
 import { useReactiveVar } from "@apollo/client";
-import { Avatar, Box, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, TextField, Typography } from "@mui/material";
+import Select from '@mui/material/Select';
 import CountriesDropdown from 'common/components/countries-dropdown';
 import GoogleLogo from 'common/logo/google.png';
 import IndeedLogo from 'common/logo/indeed.png';
 import LinkedInLogo from 'common/logo/LI-In-Bug.png';
 import { AdvertisingMedium, EmploymentStatus, ExperienceLevel, LinkedInJobFunctionCodes, Listing } from 'common/models';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { userVar } from "../dashboard/layout";
+import { useYupValidationResolver } from 'common/hooks';
+import * as yup from 'yup';
 
+const validationSchema = yup.object({
+  title: yup.string().max(200).required(),
+  advertisingMediums: yup.array().required(),
+  description: yup.string().min(100).max(125000).required(),
+  location: yup.string().required(),
+  categories: yup.array().required(),
+  workplaceType: yup.string().required(),
+  employmentStatus: yup.string().required(),
+  experienceLevel: yup.string().required(),
+  skillsDescription: yup.string().max(4000).required(),
+});
 const NewListing: React.FC = () => {
   const user = useReactiveVar(userVar);
-  const { register, watch, setValue, getValues } = useForm<Listing>({
+  const resolver = useYupValidationResolver(validationSchema);
+  const { register, watch, setValue, getValues, handleSubmit, formState: { isValid, isDirty }, control } = useForm<Listing>({
+    mode: 'all',
     defaultValues: {
       advertisingMediums: [],
-    }
+    },
+    resolver
   });
 
   const handleChange = (checked: boolean, advertisingMedium: AdvertisingMedium) => {
@@ -33,6 +50,8 @@ const NewListing: React.FC = () => {
     setValue('advertisingMediums', advertisingMediumsCloned);
   };
 
+  const onSubmit = (data: Listing) => console.log(data);
+
   return (
     <Box sx={{ padding: '2rem', boxSizing: 'border-box', width: '1000px' }}>
       <Typography variant='h3'>New Job Listing</Typography>
@@ -44,7 +63,7 @@ const NewListing: React.FC = () => {
         padding: '2rem',
         boxSizing: 'border-box'
       }}>
-        <Box style={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
           <Box>
             <Typography variant="h4" style={{ display: "flex", alignItems: 'center', columnGap: '1rem', marginBottom: '2rem' }}>
               <Avatar sx={{ bgcolor: 'black' }}>1.</Avatar>
@@ -55,7 +74,7 @@ const NewListing: React.FC = () => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={watch().organisationId}
+                value={watch().organisationId || ''}
                 label="Organisation"
                 onChange={(event: any) => setValue('organisationId', event.target?.value)}
                 placeholder="Please select your organisation"
@@ -90,8 +109,8 @@ const NewListing: React.FC = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                checked={watch().advertisingMediums.includes(AdvertisingMedium.Google)}
-                onChange={(_, checked) => handleChange(checked, AdvertisingMedium.Google)}
+                  checked={watch().advertisingMediums.includes(AdvertisingMedium.Google)}
+                  onChange={(_, checked) => handleChange(checked, AdvertisingMedium.Google)}
                 />}
               label={(
                 <img src={GoogleLogo} alt="Google" width="80px" />
@@ -128,73 +147,108 @@ const NewListing: React.FC = () => {
               }}
             />
             <Box style={{ display: 'flex', flexDirection: 'row', columnGap: '1rem', alignItems: 'start' }}>
-              <CountriesDropdown />
+              <CountriesDropdown register={() => register('location')} />
               <FormControl style={{ minWidth: 300 }}>
                 <InputLabel id="demo-simple-select-label">Select Your Job function categories</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={watch().categories}
-                  label="Job function category"
-                  onChange={(event: any) => setValue('categories', event.target?.value)}
-                  placeholder="Please select your job function categories"
-                >
-                  {
-                    (Object.keys(LinkedInJobFunctionCodes) as Array<keyof typeof LinkedInJobFunctionCodes>)
-                      .map(((key) => (<MenuItem value={key}>{LinkedInJobFunctionCodes[key]}</MenuItem>)))
-                  }
-                </Select>
+                <Controller name="categories" control={control} render={({
+                  field: { onChange, onBlur, value, name, ref }
+                }) => (
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    multiple
+                    label="Job function category"
+                    placeholder="Please select your job function categories"
+                    value={watch().categories || []}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    ref={ref}
+                  >
+                    {
+                      (Object.keys(LinkedInJobFunctionCodes) as Array<keyof typeof LinkedInJobFunctionCodes>)
+                        .map(((key) => <MenuItem value={key} key={key}>{LinkedInJobFunctionCodes[key]}</MenuItem>))
+                    }
+                  </Select>
+                )} />
               </FormControl>
               <FormControl style={{ minWidth: 300 }}>
                 <InputLabel id="demo-simple-select-label">Workplace type?</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={watch().workplaceTypes}
-                  label="Workplace type"
-                  onChange={(event: any) => setValue('workplaceTypes', event.target?.value)}
-                  placeholder="Workplace type"
-                >
-                  <MenuItem value="On-site">On-Site</MenuItem>
-                  <MenuItem value="Hybrid">Hybrid</MenuItem>
-                  <MenuItem value="Remote">Remote</MenuItem>
-                </Select>
+                <Controller control={control} name="workplaceType" render={({
+                  field: { onChange, onBlur, value, name, ref }
+                }) => (
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Workplace type"
+                    placeholder="Workplace type"
+                    value={value}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    ref={ref}
+                  >
+                    <MenuItem value="On-site">On-Site</MenuItem>
+                    <MenuItem value="Hybrid">Hybrid</MenuItem>
+                    <MenuItem value="Remote">Remote</MenuItem>
+                  </Select>
+                )} />
               </FormControl>
             </Box>
             <Box style={{ display: 'flex', flexDirection: 'row', columnGap: '1rem', alignItems: 'start' }}>
               <FormControl style={{ minWidth: 300 }}>
                 <InputLabel id="demo-simple-select-label">Employment Status?</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={watch().employmentStatus}
-                  label="Employment Status"
-                  onChange={(event: any) => setValue('employmentStatus', event.target?.value)}
-                  placeholder="Workplace type"
-                >
-                  {(Object.keys(EmploymentStatus) as Array<keyof typeof EmploymentStatus>).map((key) => (
-                    <MenuItem value={key} key={key}>{EmploymentStatus[key]}</MenuItem>
-                  ))}
-                </Select>
+                <Controller control={control} name="employmentStatus" render={({
+                  field: { onChange, onBlur, value, name, ref }
+                }) => (
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Employment Status"
+                    placeholder="Workplace type"
+                    value={value}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    ref={ref}
+                  >
+                    {(Object.keys(EmploymentStatus) as Array<keyof typeof EmploymentStatus>).map((key) => (
+                      <MenuItem value={key} key={key}>{EmploymentStatus[key]}</MenuItem>
+                    ))}
+                  </Select>
+                )} />
               </FormControl>
               <FormControl style={{ minWidth: 300 }}>
                 <InputLabel id="demo-simple-select-label">Exprience Level?</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={watch().experienceLevel}
-                  label="Experience Level"
-                  onChange={(event: any) => setValue('experienceLevel', event.target?.value)}
-                  placeholder="Workplace type"
-                >
-                  {(Object.keys(ExperienceLevel) as Array<keyof typeof ExperienceLevel>).map((key) => (
-                    <MenuItem value={key} key={key}>{ExperienceLevel[key]}</MenuItem>
-                  ))}
-                </Select>
+                <Controller control={control} name="experienceLevel" render={({
+                  field: { onChange, onBlur, value, name, ref }
+                }) => (
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Experience Level"
+                    placeholder="Experience Level"
+                    value={value}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    ref={ref}
+                  >
+                    {(Object.keys(ExperienceLevel) as Array<keyof typeof ExperienceLevel>).map((key) => (
+                      <MenuItem value={key} key={key}>{ExperienceLevel[key]}</MenuItem>
+                    ))}
+                  </Select>)}
+                />
               </FormControl>
             </Box>
           </Box>
-        </Box>
+          <Button
+            disabled={!isValid || !isDirty}
+            type='submit'
+            variant='contained'
+            size='large'
+            sx={{ width: 'fit-content', marginLeft: 'auto' }}
+            color='success'
+          >
+            Submit Job Listing
+          </Button>
+        </form>
       </Box>
     </Box>
   )

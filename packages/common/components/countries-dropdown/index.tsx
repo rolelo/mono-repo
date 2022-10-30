@@ -1,5 +1,5 @@
 import { Autocomplete, createFilterOptions, TextField } from '@mui/material';
-import React, { useMemo } from 'react'
+import React, { useMemo } from 'react';
 import { useQuery } from 'react-query';
 
 const getCountriesAndCities = async () => {
@@ -8,7 +8,11 @@ const getCountriesAndCities = async () => {
   return data;
 }
 
-const CountriesDropdown: React.FC = () => {
+
+type Props = {
+  register: Function
+}
+const CountriesDropdown: React.FC<Props> = ({ register }) => {
   const { data } = useQuery<{
     country: string,
     cities: string[]
@@ -33,7 +37,7 @@ const CountriesDropdown: React.FC = () => {
       filterOptions={createFilterOptions({ matchFrom: 'any', limit: 50 })}
       options={options}
       sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Location" />}
+      renderInput={(params) => <TextField {...params} label="Location" {...register()} />}
     />
   )
 }
