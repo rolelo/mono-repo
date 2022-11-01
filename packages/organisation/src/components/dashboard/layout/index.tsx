@@ -53,9 +53,10 @@ const DashboardLayout: React.FC = () => {
           </MenuItem>
         ]}
           dropdownLinks={[
-          <MenuItem key="organisation" onClick={() => navigator('/organisation')}>
-            <Typography textAlign="center">Organisations</Typography>
-          </MenuItem>]}
+            <MenuItem key="organisation" onClick={() => navigator('/organisation')}>
+              <Typography textAlign="center">Organisations</Typography>
+            </MenuItem>]}
+          avatarMenu
         />
         <div className="wrapper">
           <Outlet />

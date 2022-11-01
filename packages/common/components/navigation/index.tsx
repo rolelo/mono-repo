@@ -14,10 +14,11 @@ import Logo from '../../logo/logo.png';
 import Amplify from '../../services/Amplify';
 
 type Props = {
-  dropdownLinks: JSX.Element[]
-  appbarLinks: JSX.Element[]
+  dropdownLinks?: JSX.Element[]
+  appbarLinks?: JSX.Element[]
+  avatarMenu: boolean
 }
-const AvatarMenu: React.FC<Omit<Props, 'appbarLinks'>> = ({ dropdownLinks }) => {
+const AvatarMenu: React.FC<Omit<Props, 'appbarLinks' | 'avatarMenu'>> = ({ dropdownLinks }) => {
   const navigator = useNavigate();
   const { mutate } = useMutation(Amplify.signOut, {
     onSuccess: () => {
@@ -70,7 +71,7 @@ const AvatarMenu: React.FC<Omit<Props, 'appbarLinks'>> = ({ dropdownLinks }) => 
   );
 };
 
-export default function Navigation({ dropdownLinks, appbarLinks }: Props) {
+export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu }: Props): JSX.Element {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -85,9 +86,12 @@ export default function Navigation({ dropdownLinks, appbarLinks }: Props) {
             <img src={Logo} alt="Rolelo" style={{ width: 25 }} />
           </IconButton>
           {appbarLinks}
-          <Box sx={{ flexGrow: 1, justifyContent: 'flex-end', textAlign: 'right' }}>
-            <AvatarMenu dropdownLinks={dropdownLinks} />
-          </Box>
+          {
+            avatarMenu &&
+            <Box sx={{ flexGrow: 1, justifyContent: 'flex-end', textAlign: 'right' }}>
+              <AvatarMenu dropdownLinks={dropdownLinks} />
+            </Box>
+          }
         </Toolbar>
       </AppBar>
     </Box >

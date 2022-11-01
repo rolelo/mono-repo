@@ -43,7 +43,7 @@ const DashboardLayout: React.FC = () => {
   return (
     <Fade in timeout={600}>
       <Container>
-        <Navigation dropdownLinks={[]} appbarLinks={[]} />
+        <Navigation dropdownLinks={[]} appbarLinks={[]} avatarMenu={false} />
         <div className="wrapper">
           <Outlet />
         </div>
