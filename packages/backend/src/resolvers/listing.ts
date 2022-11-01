@@ -15,6 +15,9 @@ export const resolvers = {
     }
       const listings = (await Listing.find(query).exec());
       return listings.map(l => l.toObject());
+    },
+    async clientListing(_, { id }) {
+      return (await Listing.findById(id)).toObject();
     }
   },
   Mutation: {
@@ -31,6 +34,7 @@ export const resolvers = {
         _id: uuidv4(),
         organisationId: organisation._id,
         organisationName: organisation.name,
+        organisationLogo: organisation.companyLogo,
         organisationDescription: organisation.companyDescription,
         organisationWebsite: organisation.website,
         createdDate: Date.now().toString(),

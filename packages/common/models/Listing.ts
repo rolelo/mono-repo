@@ -6,7 +6,7 @@ export interface ListingBase {
   advertisingMediums: [AdvertisingMedium];
   description: string;
   location: string;
-  categories: [LinkedInJobFunctionCodes];
+  categories: [keyof typeof LinkedInJobFunctionCodes];
   skillsDescription: string;
   workRemoteAllowed: boolean;
   workplaceType: WorkPlaceType;
@@ -103,6 +103,7 @@ export interface IListing extends ListingBase {
   _id: string;
   organisationName: string;
   organisationDescription: string;
+  organisationLogo: string;
   organisationWebsite: string;
   createdDate: string;
   createdById: string;
@@ -112,6 +113,7 @@ const listingSchema = new Schema<IListing>({
   _id: { type: String, required: true },
   organisationId: { type: String, required: true },
   organisationName: { type: String, required: true },
+  organisationLogo: { type: String, required: true },
   organisationDescription: { type: String, required: true },
   organisationWebsite: { type: String, required: true },
   createdDate: { type: String, required: true },

@@ -41,7 +41,6 @@ export const resolvers = {
         adminId: sub,
         ...input,
         totalPositions: 0,
-        companyLogo: 'amir',
         people: [],
         createdDate: Date.now().toString(),
       });

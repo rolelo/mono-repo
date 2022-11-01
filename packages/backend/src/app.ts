@@ -47,11 +47,14 @@ const startApolloServer = async () => {
     context: async ({req}): Promise<Context> => {
       const token = req.headers.authorization;
       try {
-        // const payload = await verifier.verify(token);
+        const payload = await verifier.verify(token);
         return {
-          sub:  '6b9e61bc-374e-4669-9ed8-2bf42a1c0812', //payload.sub,
-          name: 'Amir Shojae', //payload.name.toString(),
-          email: 'amiralishojaee123@gmail.com', //payload.email.toString(),
+          sub:  payload.sub,
+          name: payload.name.toString(),
+          email: payload.email.toString(),
+          // sub:  '6b9e61bc-374e-4669-9ed8-2bf42a1c0812', //payload.sub,
+          // name: 'Amir Shojae', //payload.name.toString(),
+          // email: 'amiralishojaee123@gmail.com', //payload.email.toString(),
         };
       } catch (err) {
         throw new AuthenticationError('Unauthorized');

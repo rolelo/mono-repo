@@ -1,6 +1,7 @@
 import PrivateRoute from "common/components/private-route";
 import { useRoutes } from 'react-router-dom';
 import DashboardLayout from "../dashboard/layout";
+import Listing from "../listing";
 
 const Routes = () => {
   const element = useRoutes([
@@ -10,7 +11,10 @@ const Routes = () => {
       children: [{
         path: '/',
         element: <DashboardLayout />,
-        children: [],
+        children: [{
+          path: '/listing/:id',
+          element: <Listing />
+        }],
       }],
     }
   ]);
