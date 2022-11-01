@@ -2,6 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 import { Box, Typography, Chip } from '@mui/material';
 import { EmploymentStatus, IListing, LinkedInJobFunctionCodes } from 'common/models';
 import { useParams } from 'react-router-dom';
+import { format } from 'date-fns';
 
 const GET_LISTING = gql`
   query clientListing($id: String!) {
@@ -48,9 +49,12 @@ const Listing: React.FC = () => {
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '2rem', alignItems: 'center', }}>
           <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" width="70px" />
-          <Typography variant='h4' fontWeight="500">{data?.clientListing.title}</Typography>
+          <Typography variant='h4' fontWeight="600">{data?.clientListing.title}</Typography>
         </Box>
-        <Typography variant="h4" fontWeight="bolder">{`${data?.clientListing.currency}-${data?.clientListing.salary}`}</Typography>
+        <Box>
+          <Typography variant="h4" fontWeight="bolder">{`${data?.clientListing.currency} ${data?.clientListing.salary}`}</Typography>
+          <Typography variant='h6' textAlign="right">{format(new Date(+data!.clientListing.createdDate), "dd/MM/yyyy")}</Typography>
+        </Box>
       </Box>
       <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>About</Typography>
       <Typography variant='h5' fontWeight="300">{data?.clientListing.organisationDescription}</Typography>
@@ -80,19 +84,15 @@ const Listing: React.FC = () => {
         </Box>
       </Box>
 
-      <Box style={{ padding: '2rem 0 1rem 0' }}>
-        <Typography variant='h5' fontWeight="600" style={{ padding: "2rem 0 1rem 0"}}>About</Typography>
+      <Box style={{ padding: '2rem 0 4rem 0' }}>
+        <Typography variant='h5' fontWeight="600" style={{ padding: "2rem 0 1rem 0" }}>Skills Required</Typography>
         <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", columnGap: "0.5rem", rowGap: "1rem" }}>
           {data?.clientListing.categories.map((c) => (
             <Chip sx={{ fontSize: "1.2rem", fontWeight: "400" }} label={LinkedInJobFunctionCodes[c]} />
           ))}
         </Box>
       </Box>
-      <Typography variant='h3'>Job Listing: {data?.clientListing.organisationWebsite}</Typography>
-      <Typography variant='h3'>Job Listing: {data?.clientListing.categories.map((c) => LinkedInJobFunctionCodes[c])}</Typography>
-      <Typography variant='h3'>Job Listing: {data?.clientListing.categories}</Typography>
-      <Typography variant='h3'>Job Listing: {data?.clientListing.createdDate}</Typography>
-
+      <a href={data?.clientListing.organisationWebsite} target="_blank" rel="noreferrer">{data?.clientListing.organisationWebsite}</a>
     </Box>
   )
 }
