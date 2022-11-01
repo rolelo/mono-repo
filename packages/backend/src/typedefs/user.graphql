@@ -22,17 +22,162 @@ type User {
   phoneNumber: String
   organisations: [Organisation]
 }
-type Query {
-  user: User!
-}
 
 type SignedUrl {
   url: String!
   uuid: String!
   fields: String!
 }
+enum AdvertisingMedium {
+  LinkedIn
+  Indeed
+  Google
+}
+enum JobOperationType {
+  CREATE
+  UPDATE
+  REVIEW
+  CLOSE
+}
+enum LinkedInJobFunctionCodes {
+  acct
+  adm
+  advr
+  anls
+  art
+  bd
+  cnsl
+  cust
+  dist
+  dsgn
+  edu
+  eng
+  fin
+  genb
+  hcpr
+  hr
+  it
+  lgl
+  mgmt
+  mnfc
+  mrkt
+  othr
+  pr
+  prch
+  prdm
+  prjm
+  prod
+  qa
+  rsch
+  sale
+  sci
+  stra
+  supl
+  trng
+  wrt
+}
+enum JobOperationType {
+  CREATE
+  UPDATE
+  REVIEW
+  CLOSE
+}
+enum EmploymentStatus {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  TEMPORARY
+  VOLUNTEER
+  OTHER
+}
+enum ExperienceLevel {
+  ENTRY_LEVEL
+  MID_SENIOR_LEVEL
+  DIRECTOR
+  EXECUTIVE
+  INTERNSHIP
+  ASSOCIATE
+  NOT_APPLICABLE
+}
+enum ListingType  {
+  BASIC
+  PREMIUM
+}
+enum ListingCurrency {
+  USD
+  GBP
+  EUR
+}
 
+interface IListing {
+  jobPostingOperationType: JobOperationType!
+  title: String!
+  advertisingMediums: [AdvertisingMedium]
+  description: String!
+  location: String!
+  categories: [LinkedInJobFunctionCodes]
+  skillsDescription: String!
+  workRemoteAllowed: Boolean
+  workplaceType: String!
+  employmentStatus: EmploymentStatus!
+  experienceLevel: ExperienceLevel!
+  companyDescription: String!
+  companyName: String!
+  expireAt: String!
+  listingType: ListingType!
+  currency: ListingCurrency!
+  salary: Int!
+}
+input ListingInput  {
+  organisationId: String
+  jobPostingOperationType: JobOperationType!
+  title: String!
+  advertisingMediums: [AdvertisingMedium]
+  description: String!
+  location: String!
+  categories: [LinkedInJobFunctionCodes]
+  skillsDescription: String!
+  workRemoteAllowed: Boolean
+  workplaceType: String!
+  employmentStatus: EmploymentStatus!
+  experienceLevel: ExperienceLevel!
+  listingType: ListingType!
+  expireAt: String!
+  currency: ListingCurrency!
+  salary: Int!
+
+}
+type Listing implements IListing {
+  _id: String
+  organisationName: String
+  organisationDescription: String
+  organisationWebsite: String
+  createdDate: String
+  createdById: String
+  createdByName: String
+  jobPostingOperationType: JobOperationType!
+  title: String!
+  advertisingMediums: [AdvertisingMedium]
+  description: String!
+  location: String!
+  categories: [LinkedInJobFunctionCodes]
+  skillsDescription: String!
+  workRemoteAllowed: Boolean
+  workplaceType: String!
+  employmentStatus: EmploymentStatus!
+  experienceLevel: ExperienceLevel!
+  expireAt: String!
+  listingType: ListingType!
+  currency: ListingCurrency!
+  salary: Int!
+}
+type Query {
+  user: User!
+  listings(organisationId: String): [Listing]
+}
 type Mutation {
+  createListing(input: ListingInput!): Listing!
   createUser: User!
   updateUser: User!
   createOrganisationS3PreSignedUrl(content: String!): SignedUrl!

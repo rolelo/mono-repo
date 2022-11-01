@@ -10,11 +10,10 @@ type Props = {
 }
 const PrivateRoute: React.FC<Props> = ({ redirectUrl }) => {
   const [userAttributes, setUserAttributes] = React.useState<UserAttributes | null>(null);
-  const navigator = useNavigate();
   const location = useLocation();
   const { mutate } = useMutation(() => Amplify.verifyUser(), {
     onError: () => {
-      if (location.pathname.includes('/auth')) {
+      if (!location.pathname.includes('/auth')) {
         window.location.href = `https://localhost:3000/auth/login?redirectUrl=${redirectUrl}`
       }
     },

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   Box, Button, CircularProgress, styled
 } from '@mui/material';

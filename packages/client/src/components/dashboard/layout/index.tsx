@@ -1,10 +1,10 @@
 import { gql, makeVar, useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
-import { Fade, MenuItem, Typography } from '@mui/material';
+import { Fade } from '@mui/material';
 import Navigation from 'common/components/navigation';
 import { User } from 'common/models';
 import React from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 const GET_USER = gql`
   query GET_USER {
@@ -35,7 +35,6 @@ const Container = styled('div')({
 
 export const userVar = makeVar<User | null>(null);
 const DashboardLayout: React.FC = () => {
-  const navigator = useNavigate();
   useQuery<{ user: User }>(GET_USER, {
     onCompleted: ({ user }) => {
       userVar(user);
@@ -44,19 +43,7 @@ const DashboardLayout: React.FC = () => {
   return (
     <Fade in timeout={600}>
       <Container>
-        <Navigation appbarLinks={[
-          <MenuItem key="New Listing" onClick={() => navigator('/new-listing')}>
-            <Link to="/new-listing" style={{ color: 'inherit', textDecoration: 'none' }}>New Listing</Link>
-          </MenuItem>,
-          <MenuItem key="View All Listings" onClick={() => navigator('/listings')}>
-            <Link to="/listings" style={{ color: 'inherit', textDecoration: 'none' }}>View Listings</Link>
-          </MenuItem>
-        ]}
-          dropdownLinks={[
-          <MenuItem key="organisation" onClick={() => navigator('/organisation')}>
-            <Typography textAlign="center">Organisations</Typography>
-          </MenuItem>]}
-        />
+        <Navigation dropdownLinks={[]} appbarLinks={[]} />
         <div className="wrapper">
           <Outlet />
         </div>

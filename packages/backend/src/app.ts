@@ -1,19 +1,18 @@
-import {ApolloServer} from 'apollo-server-express';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,
-  AuthenticationError,
+  AuthenticationError
 } from 'apollo-server-core';
+import { ApolloServer } from 'apollo-server-express';
+import { CognitoJwtVerifier } from 'aws-jwt-verify/cognito-verifier';
+import AWS from 'aws-sdk';
+import * as dotenv from 'dotenv';
 import express from 'express';
 import http from 'http';
-import * as dotenv from 'dotenv';
-import {CognitoJwtVerifier} from 'aws-jwt-verify/cognito-verifier';
 import mongoose from 'mongoose';
-import {makeExecutableSchema} from '@graphql-tools/schema';
+import { Context } from '../../common/models';
 import * as resolvers from './resolvers';
-import {Context} from '../../common/models';
-import { v4 } from "uuid";
-import AWS from 'aws-sdk';
 const {loadFiles} = require('@graphql-tools/load-files');
 const cors = require('cors');
 
@@ -38,6 +37,7 @@ const startApolloServer = async () => {
     resolvers: [
       resolvers.userResolvers.resolvers,
       resolvers.oganisationResolvers.resolvers,
+      resolvers.listingResolvers.resolvers,
     ],
   });
   const server = new ApolloServer({
@@ -47,11 +47,11 @@ const startApolloServer = async () => {
     context: async ({req}): Promise<Context> => {
       const token = req.headers.authorization;
       try {
-        const payload = await verifier.verify(token);
+        // const payload = await verifier.verify(token);
         return {
-          sub: payload.sub,
-          name: payload.name.toString(),
-          email: payload.email.toString(),
+          sub:  '6b9e61bc-374e-4669-9ed8-2bf42a1c0812', //payload.sub,
+          name: 'Amir Shojae', //payload.name.toString(),
+          email: 'amiralishojaee123@gmail.com', //payload.email.toString(),
         };
       } catch (err) {
         throw new AuthenticationError('Unauthorized');

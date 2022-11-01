@@ -19,6 +19,7 @@ const RDrawer: React.FC<Props> = ({
       '& .MuiPaper-root': {
         width: '50rem',
         padding: '2rem',
+        boxSizing: 'border-box',
       },
     }}
   >

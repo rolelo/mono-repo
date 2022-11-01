@@ -13,7 +13,11 @@ import { toast } from 'react-toastify';
 import Logo from '../../logo/logo.png';
 import Amplify from '../../services/Amplify';
 
-const AvatarMenu: React.FC = () => {
+type Props = {
+  dropdownLinks: JSX.Element[]
+  appbarLinks: JSX.Element[]
+}
+const AvatarMenu: React.FC<Omit<Props, 'appbarLinks'>> = ({ dropdownLinks }) => {
   const navigator = useNavigate();
   const { mutate } = useMutation(Amplify.signOut, {
     onSuccess: () => {
@@ -57,9 +61,7 @@ const AvatarMenu: React.FC = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <MenuItem key="organisation" onClick={() => navigator('/organisation')}>
-          <Typography textAlign="center">Organisations</Typography>
-        </MenuItem>
+        {dropdownLinks}
         <MenuItem key="logout" onClick={() => mutate()}>
           <Typography textAlign="center">Logout</Typography>
         </MenuItem>
@@ -68,7 +70,7 @@ const AvatarMenu: React.FC = () => {
   );
 };
 
-export default function Navigation() {
+export default function Navigation({ dropdownLinks, appbarLinks }: Props) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -82,22 +84,12 @@ export default function Navigation() {
           >
             <img src={Logo} alt="Rolelo" style={{ width: 25 }} />
           </IconButton>
-          <MenuItem key="New Listing">
-            <Typography textAlign="center">
-              <Link to="/new-listing" style={{ color: 'inherit', textDecoration: 'none'}}>New Listing</Link>
-            </Typography>
-          </MenuItem>
-          <MenuItem key="View All Listings">
-            <Typography textAlign="center">
-              <Link to="/view-listings" style={{ color: 'inherit', textDecoration: 'none' }}>View Listings</Link>
-            </Typography>
-
-          </MenuItem>
+          {appbarLinks}
           <Box sx={{ flexGrow: 1, justifyContent: 'flex-end', textAlign: 'right' }}>
-            <AvatarMenu />
+            <AvatarMenu dropdownLinks={dropdownLinks} />
           </Box>
         </Toolbar>
       </AppBar>
-    </Box>
+    </Box >
   );
 }
