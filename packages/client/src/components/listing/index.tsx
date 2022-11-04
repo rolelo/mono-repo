@@ -1,8 +1,10 @@
 import { gql, useQuery } from '@apollo/client';
+import { styled } from '@mui/system';
 import { Box, Typography, Chip, Button } from '@mui/material';
 import { EmploymentStatus, IListing, LinkedInJobFunctionCodes } from 'common/models';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
+import DirectApply from '../direct-apply';
 
 const GET_LISTING = gql`
   query clientListing($id: String!) {
@@ -34,6 +36,21 @@ const GET_LISTING = gql`
   }
 `;
 
+const LeftPane = styled('div')({
+  boxSizing: 'border-box',
+  flex: '0.5',
+  borderRadius: '8px',
+  height: '200px'
+});
+
+const RightPane = styled('div')({
+  padding: '2rem',
+  boxSizing: 'border-box',
+  flex: '1.2',
+  backgroundColor: 'white',
+  borderRadius: '8px'
+});
+
 const Listing: React.FC = () => {
   const { id } = useParams();
   const { data, loading } = useQuery<{ clientListing: IListing }>(GET_LISTING, {
@@ -46,7 +63,7 @@ const Listing: React.FC = () => {
   });
   return (
     <Box sx={{ padding: '2rem', display: "flex", flexDirection: "row", columnGap: '2rem', boxSizing: 'border-box' }}>
-      <Box sx={{ boxSizing: 'border-box', flex: '1', borderRadius: '8px', height: '200px' }}>
+      <LeftPane>
         <Box sx={{
           display: "flex",
           flexDirection: "row",
@@ -59,11 +76,16 @@ const Listing: React.FC = () => {
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
           <Box sx={{ padding: '2rem', borderRadius: "8px", maxHeight: "300px", backgroundColor: 'white' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '1rem', alignItems: 'center', }}>
-              <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" width="50px" />
-              <Typography variant='h6' fontWeight="600">{data?.clientListing.title}</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '1rem', alignItems: 'center', }}>
+                <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" width="50px" />
+                <Typography variant='h5' fontWeight="600">{data?.clientListing.title}</Typography>
+              </Box>
+              <Box>
+                <Typography variant="h5" fontWeight="bolder">{`${data?.clientListing.currency} ${data?.clientListing.salary}`}</Typography>
+              </Box>
             </Box>
-            <Typography variant='body1' fontWeight="300" style={{ margin: '1rem 0 0.5rem 0', height: '80px', overflow: 'hidden' }}>
+            <Typography variant='body1' fontWeight="300" style={{ margin: '1rem 0 0.5rem 0', height: '43px', overflow: 'hidden' }}>
               {data?.clientListing.description}
             </Typography>
             <Box sx={{ margin: '2rem 0', display: "flex", flexDirection: "row", flexWrap: "wrap", columnGap: "0.5rem", rowGap: "1rem" }}>
@@ -73,8 +95,8 @@ const Listing: React.FC = () => {
             </Box>
           </Box>
         </Box>
-      </Box>
-      <Box sx={{ padding: '2rem', boxSizing: 'border-box', flex: '1.5', backgroundColor: 'white', borderRadius: '8px' }}>
+      </LeftPane>
+      <RightPane sx={{ padding: '2rem', boxSizing: 'border-box', flex: '1.2', backgroundColor: 'white', borderRadius: '8px' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '2rem', alignItems: 'center', }}>
             <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" width="70px" />
@@ -121,8 +143,11 @@ const Listing: React.FC = () => {
             ))}
           </Box>
         </Box>
-        <a href={data?.clientListing.organisationWebsite} target="_blank" rel="noreferrer">{data?.clientListing.organisationWebsite}</a>
-      </Box>
+        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end"}}>
+          <a href={data?.clientListing.organisationWebsite} target="_blank" rel="noreferrer">{data?.clientListing.organisationWebsite}</a>
+          { id && <DirectApply id={id} /> }
+        </Box>
+      </RightPane>
     </Box>
   )
 }

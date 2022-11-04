@@ -1,10 +1,6 @@
-import {Context, CreateOrganisationInput, Organisation, User} from '../../../common/models';
-import {v4 as uuidv4} from 'uuid';
-import AWS from 'aws-sdk';
-
-const s3Client = new AWS.S3({
-  region: 'eu-west-1'
-});
+import { v4 as uuidv4 } from 'uuid';
+import { Context, CreateOrganisationInput, Organisation, User } from '../../../common/models';
+import { s3Client } from '../app';
 
 export const resolvers = {
   Mutation: {

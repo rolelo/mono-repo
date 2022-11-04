@@ -144,7 +144,17 @@ input ListingInput  {
   expireAt: String!
   currency: ListingCurrency!
   salary: Int!
+}
+input JobApplicationInput {
+  name: String!
+  email: String!
+  cvUrl: String!
+}
 
+type JobApplication {
+  name: String!
+  email: String!
+  cvUrl: String!
 }
 type Listing implements IListing {
   _id: String
@@ -178,8 +188,10 @@ type Query {
 }
 type Mutation {
   createListing(input: ListingInput!): Listing!
+  createJobApplication(input: JobApplicationInput!): JobApplication!
   createUser: User!
   updateUser: User!
+  createCVS3PreSignedUrl(content: String!): SignedUrl!
   createOrganisationS3PreSignedUrl(content: String!): SignedUrl!
   createOrganisation(input: CreateOrganisationInput!): Organisation!
   deleteOrganisation(_id: String!): String!

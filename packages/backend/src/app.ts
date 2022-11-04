@@ -18,7 +18,9 @@ const cors = require('cors');
 
 dotenv.config();
 
-const s3Client = new AWS.S3();
+export const s3Client = new AWS.S3({
+  region: "eu-west-1",
+});
 
 const verifier = CognitoJwtVerifier.create({
   userPoolId: process.env.USERPOOL_ID,
@@ -38,6 +40,7 @@ const startApolloServer = async () => {
       resolvers.userResolvers.resolvers,
       resolvers.oganisationResolvers.resolvers,
       resolvers.listingResolvers.resolvers,
+      resolvers.jobApplicationResolvers.resolvers,
     ],
   });
   const server = new ApolloServer({

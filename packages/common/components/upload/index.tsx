@@ -3,10 +3,10 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { gql, useMutation } from '@apollo/client';
-import axios from 'axios';
 //@ts-ignore
 import EmptyProfileImage from 'common/logo/empty-profile-image.png';
 import environmentVars from 'common/utils/env.variables';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const Input = styled('input')({
