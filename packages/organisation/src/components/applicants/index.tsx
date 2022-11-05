@@ -42,7 +42,12 @@ const Applicant: React.FC<IJobApplication> = ({ createdDate, cvUrl, email, name 
         <Typography fontWeight={600}>{format(new Date(+createdDate), "dd/MM/yyyy")}</Typography>
       </Box>
     </Box>
-    <Divider sx={{ margin: '2rem 0'}} />
+    <Divider sx={{ margin: '2rem 0' }} />
+    <Box sx={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "flex-end", columnGap: "1rem" }}>
+      <Button variant="contained" color="error">Decline</Button>
+      <Button variant="contained" color="success" component={'a'} href={`mailto:${email}`}>Email participant</Button>
+      <Button variant="contained" color="success" component={'a'} href={`tel:${email}`}>Call participant</Button>
+    </Box>
   </Paper>
 )
 

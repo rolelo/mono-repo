@@ -34,18 +34,23 @@ export const resolvers = {
     },
     createJobApplication: async (
       parent,
-      { input: { jobId, ...rest } }: { input: JobApplicationInput } 
+      { input: { jobId, phoneNumber, ...rest } }: { input: JobApplicationInput } 
     ): Promise<IJobApplication> => {
+      const _id = uuidv4();
       const listing = await Listing.findById(jobId);
       const createdDate = Date.now().toString();
       listing.applications.push({
-        ...rest,
+        _id,
         createdDate,
+        phoneNumber,
+        ...rest,
       });
       await listing.save();
       return {
-        ...rest,
+        _id,
         createdDate,
+        phoneNumber,
+        ...rest,
       };
     },
   },

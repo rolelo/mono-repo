@@ -4,9 +4,10 @@ import { Backdrop, Box, Button, CircularProgress, Fade, TextField, Typography } 
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
 import { JobApplicationInput, SignedUrl } from 'common/models';
-import environmentVars from 'common/utils/env.variables';
 import React, { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import { toast } from 'react-toastify';
 
 type Props = {
@@ -53,9 +54,10 @@ const DirectApply: React.FC<Props> = ({ id }) => {
       handleClose();
     }
   });
-  const { handleSubmit, register, reset, formState: { isValid, isDirty } } = useForm<JobApplicationInput>({
+  const { handleSubmit, register, reset, control, formState: { isValid, isDirty } } = useForm<JobApplicationInput>({
     mode: 'all',
     defaultValues: {
+      phoneNumber: "",
       jobId: id,
     },
   });
@@ -107,11 +109,13 @@ const DirectApply: React.FC<Props> = ({ id }) => {
     return uuid;
   }
 
-  const onSubmit: SubmitHandler<JobApplicationInput> = async ({ email, jobId, name }): Promise<void> => {
+  const onSubmit: SubmitHandler<JobApplicationInput> = async ({ email, jobId, name, phoneNumber }): Promise<void> => {
     const uuid = await uploadToS3();
+
     submitForm({
       variables: {
         input: {
+          phoneNumber,
           cvUrl: `${environmentVars.s3BucketUrl}/cv/${uuid}`,
           email,
           jobId,
@@ -151,6 +155,17 @@ const DirectApply: React.FC<Props> = ({ id }) => {
               <TextField label="Email" variant="filled" fullWidth {...register('email', {
                 minLength: 4,
               })} />
+              <Box sx={{ '& input': { backgroundColor: 'transparent', border: 0 } }}>
+                <Controller control={control} name="phoneNumber" render={({ field: { onChange, value}}) => (
+                  <PhoneInput
+                    style={{ fontSize: '15px', padding: '1rem', border: 0, backgroundColor: "#9191911f" }}
+                    defaultCountry='GB'
+                    placeholder="Enter phone number"
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}/>
+              </Box>
               <div style={{ display: "flex", flexDirection: "row", columnGap: "2rem", alignItems: "center" }}>
                 <Button variant="contained" component="label" startIcon={<UploadFileIcon />} size="large">
                   Upload your CV

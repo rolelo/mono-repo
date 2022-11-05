@@ -146,6 +146,7 @@ input ListingInput  {
   salary: Int!
 }
 input JobApplicationInput {
+  phoneNumber: String!
   name: String!
   email: String!
   cvUrl: String!

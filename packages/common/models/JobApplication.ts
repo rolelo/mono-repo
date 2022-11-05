@@ -1,16 +1,18 @@
 import { model, Model, Schema } from "mongoose";
 
 export type JobApplicationInput = {
-  name: string
-  email: string
-  cvUrl: string
-  jobId: string
+  name: string,
+  phoneNumber: string,
+  email: string,
+  cvUrl: string,
+  jobId: string,
 }
 export interface IJobApplication {
-  _id?: string,
+  _id: string,
   name: string,
   email: string,
   cvUrl: string,
+  phoneNumber: string,
   createdDate: string,
 }
 
