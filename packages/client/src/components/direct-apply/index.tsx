@@ -1,14 +1,13 @@
+import { gql, useMutation } from '@apollo/client';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import { Box, Button, TextField, Fade, Backdrop, Typography, CircularProgress } from '@mui/material';
-import React, { useState } from 'react';
+import { Backdrop, Box, Button, CircularProgress, Fade, TextField, Typography } from '@mui/material';
 import Modal from '@mui/material/Modal';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { JobApplicationInput } from 'common/models';
-import { gql, useMutation, useQuery } from '@apollo/client';
 import axios from 'axios';
-import { toast } from 'react-toastify';
-import { SignedUrl } from 'common/models'
+import { JobApplicationInput, SignedUrl } from 'common/models';
 import environmentVars from 'common/utils/env.variables';
+import React, { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type Props = {
   id: string;
@@ -46,18 +45,29 @@ const CREATE_JOB_APPLICATION = gql`
 
 const DirectApply: React.FC<Props> = ({ id }) => {
   const [open, setOpen] = useState(false);
-  const [fileUploaded, setFileUploaded] = useState<SignedUrl & { file: any }>();
-  const [mutation, { loading }] = useMutation<{ createCVS3PreSignedUrl: SignedUrl }>(GET_SIGNED_URL, {});
-  const [submitForm] = useMutation<JobApplicationInput, { input: JobApplicationInput }>(CREATE_JOB_APPLICATION);
-  const { handleSubmit, register, formState: { isValid, isDirty } } = useForm<JobApplicationInput>({
+  const [fileUploaded, setFileUploaded] = useState<SignedUrl & { file: any } | null>(null);
+  const [submitForm] = useMutation<JobApplicationInput, { input: JobApplicationInput }>(CREATE_JOB_APPLICATION, {
+    onCompleted: () => {
+      toast.success("Job Application submitted successfully, you can view the status of your request via the online portal.")
+      handleReset();
+      handleClose();
+    }
+  });
+  const { handleSubmit, register, reset, formState: { isValid, isDirty } } = useForm<JobApplicationInput>({
     mode: 'all',
     defaultValues: {
       jobId: id,
-    }
+    },
   });
+  const [mutation, { loading }] = useMutation<{ createCVS3PreSignedUrl: SignedUrl }>(GET_SIGNED_URL);
 
   const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true)
+  const handleOpen = () => setOpen(true);
+  const handleReset = () => {
+    reset();
+    setFileUploaded(null);
+  }
+
 
   const handleUploadCV = async (e: any) => {
     if (e.target.files?.length) {
@@ -97,8 +107,8 @@ const DirectApply: React.FC<Props> = ({ id }) => {
     return uuid;
   }
 
-  const onSubmit: SubmitHandler<JobApplicationInput> = ({ email, jobId, name }): void => {
-    const uuid = uploadToS3();
+  const onSubmit: SubmitHandler<JobApplicationInput> = async ({ email, jobId, name }): Promise<void> => {
+    const uuid = await uploadToS3();
     submitForm({
       variables: {
         input: {
@@ -120,7 +130,10 @@ const DirectApply: React.FC<Props> = ({ id }) => {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
-        onClose={handleClose}
+        onClose={() => {
+          handleReset();
+          handleClose();
+        }}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -132,13 +145,13 @@ const DirectApply: React.FC<Props> = ({ id }) => {
             <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", rowGap: '2rem' }}>
               <TextField label="Name" variant="filled" fullWidth {...register('name', {
                 minLength: 4,
-                maxLength: 20,
+                maxLength: 40,
                 required: "Please enter your name",
               })} />
               <TextField label="Email" variant="filled" fullWidth {...register('email', {
                 minLength: 4,
               })} />
-              <div style={{ display: "flex", flexDirection: "row", columnGap: "2rem", alignItems: "center"}}>
+              <div style={{ display: "flex", flexDirection: "row", columnGap: "2rem", alignItems: "center" }}>
                 <Button variant="contained" component="label" startIcon={<UploadFileIcon />} size="large">
                   Upload your CV
                   <input
@@ -154,7 +167,13 @@ const DirectApply: React.FC<Props> = ({ id }) => {
                 </Button>
                 <Typography variant='body1'>{fileUploaded?.file?.name}</Typography>
               </div>
-              <Button startIcon={loading ?? <CircularProgress size='2rem' />} disabled={!isDirty || !isValid} variant="contained" color='success' size="large" type='submit'>
+              <Button
+                startIcon={loading ?? <CircularProgress size='2rem' />}
+                disabled={!isDirty || !isValid}
+                variant="contained"
+                color='success'
+                size="large"
+                type='submit'>
                 Apply For Position
               </Button>
             </form>

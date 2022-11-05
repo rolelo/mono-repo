@@ -28,10 +28,11 @@ export const resolvers = {
     },
     createJobApplication: async (
       parent,
-      { jobId, ...rest }: JobApplicationInput
+      { input: { jobId, ...rest } }: { input: JobApplicationInput } 
     ): Promise<IJobApplication> => {
       const listing = await Listing.findById(jobId);
       listing.applications.push(rest);
+      await listing.save();
       return rest;
     },
   },
