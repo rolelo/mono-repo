@@ -16,8 +16,8 @@ const RDrawer: React.FC<Props> = ({
     {...rest}
     anchor="right"
     sx={{
-      '& .MuiPaper-root': {
-        width: '50rem',
+      '& > .MuiPaper-root': {
+        width: '60rem',
         padding: '2rem',
         boxSizing: 'border-box',
       },
@@ -25,7 +25,7 @@ const RDrawer: React.FC<Props> = ({
   >
     <div>
       <Typography variant="h6" style={{ opacity: 0.6 }}>{subtitle}</Typography>
-      <Typography variant="h2">{title}</Typography>
+      <Typography variant="h4">{title}</Typography>
       <Typography variant="body1" style={{ marginTop: '1rem' }}>{extraInformation}</Typography>
     </div>
     <Divider style={{ margin: '2rem 0' }} />

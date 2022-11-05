@@ -11,6 +11,7 @@ export interface IJobApplication {
   name: string,
   email: string,
   cvUrl: string,
+  createdDate: string,
 }
 
 const jobApplicationSchema = new Schema<IJobApplication>({
@@ -18,6 +19,7 @@ const jobApplicationSchema = new Schema<IJobApplication>({
   name: { type: String, required: true },
   email: { type: String, required: true },
   cvUrl: { type: String, required: true },
+  createdDate: { type: String, required: true },
 });
 export const JobApplication: Model<IJobApplication> = model("JobApplication", jobApplicationSchema);
 

@@ -90,7 +90,7 @@ const Listing: React.FC = () => {
             </Typography>
             <Box sx={{ margin: '2rem 0', display: "flex", flexDirection: "row", flexWrap: "wrap", columnGap: "0.5rem", rowGap: "1rem" }}>
               {data?.clientListing.categories.slice(0, 3).map((c) => (
-                <Chip sx={{ fontSize: "1rem", fontWeight: "400" }} label={LinkedInJobFunctionCodes[c]} />
+                <Chip sx={{ fontSize: "1rem", fontWeight: "400" }} key={c} label={LinkedInJobFunctionCodes[c]} />
               ))}
             </Box>
           </Box>
@@ -139,7 +139,7 @@ const Listing: React.FC = () => {
           <Typography variant='h5' fontWeight="600" style={{ padding: "2rem 0 1rem 0" }}>Skills Required</Typography>
           <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", columnGap: "0.5rem", rowGap: "1rem" }}>
             {data?.clientListing.categories.map((c) => (
-              <Chip sx={{ fontSize: "1.2rem", fontWeight: "400" }} label={LinkedInJobFunctionCodes[c]} />
+              <Chip sx={{ fontSize: "1.2rem", fontWeight: "400" }} key={c} label={LinkedInJobFunctionCodes[c]} />
             ))}
           </Box>
         </Box>

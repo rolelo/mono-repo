@@ -157,6 +157,7 @@ type JobApplication {
   email: String!
   cvUrl: String!
   jobId: String!
+  createdDate: String!
 }
 type Listing implements IListing {
   _id: String
@@ -186,6 +187,7 @@ type Listing implements IListing {
 type Query {
   user: User!
   listings(organisationId: String): [Listing]
+  jobApplicants(jobId: String!): [JobApplication]
   clientListing(id: String!): Listing
 }
 type Mutation {
