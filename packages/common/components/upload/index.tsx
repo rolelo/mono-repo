@@ -59,7 +59,7 @@ const ImageUpload: React.FC<Props> = ({
           data: formData,
         });
 
-        submitImage(environmentVars.s3BucketUrl + uuid);
+        submitImage(`${environmentVars.s3BucketUrl}/organisation-logos/${uuid}`);
       } catch(e) {
         console.log(e);
         toast.error('Something went wrong uploading your file');

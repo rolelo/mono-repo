@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { IJobApplication, JobApplication } from '../../../common/models';
+import { IJobApplication, JobApplication, JobApplicationInput, Listing } from '../../../common/models';
 import { s3Client } from '../app';
 
 export const resolvers = {
@@ -28,16 +28,11 @@ export const resolvers = {
     },
     createJobApplication: async (
       parent,
-      { email, name }: IJobApplication
+      { jobId, ...rest }: JobApplicationInput
     ): Promise<IJobApplication> => {
-      const application = new JobApplication({
-        _id: uuidv4(),
-        email,
-        name,
-      });
-
-      await application.save();
-      return application.toObject();
+      const listing = await Listing.findById(jobId);
+      listing.applications.push(rest);
+      return rest;
     },
   },
 };

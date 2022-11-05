@@ -149,12 +149,14 @@ input JobApplicationInput {
   name: String!
   email: String!
   cvUrl: String!
+  jobId: String!
 }
 
 type JobApplication {
   name: String!
   email: String!
   cvUrl: String!
+  jobId: String!
 }
 type Listing implements IListing {
   _id: String

@@ -1,4 +1,5 @@
 import {model, Model, Schema} from 'mongoose';
+import { IJobApplication, JobApplicationInput } from './JobApplication';
 import {IUser, User} from './User';
 
 export interface CreateOrganisationInput {
@@ -53,7 +54,7 @@ const organisationSchema = new Schema<IOrganisation>({
   companyDescription: {type: String, required: true},
   email: {type: String, required: true},
   totalPositions: {type: Number, required: true},
-  createdDate: {type: String, required: true},
+  createdDate: { type: String, required: true },
 });
 
 export const Organisation: Model<IOrganisation> = model(

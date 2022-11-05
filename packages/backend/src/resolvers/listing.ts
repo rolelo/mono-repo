@@ -40,6 +40,7 @@ export const resolvers = {
         createdDate: Date.now().toString(),
         createdByName: user.name,
         createdById: sub,
+        applications: [],
         ...listingBase,
       };
 

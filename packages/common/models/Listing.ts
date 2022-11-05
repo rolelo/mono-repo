@@ -1,4 +1,5 @@
 import { model, Model, Schema } from "mongoose";
+import { IJobApplication } from "./JobApplication";
 export interface ListingBase {
   organisationId: string;
   jobPostingOperationType: JobOperationType;
@@ -108,6 +109,7 @@ export interface IListing extends ListingBase {
   createdDate: string;
   createdById: string;
   createdByName: string;
+  applications: IJobApplication[];
 }
 const listingSchema = new Schema<IListing>({
   _id: { type: String, required: true },
@@ -129,7 +131,11 @@ const listingSchema = new Schema<IListing>({
     required: true,
   },
   description: { type: String, required: true },
-  currency: { type: String, enum: Object.keys(ListingCurrency), required: true },
+  currency: {
+    type: String,
+    enum: Object.keys(ListingCurrency),
+    required: true,
+  },
   salary: { type: Number, required: true },
   location: { type: String, required: true },
   categories: {
@@ -139,11 +145,24 @@ const listingSchema = new Schema<IListing>({
   },
   skillsDescription: { type: String, required: true },
   workRemoteAllowed: { type: Boolean, required: true },
-  workplaceType: { type: String, enum: Object.keys(WorkPlaceType), required: true },
-  employmentStatus: { type: String, enum: Object.keys(EmploymentStatus), required: true },
-  experienceLevel: { type: String, enum: Object.keys(ExperienceLevel), required: true },
+  workplaceType: {
+    type: String,
+    enum: Object.keys(WorkPlaceType),
+    required: true,
+  },
+  employmentStatus: {
+    type: String,
+    enum: Object.keys(EmploymentStatus),
+    required: true,
+  },
+  experienceLevel: {
+    type: String,
+    enum: Object.keys(ExperienceLevel),
+    required: true,
+  },
   expireAt: { type: String, required: true },
   listingType: { type: String, enum: Object.keys(ListingType), required: true },
+  applications: { type: [Object], required: true, default: [] },
   createdById: { type: String, required: true, index: true },
   createdByName: { type: String, required: true },
 });
