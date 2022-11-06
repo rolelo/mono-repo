@@ -1,14 +1,14 @@
 import { gql, makeVar, useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
 import { Fade, MenuItem } from '@mui/material';
-import Navigation from 'common/components/navigation';
-import React, { useState } from 'react';
-import { Outlet, useNavigate, Link } from 'react-router-dom';
-import UserProfile from '../../user-profile';
 import RDrawer from 'common/components/drawer';
+import Navigation from 'common/components/navigation';
 import { User } from 'common/models';
+import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import UserProfile from '../../user-profile';
 
-const GET_USER = gql`
+export const GET_USER = gql`
   query GET_USER {
     user {
       name
@@ -22,6 +22,7 @@ const GET_USER = gql`
         salaryLookingFor
         techSkills
         yearsOfExperience
+        countryOfResidence
       }
     }
   }
@@ -42,6 +43,7 @@ const DashboardLayout: React.FC = () => {
   const [open, setOpen] = useState(false);
   useQuery<{ user: User }>(GET_USER, {
     onCompleted: ({ user }) => {
+      console.log(user);
       userVar(user);
     }
   });

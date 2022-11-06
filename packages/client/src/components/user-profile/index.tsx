@@ -1,15 +1,15 @@
 import { gql, useMutation, useReactiveVar } from '@apollo/client';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import { Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
+import { Alert, Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import axios from 'axios';
 import { Profile, ProfileInput, SignedUrl, TechSkills } from 'common/models';
 import environmentVars from 'common/utils/env.variables';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import 'react-phone-number-input/style.css';
 import { toast } from 'react-toastify';
-import { userVar } from '../dashboard/layout';
+import { GET_USER, userVar } from '../dashboard/layout';
 
 var countries = require('i18n-iso-countries');
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -34,8 +34,10 @@ const CREATE_PROFILE = gql`
 `;
 
 const UserProfile: React.FC = () => {
-  const user = useReactiveVar(userVar)
+  const user = useReactiveVar(userVar);
+  const [viewOnly, setViewOnly] = useState<boolean>(Boolean(user?.profile));
   const [fileUploaded, setFileUploaded] = useState<SignedUrl & { file: File } | null>(null);
+  const [mutation] = useMutation<{ createCVS3PreSignedUrl: SignedUrl }>(GET_SIGNED_URL);
   const [submitForm] = useMutation<Profile, { input: ProfileInput }>(CREATE_PROFILE, {
     onCompleted: () => {
       toast.success("Job Application submitted successfully, you can view the status of your request via the online portal.")
@@ -43,17 +45,21 @@ const UserProfile: React.FC = () => {
     },
     onError: (e) => {
       toast.error(e instanceof Error ? e.message : 'There was an error creating your profile');
-    }
+    },
+    refetchQueries: [GET_USER]
   });
-
-  console.log(user);
   const { handleSubmit, register, reset, watch, control, formState: { isValid, isDirty } } = useForm<ProfileInput>({
     mode: 'all',
     defaultValues: {
       ...(user?.profile ? { ...user?.profile } : {})
     }
   });
-  const [mutation] = useMutation<{ createCVS3PreSignedUrl: SignedUrl }>(GET_SIGNED_URL);
+
+  useEffect(() => {
+    reset({ ...(user?.profile ? { ...user?.profile } : {}) });
+    setViewOnly(true);
+  }, [user, reset])
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "application/pdf": [".pdf"]
@@ -113,31 +119,50 @@ const UserProfile: React.FC = () => {
       toast.error(e instanceof Error ? e.message : 'Something went wrong when trying to upload your file');
     }
   }
-  const onSubmit: SubmitHandler<ProfileInput> = async (input): Promise<void> => {
-    console.log(input);
-    const uuid = await uploadToS3();
+  const onSubmit: SubmitHandler<ProfileInput> = async ({
+    countryOfResidence,
+    rightToWorkInEU,
+    rightToWorkInUK,
+    rightToWorkInUS,
+    cv,
+    salaryLookingFor,
+    techSkills,
+    yearsOfExperience
+  }): Promise<void> => {
+    let uuid;
+    if (!user?.profile?.cv || fileUploaded) {
+      console.log('in here');
+      uuid = await uploadToS3();
+    }
     submitForm({
       variables: {
         input: {
-          ...input,
-          cv: `${environmentVars.s3BucketUrl}/cv/${uuid}`,
-          salaryLookingFor: +input.salaryLookingFor,
-          yearsOfExperience: +input.yearsOfExperience,
+          countryOfResidence,
+          rightToWorkInEU,
+          rightToWorkInUK,
+          rightToWorkInUS,
+          techSkills,
+          cv: `${environmentVars.s3BucketUrl}/cv/${uuid}` || cv,
+          salaryLookingFor: +salaryLookingFor,
+          yearsOfExperience: +yearsOfExperience,
         }
       }
     });
   }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", rowGap: '2rem' }}>
+      <Alert color={viewOnly ? 'success' : 'warning'}>
+        {viewOnly ? 'Profile successfully setup' : user?.profile ? 'You are editing your profile' : 'You still need to setup a profile'}
+      </Alert>
       <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Countries</InputLabel>
+          <InputLabel id="demo-simple-select-label">Country of Residence</InputLabel>
           <Controller
             control={control}
             name='countryOfResidence'
             render={({ field }) => (
               <Select
+                disabled={viewOnly}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="countryOfResidence"
@@ -158,6 +183,7 @@ const UserProfile: React.FC = () => {
             name='rightToWorkInUK'
             render={({ field }) => (
               <Select
+                disabled={viewOnly}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="rightToWorkInUK"
@@ -180,6 +206,7 @@ const UserProfile: React.FC = () => {
             render={({ field }) => (
               <Select
                 labelId="demo-simple-select-label"
+                disabled={viewOnly}
                 id="demo-simple-select"
                 label="rightToWorkInEU"
                 {...field}
@@ -199,6 +226,7 @@ const UserProfile: React.FC = () => {
             render={({ field }) => (
               <Select
                 labelId="demo-simple-select-label"
+                disabled={viewOnly}
                 id="demo-simple-select"
                 label="rightToWorkInUS"
                 {...field}
@@ -213,7 +241,7 @@ const UserProfile: React.FC = () => {
       </Box>
       <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Yeard of Experience</InputLabel>
+          <InputLabel id="demo-simple-select-label">Years of Experience</InputLabel>
           <Controller
             control={control}
             name='yearsOfExperience'
@@ -222,6 +250,7 @@ const UserProfile: React.FC = () => {
             }) => (
               <Select
                 labelId="demo-simple-select-label"
+                disabled={viewOnly}
                 id="demo-simple-select"
                 label="yearsOfExperience"
                 {...field}
@@ -249,6 +278,7 @@ const UserProfile: React.FC = () => {
                 multiline
                 value={watch().techSkills || []}
                 labelId="demo-simple-select-label"
+                disabled={viewOnly}
                 id="demo-simple-select"
                 label="techSkills"
                 onChange={onChange}
@@ -269,35 +299,59 @@ const UserProfile: React.FC = () => {
           <OutlinedInput
             id="outlined-adornment-amount"
             {...register('salaryLookingFor')}
+            disabled={viewOnly}
             startAdornment={<InputAdornment position="start">£</InputAdornment>}
             label="Amount"
           />
         </FormControl>
       </Box>
-      <section>
-        <div {...getRootProps()}>
-          <input
-            {...getInputProps()}
-          />
-          <Box sx={{
-            backgroundColor: "#FAFAFA",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "4rem",
-            '&:hover': { cursor: 'pointer' }
-          }}>
-            <UploadFileIcon sx={{ fontSize: "4rem" }} />
-            {
-              fileUploaded?.file.name ?
-                <Typography variant="h6" textAlign="center">{fileUploaded.file.name}</Typography>
-                : <Typography variant="h6" textAlign="center">Drag & Drop or Click here to upload your latest CV</Typography>
-            }
+      {
+        !viewOnly ? (
+          <section>
+            <div {...getRootProps()}>
+              <input
+                {...getInputProps()}
+              />
+              <Box sx={{
+                backgroundColor: "#FAFAFA",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "4rem",
+                '&:hover': { cursor: 'pointer' }
+              }}>
+                <UploadFileIcon sx={{ fontSize: "4rem" }} />
+                {
+                  fileUploaded?.file.name ?
+                    <Typography variant="h6" textAlign="center">{fileUploaded.file.name}</Typography>
+                    : <Typography variant="h6" textAlign="center">Drag & Drop or Click here to upload your latest CV</Typography>
+                }
+              </Box>
+            </div>
+          </section>
+        ) : (
+          <Box sx={{ display: 'flex', justifyContent: "space-between" }}>
+            <Button
+              variant="contained"
+              color="info"
+              component="a"
+              href={user?.profile?.cv}
+              target="_blank"
+              referrerPolicy='no-referrer'>
+              View Your Uploaded CV
+            </Button>
+            <Button onClick={() => setViewOnly(false)} variant="contained" color="secondary">Edit Your Profile</Button>
           </Box>
-        </div>
-      </section>
-      <Button disabled={!isValid || !isDirty} type="submit" variant="contained" fullWidth>Create profile</Button>
+        )
+      }
+      {
+        !viewOnly && (
+          <Button disabled={(!isValid || !isDirty) && !user?.profile} type="submit" variant="contained" fullWidth>
+            {user?.profile ? 'Update Profile' : 'Create profile'}
+          </Button>
+        )
+      }
     </form>
   )
 }
