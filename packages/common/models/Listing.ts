@@ -1,13 +1,13 @@
 import { model, Model, Schema } from "mongoose";
-import { IJobApplication } from "./JobApplication";
+import { IUser } from ".";
 export interface ListingBase {
   organisationId: string;
   jobPostingOperationType: JobOperationType;
   title: string;
-  advertisingMediums: [AdvertisingMedium];
+  advertisingMediums: AdvertisingMedium[];
   description: string;
   location: string;
-  categories: [keyof typeof LinkedInJobFunctionCodes];
+  categories: (keyof typeof LinkedInJobFunctionCodes)[];
   skillsDescription: string;
   workRemoteAllowed: boolean;
   workplaceType: WorkPlaceType;
@@ -109,7 +109,10 @@ export interface IListing extends ListingBase {
   createdDate: string;
   createdById: string;
   createdByName: string;
-  applications: IJobApplication[];
+  applications: IUser[];
+}
+export interface ListingForClient extends IListing {
+  alreadyApplied: boolean;
 }
 const listingSchema = new Schema<IListing>({
   _id: { type: String, required: true },

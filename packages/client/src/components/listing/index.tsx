@@ -1,10 +1,12 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { Box, Button, Chip, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import { Box, Typography, Chip, Button } from '@mui/material';
-import { EmploymentStatus, IListing, LinkedInJobFunctionCodes } from 'common/models';
-import { useParams } from 'react-router-dom';
+import { EmploymentStatus, IUser, JobApplicationInput, LinkedInJobFunctionCodes, ListingForClient } from 'common/models';
 import { format } from 'date-fns';
-import DirectApply from '../direct-apply';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 
 const GET_LISTING = gql`
   query clientListing($id: String!) {
@@ -32,6 +34,15 @@ const GET_LISTING = gql`
       listingType
       currency
       salary
+      alreadyApplied
+    }
+  }
+`;
+
+const CREATE_JOB_APPLICATION = gql`
+  mutation CreateJobApplication($input: JobApplicationInput!) {
+    createJobApplication(input: $input) {
+      name
     }
   }
 `;
@@ -53,7 +64,7 @@ const RightPane = styled('div')({
 
 const Listing: React.FC = () => {
   const { id } = useParams();
-  const { data, loading } = useQuery<{ clientListing: IListing }>(GET_LISTING, {
+  const { data } = useQuery<{ clientListing: ListingForClient }>(GET_LISTING, {
     variables: {
       id,
     },
@@ -61,6 +72,14 @@ const Listing: React.FC = () => {
       console.log(error.networkError);
     }
   });
+  const [mutation] = useMutation<IUser, { input: JobApplicationInput }>(CREATE_JOB_APPLICATION, {
+    onCompleted: () => {
+      toast.success('Successfully applied to position');
+    },
+    onError: (e) => {
+      toast.error(e instanceof Error ? e.message : 'Something went wrong with applying for position');
+    }
+  })
   return (
     <Box sx={{ padding: '2rem', display: "flex", flexDirection: "row", columnGap: '2rem', boxSizing: 'border-box' }}>
       <LeftPane>
@@ -143,9 +162,21 @@ const Listing: React.FC = () => {
             ))}
           </Box>
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end"}}>
+        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
           <a href={data?.clientListing.organisationWebsite} target="_blank" rel="noreferrer">{data?.clientListing.organisationWebsite}</a>
-          { id && <DirectApply id={id} /> }
+          {id && (
+            <Button disabled={data?.clientListing.alreadyApplied} variant="contained" component="label" startIcon={<UploadFileIcon />} size="large" onClick={() => mutation({
+              variables: {
+                input: {
+                  jobId: id
+                }
+              }
+            })}>
+              {
+                data?.clientListing.alreadyApplied ? "You have already applied to this position" : "Direct Apply"
+              }
+            </Button>
+          )}
         </Box>
       </RightPane>
     </Box>

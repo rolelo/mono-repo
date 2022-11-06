@@ -122,10 +122,6 @@ input ListingInput  {
   salary: Int!
 }
 input JobApplicationInput {
-  phoneNumber: String!
-  name: String!
-  email: String!
-  cvUrl: String!
   jobId: String!
 }
 input ProfileInput {
@@ -203,17 +199,18 @@ type Listing implements IListing {
   listingType: ListingType!
   currency: ListingCurrency!
   salary: Int!
+  alreadyApplied: Boolean!
 }
 type Query {
   user: User!
   listings(organisationId: String): [Listing]
-  jobApplicants(jobId: String!): [JobApplication]
+  jobApplicants(jobId: String!): [User]
   clientListing(id: String!): Listing
 }
 type Mutation {
   createProfile(input: ProfileInput!): Profile!
   createListing(input: ListingInput!): Listing!
-  createJobApplication(input: JobApplicationInput!): JobApplication!
+  createJobApplication(input: JobApplicationInput!): User!
   createUser: User!
   updateUser: User!
   createCVS3PreSignedUrl(content: String!): SignedUrl!

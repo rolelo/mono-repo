@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
-import { IJobApplication, JobApplicationInput, Listing } from '../../../common/models';
+import { Context, IJobApplication, IUser, JobApplicationInput, Listing, User } from '../../../common/models';
 import { s3Client } from '../app';
 
 export const resolvers = {
   Query: {
-    jobApplicants: async (_, { jobId }): Promise<IJobApplication[]> => {
+    jobApplicants: async (_, { jobId }): Promise<IUser[]> => {
       const jobApplicants = await Listing.findById(jobId);
       return jobApplicants.applications;
     }
@@ -34,23 +34,24 @@ export const resolvers = {
     },
     createJobApplication: async (
       parent,
-      { input: { jobId, phoneNumber, ...rest } }: { input: JobApplicationInput } 
+      { input: { jobId } }: { input: JobApplicationInput },
+      { sub, name, email, phoneNumber }: Context
     ): Promise<IJobApplication> => {
-      const _id = uuidv4();
+      const user = await (await User.findById(sub)).toObject();
+      if (!user.profile) throw Error("User does not have a profile setup");
       const listing = await Listing.findById(jobId);
       const createdDate = Date.now().toString();
       listing.applications.push({
-        _id,
-        createdDate,
-        phoneNumber,
-        ...rest,
+        ...user
       });
       await listing.save();
       return {
-        _id,
+        _id: sub,
         createdDate,
+        name,
+        email,
         phoneNumber,
-        ...rest,
+        cvUrl: user.profile.cv
       };
     },
   },
