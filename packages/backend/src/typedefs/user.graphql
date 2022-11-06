@@ -129,9 +129,9 @@ input JobApplicationInput {
   jobId: String!
 }
 input ProfileInput {
-  rightToWorkInUK: Boolean!
-  rightToWorkInEU: Boolean!
-  rightToWorkInUS: Boolean!
+  rightToWorkInUK: String!
+  rightToWorkInEU: String!
+  rightToWorkInUS: String!
   cv: String!
   countryOfResidence: String!
   salaryLookingFor: Int
@@ -151,10 +151,10 @@ type Organisation {
   profile: Profile
 }
 type Profile {
-  rightToWorkInUK: Boolean!
-  rightToWorkInEU: Boolean!
-  rightToWorkInUS: Boolean!
-  cv: [String]
+  rightToWorkInUK: String!
+  rightToWorkInEU: String!
+  rightToWorkInUS: String!
+  cv: String
   countryOfResidence: String!
   salaryLookingFor: Int
   techSkills: [String]
@@ -165,6 +165,7 @@ type User {
   email: String!
   phoneNumber: String
   organisations: [Organisation]
+  profile: Profile
 }
 type SignedUrl {
   url: String!

@@ -1,3 +1,4 @@
+import { gql, makeVar, useQuery } from '@apollo/client';
 import styled from '@emotion/styled';
 import { Fade, MenuItem } from '@mui/material';
 import Navigation from 'common/components/navigation';
@@ -5,6 +6,26 @@ import React, { useState } from 'react';
 import { Outlet, useNavigate, Link } from 'react-router-dom';
 import UserProfile from '../../user-profile';
 import RDrawer from 'common/components/drawer';
+import { User } from 'common/models';
+
+const GET_USER = gql`
+  query GET_USER {
+    user {
+      name
+      email
+      phoneNumber
+      profile {
+        rightToWorkInUK
+        rightToWorkInEU
+        rightToWorkInUS
+        cv
+        salaryLookingFor
+        techSkills
+        yearsOfExperience
+      }
+    }
+  }
+`;
 
 const Container = styled('div')({
   display: 'flex',
@@ -16,9 +37,14 @@ const Container = styled('div')({
   },
 });
 
+export const userVar = makeVar<User | null>(null);
 const DashboardLayout: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const navigator = useNavigate();
+  useQuery<{ user: User }>(GET_USER, {
+    onCompleted: ({ user }) => {
+      userVar(user);
+    }
+  });
   return (
     <Fade in timeout={600}>
       <Container>

@@ -1,10 +1,10 @@
-import {Context, IOrganisation, IUser, Organisation, User} from '../../../common/models';
+import {Context, IOrganisation, IUser, Organisation, Profile, User} from '../../../common/models';
 
 export const resolvers = {
   Query: {
-    user: async (parent, args, {sub}: Context): Promise<IUser> => {
-      const {_id, name,
-        email, phoneNumber, organisationIds, profile} = await User.findById(sub);
+    user: async (parent, args, { sub }: Context): Promise<IUser> => {
+      const { _id, name, email, phoneNumber, organisationIds, profile } =
+        await User.findById(sub);
       return {
         _id,
         name,
@@ -17,8 +17,8 @@ export const resolvers = {
   },
   Mutation: {
     createUser: async (
-        parent,
-        {sub, email, name, phoneNumber}: Context,
+      parent,
+      { sub, email, name, phoneNumber }: Context
     ): Promise<IUser> => {
       const user = new User({
         _id: sub,
@@ -30,13 +30,19 @@ export const resolvers = {
       await user.save();
       return user.toObject();
     },
-    createProfile: {
-  
+    createProfile: async (parent, { input }: { input: Profile }, { sub }: Context): Promise<Profile> => {
+      const user = await User.findById(sub);
+      user.profile = input;
+      await user.save();
+      return input;
     },
   },
   User: {
-    async organisations({organisationIds},
-        _, {sub}: Context): Promise<IOrganisation[]> {
+    async organisations(
+      { organisationIds },
+      _,
+      { sub }: Context
+    ): Promise<IOrganisation[]> {
       let ogids: string[] = organisationIds || [];
       if (!ogids) {
         const user = await User.findById(sub);

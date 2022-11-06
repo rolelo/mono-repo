@@ -1,5 +1,5 @@
 import {
-  Avatar, Menu, MenuItem, Tooltip,
+  Avatar, Menu, MenuItem, Tooltip
 } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -8,7 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useMutation } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Logo from '../../logo/logo.png';
 import Amplify from '../../services/Amplify';

@@ -1,8 +1,8 @@
 export type Profile = {
-  rightToWorkInUK: boolean;
-  rightToWorkInEU: boolean;
-  rightToWorkInUS: boolean;
-  cv: string[];
+  rightToWorkInUK: string;
+  rightToWorkInEU: string;
+  rightToWorkInUS: string;
+  cv: string;
   countryOfResidence: string;
   salaryLookingFor: number;
   techSkills: string[];

@@ -1,4 +1,4 @@
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useReactiveVar } from '@apollo/client';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import { useDropzone } from 'react-dropzone';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import 'react-phone-number-input/style.css';
 import { toast } from 'react-toastify';
+import { userVar } from '../dashboard/layout';
 
 var countries = require('i18n-iso-countries');
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -25,40 +26,57 @@ const GET_SIGNED_URL = gql`
 `
 
 const CREATE_PROFILE = gql`
-  mutation CreateProfile($input: Profile!) {
+  mutation CreateProfile($input: ProfileInput!) {
     createProfile(input: $input) {
-      name
+      salaryLookingFor
     }
   }
 `;
 
 const UserProfile: React.FC = () => {
-  const [fileUploaded, setFileUploaded] = useState<SignedUrl & { file: any } | null>(null);
+  const user = useReactiveVar(userVar)
+  const [fileUploaded, setFileUploaded] = useState<SignedUrl & { file: File } | null>(null);
   const [submitForm] = useMutation<Profile, { input: ProfileInput }>(CREATE_PROFILE, {
     onCompleted: () => {
       toast.success("Job Application submitted successfully, you can view the status of your request via the online portal.")
       handleReset();
+    },
+    onError: (e) => {
+      toast.error(e instanceof Error ? e.message : 'There was an error creating your profile');
     }
   });
+
+  console.log(user);
   const { handleSubmit, register, reset, watch, control, formState: { isValid, isDirty } } = useForm<ProfileInput>({
     mode: 'all',
+    defaultValues: {
+      ...(user?.profile ? { ...user?.profile } : {})
+    }
   });
   const [mutation] = useMutation<{ createCVS3PreSignedUrl: SignedUrl }>(GET_SIGNED_URL);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "application/pdf": [".pdf"]
-    }
+    },
+    multiple: false,
+    maxFiles: 1,
+    onDrop: (file) => {
+      handleUploadCV(file)
+    },
+    onError: (e) => {
+      toast.error(e.message);
+    },
   });
 
   const handleReset = () => {
     reset();
     setFileUploaded(null);
   }
-  const handleUploadCV = async (e: any) => {
-    console.log('in here');
-    if (e.target.files?.length) {
+  const handleUploadCV = async (f: File[]) => {
+    console.log(f);
+    if (f?.length) {
       try {
-        const file = e.target.files[0];
+        const file = f[0];
         const result = await mutation({
           variables: {
             content: file.type,
@@ -78,7 +96,7 @@ const UserProfile: React.FC = () => {
       if (!fileUploaded) throw Error("No CV Selected");
       const { url, fields, file, uuid } = fileUploaded;
       const formData = new FormData();
-  
+
       formData.append('Content-Type', file.type);
       const fieldsParsed = JSON.parse(fields);
       Object.entries(fieldsParsed).forEach(([k, v]: any) => {
@@ -89,7 +107,7 @@ const UserProfile: React.FC = () => {
         method: 'POST',
         data: formData,
       });
-  
+
       return uuid;
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Something went wrong when trying to upload your file');
@@ -97,11 +115,15 @@ const UserProfile: React.FC = () => {
   }
   const onSubmit: SubmitHandler<ProfileInput> = async (input): Promise<void> => {
     console.log(input);
-    return;
     const uuid = await uploadToS3();
     submitForm({
       variables: {
-        input
+        input: {
+          ...input,
+          cv: `${environmentVars.s3BucketUrl}/cv/${uuid}`,
+          salaryLookingFor: +input.salaryLookingFor,
+          yearsOfExperience: +input.yearsOfExperience,
+        }
       }
     });
   }
@@ -114,13 +136,13 @@ const UserProfile: React.FC = () => {
           <Controller
             control={control}
             name='countryOfResidence'
-            render={(fields) => (
+            render={({ field }) => (
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="countryOfResidence"
-                {...fields}
-                value={watch().countryOfResidence || ''}
+                {...field}
+                value={field.value || ""}
               >
                 {Object.keys(countryList).map((key) => (
                   <MenuItem key={countryList[key]} value={countryList[key]}>{countryList[key]}</MenuItem>
@@ -134,16 +156,16 @@ const UserProfile: React.FC = () => {
           <Controller
             control={control}
             name='rightToWorkInUK'
-            render={(fields) => (
+            render={({ field }) => (
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="rightToWorkInUK"
-                {...fields}
-                value={watch().rightToWorkInUK || ''}
+                {...field}
+                value={field.value || ""}
               >
-                <MenuItem value="Yes">Yes</MenuItem>
-                <MenuItem value="No">No</MenuItem>
+                <MenuItem value="true">Yes</MenuItem>
+                <MenuItem value="false">No</MenuItem>
               </Select>
             )}
           />
@@ -155,16 +177,16 @@ const UserProfile: React.FC = () => {
           <Controller
             control={control}
             name='rightToWorkInEU'
-            render={(fields) => (
+            render={({ field }) => (
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="rightToWorkInEU"
-                {...fields}
-                value={watch().rightToWorkInEU || ''}
+                {...field}
+                value={field.value || ""}
               >
-                <MenuItem value="Yes">Yes</MenuItem>
-                <MenuItem value="No">No</MenuItem>
+                <MenuItem value="true">Yes</MenuItem>
+                <MenuItem value="false">No</MenuItem>
               </Select>
             )}
           />
@@ -174,16 +196,16 @@ const UserProfile: React.FC = () => {
           <Controller
             control={control}
             name='rightToWorkInUS'
-            render={(fields) => (
+            render={({ field }) => (
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="rightToWorkInUS"
-                {...fields}
-                value={watch().rightToWorkInUS || ''}
+                {...field}
+                value={field.value || ""}
               >
-                <MenuItem value="Yes">Yes</MenuItem>
-                <MenuItem value="No">No</MenuItem>
+                <MenuItem value="true">Yes</MenuItem>
+                <MenuItem value="false">No</MenuItem>
               </Select>
             )}
           />
@@ -203,7 +225,7 @@ const UserProfile: React.FC = () => {
                 id="demo-simple-select"
                 label="yearsOfExperience"
                 {...field}
-                value={watch().yearsOfExperience || ''}
+                value={field.value || ""}
               >
                 {
                   ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"].map((value) => (
@@ -256,9 +278,6 @@ const UserProfile: React.FC = () => {
         <div {...getRootProps()}>
           <input
             {...getInputProps()}
-            {...register("cv", {
-              onChange: handleUploadCV,
-            })}
           />
           <Box sx={{
             backgroundColor: "#FAFAFA",
@@ -270,11 +289,15 @@ const UserProfile: React.FC = () => {
             '&:hover': { cursor: 'pointer' }
           }}>
             <UploadFileIcon sx={{ fontSize: "4rem" }} />
-            <Typography variant="h6" textAlign="center">Drag & Drop or Click here to upload your latest CV</Typography>
+            {
+              fileUploaded?.file.name ?
+                <Typography variant="h6" textAlign="center">{fileUploaded.file.name}</Typography>
+                : <Typography variant="h6" textAlign="center">Drag & Drop or Click here to upload your latest CV</Typography>
+            }
           </Box>
         </div>
       </section>
-      <Button type="submit" variant="contained" fullWidth>Create profile</Button>
+      <Button disabled={!isValid || !isDirty} type="submit" variant="contained" fullWidth>Create profile</Button>
     </form>
   )
 }

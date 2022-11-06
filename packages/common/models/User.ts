@@ -7,6 +7,7 @@ export interface User {
   email: string
   phoneNumber: string
   organisations: Organisation[]
+  profile?: Profile
 }
 
 export interface IUser {
