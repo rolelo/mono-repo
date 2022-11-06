@@ -1,33 +1,3 @@
-input CreateOrganisationInput {
-  name: String!
-  website: String!
-  companyLogo: String!
-  companyDescription: String!
-  email: String!
-}
-type Organisation {
-  _id: String!
-  admin: User!
-  name: String!
-  website: String!
-  companyLogo: String!  
-  companyDescription: String!
-  email: String!
-  totalPositions: Int!
-  createdDate: String!
-}
-type User {
-  name: String!
-  email: String!
-  phoneNumber: String
-  organisations: [Organisation]
-}
-
-type SignedUrl {
-  url: String!
-  uuid: String!
-  fields: String!
-}
 enum AdvertisingMedium {
   LinkedIn
   Indeed
@@ -109,7 +79,13 @@ enum ListingCurrency {
   GBP
   EUR
 }
-
+input CreateOrganisationInput {
+  name: String!
+  website: String!
+  companyLogo: String!
+  companyDescription: String!
+  email: String!
+}
 interface IListing {
   jobPostingOperationType: JobOperationType!
   title: String!
@@ -152,7 +128,49 @@ input JobApplicationInput {
   cvUrl: String!
   jobId: String!
 }
-
+input ProfileInput {
+  rightToWorkInUK: Boolean!
+  rightToWorkInEU: Boolean!
+  rightToWorkInUS: Boolean!
+  cv: String!
+  countryOfResidence: String!
+  salaryLookingFor: Int
+  techSkills: [String]
+  yearsOfExperience: Int
+}
+type Organisation {
+  _id: String!
+  admin: User!
+  name: String!
+  website: String!
+  companyLogo: String!  
+  companyDescription: String!
+  email: String!
+  totalPositions: Int!
+  createdDate: String!
+  profile: Profile
+}
+type Profile {
+  rightToWorkInUK: Boolean!
+  rightToWorkInEU: Boolean!
+  rightToWorkInUS: Boolean!
+  cv: [String]
+  countryOfResidence: String!
+  salaryLookingFor: Int
+  techSkills: [String]
+  yearsOfExperience: Int
+}
+type User {
+  name: String!
+  email: String!
+  phoneNumber: String
+  organisations: [Organisation]
+}
+type SignedUrl {
+  url: String!
+  uuid: String!
+  fields: String!
+}
 type JobApplication {
   name: String!
   email: String!
@@ -192,6 +210,7 @@ type Query {
   clientListing(id: String!): Listing
 }
 type Mutation {
+  createProfile(input: ProfileInput!): Profile!
   createListing(input: ListingInput!): Listing!
   createJobApplication(input: JobApplicationInput!): JobApplication!
   createUser: User!

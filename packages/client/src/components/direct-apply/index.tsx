@@ -4,6 +4,7 @@ import { Backdrop, Box, Button, CircularProgress, Fade, TextField, Typography } 
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
 import { JobApplicationInput, SignedUrl } from 'common/models';
+import environmentVars from 'common/utils/env.variables';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-number-input';

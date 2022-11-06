@@ -1,13 +1,6 @@
-import {model, Model, Schema} from 'mongoose';
+import { model, Model, Schema } from 'mongoose';
 import { Organisation } from './Organisation';
-
-export interface IUser {
-  _id: string;
-  email: string;
-  name: string;
-  phoneNumber?: string;
-  organisationIds: string[];
-}
+import { Profile } from './Profile';
 
 export interface User {
   name: string
@@ -16,12 +9,22 @@ export interface User {
   organisations: Organisation[]
 }
 
+export interface IUser {
+  _id: string;
+  email: string;
+  name: string;
+  phoneNumber?: string;
+  organisationIds: string[];
+  profile?: Profile;
+}
+
 const userSchema = new Schema<IUser>({
   _id: {type: String, required: true},
   email: {type: String, required: true},
   name: {type: String, required: true},
   organisationIds: {type: [String], required: true, default: []},
-  phoneNumber: {type: String, required: false},
+  phoneNumber: { type: String, required: false },
+  profile: { type: Object, required: false },
 });
 
 export const User: Model<IUser> = model('User', userSchema);

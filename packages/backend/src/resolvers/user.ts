@@ -4,20 +4,20 @@ export const resolvers = {
   Query: {
     user: async (parent, args, {sub}: Context): Promise<IUser> => {
       const {_id, name,
-        email, phoneNumber, organisationIds} = await User.findById(sub);
+        email, phoneNumber, organisationIds, profile} = await User.findById(sub);
       return {
         _id,
         name,
         email,
         phoneNumber,
         organisationIds,
+        profile,
       };
     },
   },
   Mutation: {
     createUser: async (
         parent,
-        args,
         {sub, email, name, phoneNumber}: Context,
     ): Promise<IUser> => {
       const user = new User({
@@ -29,6 +29,9 @@ export const resolvers = {
 
       await user.save();
       return user.toObject();
+    },
+    createProfile: {
+  
     },
   },
   User: {
