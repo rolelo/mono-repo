@@ -79,7 +79,7 @@ export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu }: P
         position="static"
         sx={{
           backgroundColor: theme.palette.background.default,
-          color: theme.palette.text.primary,
+          color: theme.palette.secondary.light,
         }}>
         <Toolbar>
           <IconButton
