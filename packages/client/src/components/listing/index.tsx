@@ -87,7 +87,7 @@ const Listing: React.FC = () => {
     onError: (e) => {
       toast.error(e instanceof Error ? e.message : 'Something went wrong with applying for position');
     }
-  })
+  });
   return (
     <Box sx={{ padding: '2rem', display: "flex", flexDirection: "row", columnGap: '2rem', boxSizing: 'border-box' }}>
       <LeftPane>

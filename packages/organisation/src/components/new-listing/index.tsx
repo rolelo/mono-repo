@@ -21,7 +21,16 @@ import { useYupValidationResolver } from 'common/hooks';
 import GoogleLogo from 'common/logo/google.png';
 import IndeedLogo from 'common/logo/indeed.png';
 import LinkedInLogo from 'common/logo/LI-In-Bug.png';
-import { AdvertisingMedium, EmploymentStatus, ExperienceLevel, JobOperationType, LinkedInJobFunctionCodes, ListingCurrency, ListingInput, ListingType } from 'common/models';
+import {
+  AdvertisingMedium,
+  EmploymentStatus,
+  ExperienceLevel,
+  JobOperationType,
+  LinkedInJobFunctionCodes,
+  ListingCurrency,
+  ListingInput,
+  ListingType
+} from 'common/models';
 import theme from "common/static/theme";
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -137,6 +146,10 @@ const NewListing: React.FC = () => {
       boxSizing: 'border-box',
       '& .MuiAccordionSummary-content': {
         fontSize: '1.6rem',
+        color: theme.palette.secondary.light
+      },
+      '& .MuiAccordionSummary-root': {
+        backgroundColor: theme.palette.background.default
       }
     }}>
       <form
@@ -152,7 +165,7 @@ const NewListing: React.FC = () => {
             <AccordionSummary>
               Import Templates
             </AccordionSummary>
-            <AccordionDetails sx={{ backgroundColor: theme.palette.text.primary, padding: 0 }}>
+            <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light, padding: 0 }}>
               {
                 listings.loading
                   ? <CircularProgress />
@@ -181,12 +194,12 @@ const NewListing: React.FC = () => {
           <Accordion expanded={true}>
             <AccordionSummary sx={{
               '& .MuiAccordionSummary-expandIconWrapper': {
-                color: theme.palette.text.primary,
+                color: theme.palette.secondary.light,
               }
             }} expandIcon={<ExpandMoreIcon />}>
               1. Select Organisation
             </AccordionSummary>
-            <AccordionDetails sx={{ backgroundColor: theme.palette.text.primary }}>
+            <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light, paddingTop: '1.6rem' }}>
               <FormControl style={{ minWidth: 300 }} error={Boolean(errors.organisationId)}>
                 <InputLabel id="demo-simple-select-label">Select Your Organisation</InputLabel>
                 <Controller name="organisationId" control={control} render={({
@@ -212,12 +225,12 @@ const NewListing: React.FC = () => {
           <Accordion expanded={true}>
             <AccordionSummary sx={{
               '& .MuiAccordionSummary-expandIconWrapper': {
-                color: theme.palette.text.primary
+                color: theme.palette.secondary.light
               }
             }} expandIcon={<ExpandMoreIcon />}>
               2. Choose advertising medium
             </AccordionSummary>
-            <AccordionDetails sx={{ backgroundColor: theme.palette.text.primary }}>
+            <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -250,12 +263,12 @@ const NewListing: React.FC = () => {
           <Accordion expanded={true}>
             <AccordionSummary sx={{
               '& .MuiAccordionSummary-expandIconWrapper': {
-                color: theme.palette.text.primary
+                color: theme.palette.secondary.light
               }
             }} expandIcon={<ExpandMoreIcon />}>
               3. Job Information
             </AccordionSummary>
-            <AccordionDetails sx={{ backgroundColor: theme.palette.text.primary }}>
+            <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light }}>
               <Box sx={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
                 <TextField label="Job Title" variant="standard" fullWidth {...register('title')} />
                 <ReactQuill

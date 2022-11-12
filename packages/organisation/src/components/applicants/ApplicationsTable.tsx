@@ -157,7 +157,7 @@ const ApplicantsTable: React.FC<Props> = ({ handleRowClick }) => {
     { headerName: 'Tech Skills', field: 'user.profile.techSkills', tooltipField: 'user.profile.techSkills' },
     { headerName: 'Years of Experience', field: 'user.profile.yearsOfExperience', tooltipField: 'user.profile.yearsOfExperience' },
     { headerName: 'Created Date', field: 'createdDate', tooltipField: 'createdDate' },
-  ]), []);
+  ]), [handleUpdateStatus, listingId]);
 
   const defaultColDef = React.useMemo(() => ({
     sortable: true,

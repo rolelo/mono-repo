@@ -2,6 +2,7 @@ import {
   Divider, Drawer, DrawerProps, Typography,
 } from '@mui/material';
 import React from 'react';
+import theme from '../../static/theme';
 
 type Props = {
   title: string;
@@ -20,6 +21,7 @@ const RDrawer: React.FC<Props> = ({
         width: '60rem',
         padding: '2rem',
         boxSizing: 'border-box',
+        backgroundColor: theme.palette.secondary.light,
       },
     }}
   >

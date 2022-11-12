@@ -8,7 +8,7 @@ const theme = createTheme({
   palette: {
     background: {
       default: "#232946",
-      paper: "#232946",
+      paper: "#b8c1ec",
     },
     primary: {
       main: "#eebbc3",
@@ -17,9 +17,10 @@ const theme = createTheme({
     },
     secondary: {
       main: "#b8c1ec",
+      light: "#fffffe",
     },
     text: {
-      primary: "#fffffe",
+      primary: "#232946",
     },
   },
 });
