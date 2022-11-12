@@ -1,14 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
-import { Context, IJobApplication, IUser, JobApplicationInput, Listing, User } from '../../../common/models';
+import { ApplicantStatus, Context, IApplicant, JobApplicationInput, Listing } from '../../../common/models';
 import { s3Client } from '../app';
 
 export const resolvers = {
-  Query: {
-    jobApplicants: async (_, { jobId }): Promise<IUser[]> => {
-      const jobApplicants = await Listing.findById(jobId);
-      return jobApplicants.applications;
-    }
-  },
   Mutation: {
     async createCVS3PreSignedUrl(_, { contentType }) {
       const uuid = uuidv4();
@@ -35,24 +29,24 @@ export const resolvers = {
     createJobApplication: async (
       parent,
       { input: { jobId } }: { input: JobApplicationInput },
-      { sub, name, email, phoneNumber }: Context
-    ): Promise<IJobApplication> => {
-      const user = await (await User.findById(sub)).toObject();
-      if (!user.profile) throw Error("User does not have a profile setup");
+      { sub }: Context
+    ): Promise<IApplicant> => {
+      const applicationId = uuidv4();
       const listing = await Listing.findById(jobId);
       const createdDate = Date.now().toString();
-      listing.applications.push({
-        ...user
+      listing.applicants.push({
+        id: uuidv4(),
+        createdDate,
+        userId: sub,
+        status: ApplicantStatus.PENDING
       });
       await listing.save();
       return {
-        _id: sub,
+        id: applicationId,
         createdDate,
-        name,
-        email,
-        phoneNumber,
-        cvUrl: user.profile.cv
+        userId: sub,
+        status: ApplicantStatus.PENDING,
       };
-    },
+    }
   },
 };

@@ -42,7 +42,15 @@ const GET_LISTING = gql`
 const CREATE_JOB_APPLICATION = gql`
   mutation CreateJobApplication($input: JobApplicationInput!) {
     createJobApplication(input: $input) {
-      name
+      id
+      createdDate
+      user {
+        name
+        email
+        profile {
+          cv
+        }
+      }
     }
   }
 `;
@@ -73,6 +81,7 @@ const Listing: React.FC = () => {
     }
   });
   const [mutation] = useMutation<IUser, { input: JobApplicationInput }>(CREATE_JOB_APPLICATION, {
+    refetchQueries: [GET_LISTING],
     onCompleted: () => {
       toast.success('Successfully applied to position');
     },

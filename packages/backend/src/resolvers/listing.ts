@@ -1,10 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 import {
-  Context, IListing,
-  Listing,
+  Context, IApplicant, JobApplicationInput, Listing,
   ListingForClient,
-  ListingInput,
-  Organisation,
+  ListingInput, ListingSchema, Organisation,
+  UpdateApplicationStatusInput,
   User
 } from "../../../common/models";
 
@@ -27,13 +26,20 @@ export const resolvers = {
       { sub }: Context
     ): Promise<ListingForClient> {
       const listing = (await Listing.findById(id)).toObject();
-      const alreadyApplied = Boolean(listing.applications.find(a => {
-        return a._id === sub
-      }));
+      const alreadyApplied = Boolean(
+        listing.applicants.find((a) => {
+          return a.userId === sub;
+        })
+      );
       return {
         ...listing,
+        applicants: [],
         alreadyApplied,
-      }
+      };
+    },
+    async jobApplicants(_, { jobId }: JobApplicationInput, { sub }: Context) {
+      const job = await Listing.findById(jobId);
+      return job.applicants;
     },
   },
   Mutation: {
@@ -48,7 +54,7 @@ export const resolvers = {
         await Organisation.findById(organisationId)
       ).toObject();
 
-      const newListing: IListing = {
+      const newListing: ListingSchema = {
         _id: uuidv4(),
         organisationId: organisation._id,
         organisationName: organisation.name,
@@ -58,7 +64,7 @@ export const resolvers = {
         createdDate: Date.now().toString(),
         createdByName: user.name,
         createdById: sub,
-        applications: [],
+        applicants: [],
         ...listingBase,
       };
 
@@ -66,6 +72,25 @@ export const resolvers = {
       await listing.save();
 
       return { ...listing.toObject() };
+    },
+    async updateApplicantStatus(_, { input: { jobId, status, userId } }: { input: UpdateApplicationStatusInput }) {
+      await Listing.updateOne(
+        { _id: jobId, 'applicants.userId': userId },
+        {
+          '$set': {
+            'applicants.$.status': status,
+          }
+        }
+      );
+
+      return {
+        status,
+      }
+    }
+  },
+  Applicant: {
+    user: async ({ userId }: IApplicant, _, { sub }: Context) => {
+      return User.findById(userId);
     },
   },
 };

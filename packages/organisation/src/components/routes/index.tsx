@@ -1,5 +1,6 @@
 import PrivateRoute from "common/components/private-route";
 import { useRoutes } from 'react-router-dom';
+import Applicants from "../applicants";
 import DashboardLayout from "../dashboard/layout";
 import Listings from "../listings";
 import NewListing from "../new-listing";
@@ -21,7 +22,10 @@ const Routes = () => {
           element: <NewListing />
           }, {
           path: 'listings',
-            element: <Listings />
+          element: <Listings />,
+          }, {
+          path: 'listings/:listingId/applicants',
+          element: <Applicants />,
         }],
       }],
     }

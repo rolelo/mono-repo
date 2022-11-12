@@ -1,5 +1,5 @@
 import { model, Model, Schema } from "mongoose";
-import { IUser } from ".";
+import { ApplicantStatus, IApplicant, IUser, User } from ".";
 export interface ListingBase {
   organisationId: string;
   jobPostingOperationType: JobOperationType;
@@ -100,7 +100,7 @@ export enum ListingCurrency {
   "GBP" = "GBP",
   "EUR" = "EUR",
 }
-export interface IListing extends ListingBase {
+export interface ListingSchema extends ListingBase {
   _id: string;
   organisationName: string;
   organisationDescription: string;
@@ -109,12 +109,30 @@ export interface IListing extends ListingBase {
   createdDate: string;
   createdById: string;
   createdByName: string;
-  applications: IUser[];
+  applicants: IApplicant[];
 }
-export interface ListingForClient extends IListing {
+
+export type ListingApplicant = {
+  user: User;
+  createdDate: string;
+  status: ApplicantStatus;
+  id: string;
+};
+export interface Listing extends ListingBase {
+  _id: string;
+  organisationName: string;
+  organisationDescription: string;
+  organisationLogo: string;
+  organisationWebsite: string;
+  createdDate: string;
+  createdById: string;
+  createdByName: string;
+  applicants: ListingApplicant[];
+}
+export interface ListingForClient extends Listing {
   alreadyApplied: boolean;
 }
-const listingSchema = new Schema<IListing>({
+const listingSchema = new Schema<ListingSchema>({
   _id: { type: String, required: true },
   organisationId: { type: String, required: true },
   organisationName: { type: String, required: true },
@@ -165,11 +183,11 @@ const listingSchema = new Schema<IListing>({
   },
   expireAt: { type: String, required: true },
   listingType: { type: String, enum: Object.keys(ListingType), required: true },
-  applications: { type: [Object], required: true, default: [] },
+  applicants: { type: [Object], required: true, default: [] },
   createdById: { type: String, required: true, index: true },
   createdByName: { type: String, required: true },
 });
-export const Listing: Model<IListing> = model(
+export const Listing: Model<ListingSchema> = model(
   "Listing",
   listingSchema
 );

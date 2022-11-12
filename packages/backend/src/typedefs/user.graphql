@@ -79,12 +79,22 @@ enum ListingCurrency {
   GBP
   EUR
 }
+enum ApplicantStatus {
+  LISTED
+  REJECTED
+  PENDING
+}
 input CreateOrganisationInput {
   name: String!
   website: String!
   companyLogo: String!
   companyDescription: String!
   email: String!
+}
+input UpdateApplicationStatusInput {
+  jobId: String!
+  userId: String!
+  status: ApplicantStatus!
 }
 interface IListing {
   jobPostingOperationType: JobOperationType!
@@ -134,12 +144,18 @@ input ProfileInput {
   techSkills: [String]
   yearsOfExperience: Int
 }
+type Applicant {
+  id: String!
+  createdDate: String!
+  user: User!
+  status: ApplicantStatus
+}
 type Organisation {
   _id: String!
   admin: User!
   name: String!
   website: String!
-  companyLogo: String!  
+  companyLogo: String!
   companyDescription: String!
   email: String!
   totalPositions: Int!
@@ -157,6 +173,7 @@ type Profile {
   yearsOfExperience: Int
 }
 type User {
+  id: String!
   name: String!
   email: String!
   phoneNumber: String
@@ -199,20 +216,22 @@ type Listing implements IListing {
   listingType: ListingType!
   currency: ListingCurrency!
   salary: Int!
-  alreadyApplied: Boolean!
+  applicants: [Applicant]
+  alreadyApplied: Boolean
 }
 type Query {
   user: User!
   listings(organisationId: String): [Listing]
-  jobApplicants(jobId: String!): [User]
+  jobApplicants(jobId: String!): [Applicant]
   clientListing(id: String!): Listing
 }
 type Mutation {
   createProfile(input: ProfileInput!): Profile!
   createListing(input: ListingInput!): Listing!
-  createJobApplication(input: JobApplicationInput!): User!
+  createJobApplication(input: JobApplicationInput!): Applicant!
   createUser: User!
   updateUser: User!
+  updateApplicantStatus(input: UpdateApplicationStatusInput!): Applicant!
   createCVS3PreSignedUrl(content: String!): SignedUrl!
   createOrganisationS3PreSignedUrl(content: String!): SignedUrl!
   createOrganisation(input: CreateOrganisationInput!): Organisation!

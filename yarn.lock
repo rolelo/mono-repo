@@ -14592,6 +14592,11 @@ jws@^3.2.2:
     jwa "^1.4.1"
     safe-buffer "^5.0.1"
 
+ka-table@^7.6.3:
+  version "7.6.3"
+  resolved "https://registry.yarnpkg.com/ka-table/-/ka-table-7.6.3.tgz#6db40c82492f5a450e92ffa1d400914ab44c02f1"
+  integrity sha512-gQd7yZ6/ivbtmisDC2wgqnM0f5g4bxDv5IaLwdVFPnXsxZoCZvTvblbNr9+LBdPRjGw9yqUWt6GjBf3JofHbWA==
+
 kareem@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.4.1.tgz#7d81ec518204a48c1cb16554af126806c3cd82b0"
