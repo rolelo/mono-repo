@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box, Button, CircularProgress, styled
 } from '@mui/material';
 import React from 'react';
@@ -8,6 +9,7 @@ import EmptyProfileImage from 'common/logo/empty-profile-image.png';
 import environmentVars from 'common/utils/env.variables';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import theme from '../../static/theme';
 
 const Input = styled('input')({
   display: 'none',
@@ -60,7 +62,7 @@ const ImageUpload: React.FC<Props> = ({
         });
 
         submitImage(`${environmentVars.s3BucketUrl}/organisation-logos/${uuid}`);
-      } catch(e) {
+      } catch (e) {
         console.log(e);
         toast.error('Something went wrong uploading your file');
       } finally {
@@ -71,41 +73,24 @@ const ImageUpload: React.FC<Props> = ({
 
   return (
     <div style={{
-      display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-evenly',
+      display: 'flex', flexDirection: 'row', alignItems: 'center',
     }}
     >
-      <Box
-        color="primary"
-        aria-label="upload picture"
-        component="span"
+      <Avatar
         sx={{
-          width: '110px',
-          height: '110px',
-          borderRadius: '50%',
-          display: 'flex',
-          flexDirection: 'column',
-          border: '2px solid black',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          overflow: 'hidden',
+          width: '100px',
+          height: '100px',
+          marginRight: '2rem',
         }}
-      >
-        <img
-          src={imageUrl || EmptyProfileImage}
-          alt="Profile"
-          style={{
-            width: '110px',
-            height: '110px',
-            position: 'absolute',
-            borderRadius: '50%',
-          }}
-        />
+        color='primary'
+        variant='rounded'
+        src={imageUrl}>
         {
           loading
-          && <CircularProgress />
+            ? <CircularProgress color='primary' />
+            : <>A</>
         }
-      </Box>
+      </Avatar>
       {
         display && (
           <label
@@ -120,11 +105,11 @@ const ImageUpload: React.FC<Props> = ({
               type="file"
               onChange={setImageValue}
             />
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Button variant="contained" color="secondary" style={{ marginRight: 8 }} component="span">
+            <div style={{ display: 'flex', flexDirection: 'column', rowGap: '1rem' }}>
+              <Button sx={{ width: '150px'}} variant="contained" color="secondary" style={{ marginRight: 8 }} component="span">
                 Upload Image
               </Button>
-              <Button variant="contained" color="error" onClick={clearImage}>
+              <Button sx={{ width: '150px' }} variant="contained" color="error" onClick={clearImage}>
                 Remove Image
               </Button>
             </div>
