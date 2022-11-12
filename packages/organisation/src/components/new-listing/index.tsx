@@ -132,7 +132,13 @@ const NewListing: React.FC = () => {
   }
 
   return (
-    <Box sx={{ padding: '2rem', boxSizing: 'border-box' }}>
+    <Box sx={{
+      padding: '2rem',
+      boxSizing: 'border-box',
+      '& .MuiAccordionSummary-content': {
+        fontSize: '1.6rem',
+      }
+    }}>
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{
@@ -160,7 +166,7 @@ const NewListing: React.FC = () => {
                           style={{
                             color: theme.palette.background.default
                           }}>
-                          <ListItemButton sx={{ padding: '2rem' }}>
+                          <ListItemButton sx={{ padding: '2rem', fontSize: '1.4rem' }}>
                             {l.title}
                           </ListItemButton>
                         </ListItem>
@@ -175,7 +181,7 @@ const NewListing: React.FC = () => {
           <Accordion expanded={true}>
             <AccordionSummary sx={{
               '& .MuiAccordionSummary-expandIconWrapper': {
-                color: theme.palette.text.primary
+                color: theme.palette.text.primary,
               }
             }} expandIcon={<ExpandMoreIcon />}>
               1. Select Organisation
