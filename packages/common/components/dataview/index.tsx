@@ -1,5 +1,6 @@
 import React from 'react'
 import { Typography } from '@mui/material';
+import theme from '../../static/theme';
 
 type Props<T extends Object> = {
   data: T;
@@ -13,7 +14,7 @@ function DataView<T extends Object>({ data }: Props<T>): JSX.Element {
           flexDirection: 'row',
           justifyContent: 'space-between',
           padding: '1rem',
-          backgroundColor: index % 2 === 0 ? 'white' : '#F6F6F6',
+          backgroundColor: index % 2 === 0 ? theme.palette.action.hover : theme.palette.action.selected,
           columnGap: '1rem'
         }}>
           <Typography variant='body1'>{key}</Typography>

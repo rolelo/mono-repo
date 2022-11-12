@@ -1,4 +1,3 @@
-import { gql, useQuery } from '@apollo/client';
 import { CircularProgress, Button } from '@mui/material';
 import { ColDef } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
@@ -8,57 +7,14 @@ import { Listing } from 'common/models';
 import { format } from 'date-fns';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const GET_LISTINGS = gql`
-query Listings {
-    listings {
-      _id
-      organisationName
-      organisationDescription
-      organisationWebsite
-      createdDate
-      createdById
-      createdByName
-      jobPostingOperationType
-      title
-      advertisingMediums
-      description
-      location
-      categories
-      skillsDescription
-      workRemoteAllowed
-      workplaceType
-      employmentStatus
-      experienceLevel
-      expireAt
-      listingType
-      currency
-      salary
-      applicants {
-        id
-        createdDate
-        user {
-          name
-          email
-          profile {
-            cv
-          }
-        }
-      }
-    }
-}
-`;
+import useGetListings from '../../hooks/useGetListings';
 
 type Props = {
   handleRowClick: (listing: Listing) => void
 }
 const ListingsTable: React.FC<Props> = ({ handleRowClick }) => {
   const navigate = useNavigate();
-  const {
-    data, loading, startPolling, stopPolling,
-  } = useQuery<{ listings: Listing[] }>(GET_LISTINGS, {
-    fetchPolicy: 'cache-and-network',
-  });
+  const { data, loading, startPolling, stopPolling } = useGetListings();
 
   useEffect(() => {
     startPolling(3000);

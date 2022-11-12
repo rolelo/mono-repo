@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { Fade, MenuItem, Typography } from '@mui/material';
 import Navigation from 'common/components/navigation';
 import { User } from 'common/models';
+import theme from 'common/static/theme';
 import React from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 

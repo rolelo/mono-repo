@@ -37,7 +37,7 @@ const CountriesDropdown: React.FC<Props> = ({ register }) => {
       filterOptions={createFilterOptions({ matchFrom: 'any', limit: 50 })}
       options={options}
       sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Location" {...register()} />}
+      renderInput={(params) => <TextField variant='standard' {...params} label="Location" {...register()} />}
     />
   )
 }

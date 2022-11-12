@@ -2,20 +2,24 @@ import { createTheme } from '@mui/material';
 
 const theme = createTheme({
   typography: {
-    fontSize: 18,
+    fontSize: 20,
+    fontFamily: "proxima-nova, sans-serif",
   },
   palette: {
+    background: {
+      default: "#232946",
+      paper: "#232946",
+    },
     primary: {
-      light: "#33c9dc",
-      main: "#008394",
-      dark: "#008394",
-      contrastText: "#fff",
+      main: "#eebbc3",
+      light: "#b8c1ec",
+      contrastText: "#232946",
     },
     secondary: {
-      light: "#ff4569",
-      main: "#b2102f",
-      dark: "#b2102f",
-      contrastText: "#fff",
+      main: "#b8c1ec",
+    },
+    text: {
+      primary: "#fffffe",
     },
   },
 });

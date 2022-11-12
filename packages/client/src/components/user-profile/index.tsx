@@ -313,7 +313,6 @@ const UserProfile: React.FC = () => {
                 {...getInputProps()}
               />
               <Box sx={{
-                backgroundColor: "#FAFAFA",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",

@@ -66,7 +66,6 @@ const RightPane = styled('div')({
   padding: '2rem',
   boxSizing: 'border-box',
   flex: '1.2',
-  backgroundColor: 'white',
   borderRadius: '8px'
 });
 
@@ -95,7 +94,6 @@ const Listing: React.FC = () => {
         <Box sx={{
           display: "flex",
           flexDirection: "row",
-          backgroundColor: 'white',
           marginBottom: '2rem',
         }}>
           <Button color='primary' variant='contained' size='large' sx={{ flex: "1" }}>Featured</Button>
@@ -103,7 +101,7 @@ const Listing: React.FC = () => {
           <Button color='primary' size='large' sx={{ flex: "1" }}>Most Recent</Button>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
-          <Box sx={{ padding: '2rem', borderRadius: "8px", maxHeight: "300px", backgroundColor: 'white' }}>
+          <Box sx={{ padding: '2rem', borderRadius: "8px", maxHeight: "300px" }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '1rem', alignItems: 'center', }}>
                 <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" width="50px" />
@@ -124,7 +122,7 @@ const Listing: React.FC = () => {
           </Box>
         </Box>
       </LeftPane>
-      <RightPane sx={{ padding: '2rem', boxSizing: 'border-box', flex: '1.2', backgroundColor: 'white', borderRadius: '8px' }}>
+      <RightPane sx={{ padding: '2rem', boxSizing: 'border-box', flex: '1.2', borderRadius: '8px' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '2rem', alignItems: 'center', }}>
             <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" width="70px" />
@@ -145,19 +143,19 @@ const Listing: React.FC = () => {
         <Typography variant='h5' fontWeight="300">{data?.clientListing.skillsDescription}</Typography>
 
         <Box sx={{ display: "flex", flexDirection: 'row', columnGap: '1.5rem', margin: '2rem 0' }}>
-          <Box sx={{ display: "flex", flexDirection: "column", backgroundColor: "#EEEEEE", padding: '1rem', borderRadius: "8px" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", padding: '1rem', borderRadius: "8px" }}>
             <Typography variant='h6' fontWeight="600">Experience Level</Typography>
             <Typography variant='h6' fontWeight="400">{data?.clientListing.experienceLevel}</Typography>
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", backgroundColor: "#EEEEEE", padding: '1rem', borderRadius: "8px" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", padding: '1rem', borderRadius: "8px" }}>
             <Typography variant='h6' fontWeight="600">Workplace Type</Typography>
             <Typography variant='h6' fontWeight="400">{data?.clientListing.workplaceType}</Typography>
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", backgroundColor: "#EEEEEE", padding: '1rem', borderRadius: "8px" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", padding: '1rem', borderRadius: "8px" }}>
             <Typography variant='h6' fontWeight="600">Location</Typography>
             <Typography variant='h6' fontWeight="400">{data?.clientListing.location}</Typography>
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", backgroundColor: "#EEEEEE", padding: '1rem', borderRadius: "8px" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", padding: '1rem', borderRadius: "8px" }}>
             <Typography variant='h6' fontWeight="600">Employment Status</Typography>
             <Typography variant='h6' fontWeight="400">{EmploymentStatus[data?.clientListing.employmentStatus as keyof typeof EmploymentStatus]}</Typography>
           </Box>

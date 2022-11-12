@@ -51,7 +51,7 @@ const DashboardLayout: React.FC = () => {
     <Fade in timeout={600}>
       <Container>
         <Navigation dropdownLinks={[
-          <MenuItem key="New Listing" onClick={() => setOpen(true)}>
+          <MenuItem selected={true} key="New Listing" onClick={() => setOpen(true)}>
             User Profile
           </MenuItem>,
         ]} appbarLinks={[]} avatarMenu />

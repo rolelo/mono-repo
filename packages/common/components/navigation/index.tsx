@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Logo from '../../logo/logo.png';
 import Amplify from '../../services/Amplify';
+import theme from '../../static/theme';
 
 type Props = {
   dropdownLinks?: JSX.Element[]
@@ -74,7 +75,12 @@ const AvatarMenu: React.FC<Omit<Props, 'appbarLinks' | 'avatarMenu'>> = ({ dropd
 export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu }: Props): JSX.Element {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: theme.palette.background.default,
+          color: theme.palette.text.primary,
+        }}>
         <Toolbar>
           <IconButton
             size="large"
