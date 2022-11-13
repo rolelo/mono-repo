@@ -73,7 +73,6 @@ interface IListing {
   advertisingMediums: [AdvertisingMedium]
   description: String!
   location: String!
-  categories: [LinkedInJobFunctionCodes]
   skillsDescription: String!
   workRemoteAllowed: Boolean
   workplaceType: String!
@@ -91,7 +90,6 @@ input ListingInput  {
   advertisingMediums: [AdvertisingMedium]
   description: String!
   location: String!
-  categories: [LinkedInJobFunctionCodes]
   skillsDescription: String!
   workRemoteAllowed: Boolean
   workplaceType: String!
@@ -101,19 +99,19 @@ input ListingInput  {
   expireAt: String!
   currency: ListingCurrency!
   salary: Int!
-  rsus: number;
-  bonus: number;
-  techSkills: [String];
-  numberOfHolidays: Int;
-  privateHealthInsurance: Boolean;
-  dentalHealthInsurance: Boolean;
-  visionHealthInsurance: Boolean;
-  lifeInsurance: Boolean;
-  workingHoursPerWeek: Int;
-  freeFoodAndDrink: [FoodAndDrink];
-  trainingAndDevelopment: Boolean;
-  wellnessPackages: Boolean;
-  workFromHomePackage: Boolean;
+  rsus: Int!
+  bonus: Int!
+  techSkills: [String]
+  numberOfHolidays: Int!
+  privateHealthInsurance: Boolean
+  dentalHealthInsurance: Boolean
+  visionHealthInsurance: Boolean
+  lifeInsurance: Boolean!
+  workingHoursPerWeek: Int!
+  freeFoodAndDrink: [FoodAndDrink]
+  trainingAndDevelopment: Boolean!
+  wellnessPackages: Boolean!
+  workFromHomePackage: Boolean!
 }
 input JobApplicationInput {
   jobId: String!
@@ -190,7 +188,6 @@ type Listing implements IListing {
   advertisingMediums: [AdvertisingMedium]
   description: String!
   location: String!
-  categories: [LinkedInJobFunctionCodes]
   skillsDescription: String!
   workRemoteAllowed: Boolean
   workplaceType: String!

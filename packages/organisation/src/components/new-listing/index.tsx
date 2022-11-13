@@ -54,16 +54,14 @@ const CREATE_LISTING = gql`
 `;
 
 const validationSchema = yup.object({
-  title: yup.string().max(200).required(),
-  advertisingMediums: yup.array().required(),
-  description: yup.string().min(100).max(125000).required(),
-  location: yup.string().required(),
-  categories: yup.array().required(),
-  workplaceType: yup.string().required(),
-  employmentStatus: yup.string().required(),
-  experienceLevel: yup.string().required(),
-  skillsDescription: yup.string().max(4000).required(),
-  salary: yup.number().required(),
+  // title: yup.string().max(200).required(),
+  // advertisingMediums: yup.array().required(),
+  // description: yup.string().min(100).max(125000).required(),
+  // location: yup.string().required(),
+  // workplaceType: yup.string().required(),
+  // employmentStatus: yup.string().required(),
+  // experienceLevel: yup.string().required(),
+  // skillsDescription: yup.string().max(4000).required(),
 });
 const NewListing: React.FC = () => {
   const navigation = useNavigate();
@@ -127,7 +125,7 @@ const NewListing: React.FC = () => {
       workplaceType: data.workplaceType,
       workRemoteAllowed: Boolean(data.workRemoteAllowed),
       organisationId: data.organisationId,
-      salary: +data.salary,
+      salary: Number((data.salary as unknown as string).replace(/[^0-9.-]+/g, "")),
       currency: ListingCurrency.GBP,
       bonus: +data.bonus,
       dentalHealthInsurance: `${data.dentalHealthInsurance}` === 'true',
@@ -668,6 +666,7 @@ const NewListing: React.FC = () => {
                     backgroundColor: theme.palette.grey[200],
                     border: 'none',
                   }}
+                  {...register('salary')}
                 />
               </Box>
             </AccordionDetails>
@@ -686,7 +685,7 @@ const NewListing: React.FC = () => {
               Reset Form
             </Button>
             <Button
-              disabled={!isValid || !isDirty}
+              // disabled={!isValid || !isDirty}
               type='submit'
               variant='contained'
               size='large'

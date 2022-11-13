@@ -1,5 +1,6 @@
-import { model, Model, Schema } from "mongoose"
-import { ApplicantStatus, IApplicant, IUser, TechSkills, User } from "."
+import { model, Model, Schema } from "mongoose";
+import { ApplicantStatus, IApplicant, User } from ".";
+import { TechSkills } from "./Profile";
 export interface ListingBase {
   organisationId: string;
   jobPostingOperationType: JobOperationType;

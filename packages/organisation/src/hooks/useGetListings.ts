@@ -16,7 +16,6 @@ const GET_LISTINGS = gql`
       advertisingMediums
       description
       location
-      categories
       skillsDescription
       workRemoteAllowed
       workplaceType
