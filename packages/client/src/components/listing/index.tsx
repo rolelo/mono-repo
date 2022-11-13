@@ -1,8 +1,8 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import { Box, Button, Chip, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import { EmploymentStatus, IUser, JobApplicationInput, LinkedInJobFunctionCodes, ListingForClient } from 'common/models';
+import { EmploymentStatus, IUser, JobApplicationInput, ListingForClient } from 'common/models';
 import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -114,11 +114,6 @@ const Listing: React.FC = () => {
             <Typography variant='body1' fontWeight="300" style={{ margin: '1rem 0 0.5rem 0', height: '43px', overflow: 'hidden' }}>
               {data?.clientListing.description}
             </Typography>
-            <Box sx={{ margin: '2rem 0', display: "flex", flexDirection: "row", flexWrap: "wrap", columnGap: "0.5rem", rowGap: "1rem" }}>
-              {data?.clientListing.categories.slice(0, 3).map((c) => (
-                <Chip sx={{ fontSize: "1rem", fontWeight: "400" }} key={c} label={LinkedInJobFunctionCodes[c]} />
-              ))}
-            </Box>
           </Box>
         </Box>
       </LeftPane>
@@ -163,11 +158,6 @@ const Listing: React.FC = () => {
 
         <Box style={{ padding: '2rem 0 4rem 0' }}>
           <Typography variant='h5' fontWeight="600" style={{ padding: "2rem 0 1rem 0" }}>Skills Required</Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", columnGap: "0.5rem", rowGap: "1rem" }}>
-            {data?.clientListing.categories.map((c) => (
-              <Chip sx={{ fontSize: "1.2rem", fontWeight: "400" }} key={c} label={LinkedInJobFunctionCodes[c]} />
-            ))}
-          </Box>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
           <a href={data?.clientListing.organisationWebsite} target="_blank" rel="noreferrer">{data?.clientListing.organisationWebsite}</a>

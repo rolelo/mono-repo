@@ -28,6 +28,11 @@ const ListingsTable: React.FC<Props> = ({ handleRowClick }) => {
   // Each Column Definition results in one Column.
   const columnDefs = useMemo<ColDef[]>(() => ([
     {
+      headerName: 'Created Date', field: '', cellRenderer: ({ data }: { data: Listing }) => (
+        <Button onClick={() => navigate(`/listings/${data._id}/applicants`)} size="small" variant="contained" color="primary">View Applicants</Button>
+      ),
+    },
+    {
       headerName: 'Title', field: 'title', tooltipField: 'title', cellRenderer: ({ data }: { data: Listing }) => (
         <Button sx={{ padding: 0 }} onClick={() => handleRowClick(data)} variant='text' color='info'>{data.title}</Button>
       )
@@ -38,11 +43,6 @@ const ListingsTable: React.FC<Props> = ({ handleRowClick }) => {
     { headerName: 'Created By', field: 'createdByName', tooltipField: 'createdByName' },
     { headerName: 'Expire At', field: 'expireAt', tooltipField: 'expireAt' },
     { headerName: 'Created Date', field: 'createdDate', tooltipField: 'createdDate' },
-    {
-      headerName: 'Created Date', width: 150, field: '', cellRenderer: ({ data }: { data: Listing }) => (
-        <Button onClick={() => navigate(`/listings/${data._id}/applicants`)} size="small" variant="contained" color="primary">View Applicants</Button>
-      ),
-    }
   ]), [handleRowClick, navigate]);
 
   // DefaultColDef sets props common to all Columns
@@ -63,9 +63,6 @@ const ListingsTable: React.FC<Props> = ({ handleRowClick }) => {
           || []
         } // Row Data for Rows
         columnDefs={columnDefs} // Column Defs for Columns
-        onGridReady={(event) => {
-          event.api.sizeColumnsToFit();
-        }}
         defaultColDef={defaultColDef} // Default Column Properties
         animateRows // Optional - set to 'true' to have rows animate when sorted
         rowSelection="multiple" // Options - allows click selection of rows

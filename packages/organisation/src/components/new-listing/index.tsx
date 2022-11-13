@@ -3,16 +3,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion, AccordionDetails, AccordionSummary, Box,
   Button,
-  Checkbox,
-  FormControl,
+  Checkbox, CircularProgress, FormControl,
   FormControlLabel,
-  InputLabel,
-  MenuItem,
-  TextField,
-  CircularProgress,
-  List,
+  InputLabel, List,
   ListItem,
-  ListItemButton
+  ListItemButton, MenuItem,
+  TextField
 } from "@mui/material";
 import Select from '@mui/material/Select';
 import Backdrop from 'common/components/backdrop';
@@ -25,14 +21,15 @@ import {
   AdvertisingMedium,
   EmploymentStatus,
   ExperienceLevel,
+  FoodAndDrink,
   JobOperationType,
-  LinkedInJobFunctionCodes,
-  ListingCurrency,
   ListingInput,
-  ListingType
+  ListingType,
+  TechSkills
 } from 'common/models';
 import theme from "common/static/theme";
 import React from 'react';
+import CurrencyInput from 'react-currency-input-field';
 import { Controller, useForm } from 'react-hook-form';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -87,6 +84,7 @@ const NewListing: React.FC = () => {
     setValue,
     getValues,
     handleSubmit,
+    reset,
     formState: {
       isValid,
       isDirty,
@@ -114,9 +112,9 @@ const NewListing: React.FC = () => {
   };
 
   const onSubmit = (data: ListingInput) => {
+    //@ts-ignore
     const input: ListingInput = {
       advertisingMediums: data.advertisingMediums,
-      categories: data.categories,
       description: data.description,
       employmentStatus: data.employmentStatus,
       experienceLevel: data.experienceLevel,
@@ -129,7 +127,6 @@ const NewListing: React.FC = () => {
       workplaceType: data.workplaceType,
       workRemoteAllowed: Boolean(data.workRemoteAllowed),
       organisationId: data.organisationId,
-      currency: data.currency,
       salary: +data.salary,
     }
 
@@ -266,7 +263,7 @@ const NewListing: React.FC = () => {
                 color: theme.palette.secondary.light
               }
             }} expandIcon={<ExpandMoreIcon />}>
-              3. Job Information
+              3. Description & Skills
             </AccordionSummary>
             <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light }}>
               <Box sx={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
@@ -295,160 +292,396 @@ const NewListing: React.FC = () => {
                     ]
                   }}
                 />
-                <Box style={{ display: 'flex', flexDirection: 'row', columnGap: '1rem', alignItems: 'start' }}>
-                  <CountriesDropdown register={() => register('location')} />
-                  <FormControl style={{ minWidth: 300 }}>
-                    <InputLabel id="demo-simple-select-label">Select Your Job function categories</InputLabel>
-                    <Controller name="categories" control={control} render={({
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Exprience Level?</InputLabel>
+                  <Controller control={control} name="experienceLevel" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Experience Level"
+                      variant="standard"
+                      placeholder="Experience Level"
+                      value={watch().experienceLevel || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      {(Object.keys(ExperienceLevel) as Array<keyof typeof ExperienceLevel>).map((key) => (
+                        <MenuItem value={key} key={key}>{ExperienceLevel[key]}</MenuItem>
+                      ))}
+                    </Select>)}
+                  />
+                </FormControl>
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Skills required</InputLabel>
+                  <Controller
+                    control={control}
+                    name='techSkills'
+                    render={({
                       field: { onChange, onBlur, value, name, ref }
                     }) => (
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
                         multiple
-                        variant="standard"
-                        label="Job function category"
-                        placeholder="Please select your job function categories"
-                        value={watch().categories || []}
-                        onBlur={onBlur}
-                        onChange={onChange}
-                        ref={ref}
-                      >
-                        {
-                          (Object.keys(LinkedInJobFunctionCodes) as Array<keyof typeof LinkedInJobFunctionCodes>)
-                            .map(((key) => <MenuItem value={key} key={key}>{LinkedInJobFunctionCodes[key]}</MenuItem>))
-                        }
-                      </Select>
-                    )} />
-                  </FormControl>
-                  <FormControl style={{ minWidth: 300 }}>
-                    <InputLabel id="demo-simple-select-label">Workplace type?</InputLabel>
-                    <Controller control={control} name="workplaceType" render={({
-                      field: { onChange, onBlur, value, name, ref }
-                    }) => (
-                      <Select
+                        multiline
+                        value={watch().techSkills || []}
+                        variant='standard'
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        label="Workplace type"
-                        variant="standard"
-                        placeholder="Workplace type"
-                        value={watch().workplaceType || ''}
-                        onBlur={onBlur}
+                        label="techSkills"
                         onChange={onChange}
+                        onBlur={onBlur}
                         ref={ref}
                       >
-                        <MenuItem value="On-site">On-Site</MenuItem>
-                        <MenuItem value="Hybrid">Hybrid</MenuItem>
-                        <MenuItem value="Remote">Remote</MenuItem>
-                      </Select>
-                    )} />
-                  </FormControl>
-                </Box>
-                <Box style={{ display: 'flex', flexDirection: 'row', columnGap: '1rem', alignItems: 'start' }}>
-                  <FormControl style={{ minWidth: 300 }}>
-                    <InputLabel id="demo-simple-select-label">Employment Status?</InputLabel>
-                    <Controller control={control} name="employmentStatus" render={({
-                      field: { onChange, onBlur, value, name, ref }
-                    }) => (
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Employment Status"
-                        variant="standard"
-                        placeholder="Workplace type"
-                        value={watch().employmentStatus || ''}
-                        onBlur={onBlur}
-                        onChange={onChange}
-                        ref={ref}
-                      >
-                        {(Object.keys(EmploymentStatus) as Array<keyof typeof EmploymentStatus>).map((key) => (
-                          <MenuItem value={key} key={key}>{EmploymentStatus[key]}</MenuItem>
+                        {(Object.keys(TechSkills) as Array<keyof typeof TechSkills>).map((key) => (
+                          <MenuItem value={TechSkills[key]} key={TechSkills[key]}>{TechSkills[key]}</MenuItem>
                         ))}
                       </Select>
-                    )} />
-                  </FormControl>
-                  <FormControl style={{ minWidth: 300 }}>
-                    <InputLabel id="demo-simple-select-label">Exprience Level?</InputLabel>
-                    <Controller control={control} name="experienceLevel" render={({
-                      field: { onChange, onBlur, value, name, ref }
-                    }) => (
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Experience Level"
-                        variant="standard"
-                        placeholder="Experience Level"
-                        value={watch().experienceLevel || ''}
-                        onBlur={onBlur}
-                        onChange={onChange}
-                        ref={ref}
-                      >
-                        {(Object.keys(ExperienceLevel) as Array<keyof typeof ExperienceLevel>).map((key) => (
-                          <MenuItem value={key} key={key}>{ExperienceLevel[key]}</MenuItem>
-                        ))}
-                      </Select>)}
-                    />
-                  </FormControl>
-                  <FormControl style={{ minWidth: 300 }}>
-                    <InputLabel id="demo-simple-select-label">Work remove allowed?</InputLabel>
-                    <Controller control={control} name="workRemoteAllowed" render={({
-                      field: { onChange, onBlur, value, name, ref }
-                    }) => (
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Work remote allowed"
-                        variant="standard"
-                        placeholder="Work remote allowed?"
-                        value={watch().workRemoteAllowed || ''}
-                        onBlur={onBlur}
-                        onChange={onChange}
-                        ref={ref}
-                      >
-                        <MenuItem value={`${true}`}>True</MenuItem>
-                        <MenuItem value={`${false}`}>False</MenuItem>
-                      </Select>)}
-                    />
-                  </FormControl>
-                </Box>
-                <Box style={{ display: 'flex', flexDirection: 'row', columnGap: '1rem', alignItems: 'start' }}>
-                  <FormControl style={{ minWidth: 300 }}>
-                    <InputLabel id="demo-simple-select-label">Currency?</InputLabel>
-                    <Controller control={control} name="currency" render={({
-                      field: { onChange, onBlur, value, name, ref }
-                    }) => (
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Currency"
-                        placeholder="Currency"
-                        variant="standard"
-                        value={watch().currency || ''}
-                        onBlur={onBlur}
-                        onChange={onChange}
-                        ref={ref}
-                      >
-                        {(Object.keys(ListingCurrency) as Array<keyof typeof ListingCurrency>).map((key) => (
-                          <MenuItem value={key} key={key}>{key}</MenuItem>
-                        ))}
-                      </Select>
-                    )} />
-                  </FormControl>
-                  <TextField label="Salary" variant="standard" fullWidth type={'number'} {...register('salary')} />
-                </Box>
+                    )}
+                  />
+                </FormControl>
               </Box>
             </AccordionDetails>
           </Accordion>
-          <Button
-            disabled={!isValid || !isDirty}
-            type='submit'
-            variant='contained'
-            size='large'
-            sx={{ width: 'fit-content', marginLeft: 'auto' }}
-            color='success'
-          >
-            Submit Job Listing
-          </Button>
+          <Accordion expanded={true}>
+            <AccordionSummary sx={{
+              '& .MuiAccordionSummary-expandIconWrapper': {
+                color: theme.palette.secondary.light
+              }
+            }} expandIcon={<ExpandMoreIcon />}>
+              4. Location & Workplace
+            </AccordionSummary>
+            <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light }}>
+              <Box sx={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
+                <CountriesDropdown register={() => register('location')} />
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Workplace type?</InputLabel>
+                  <Controller control={control} name="workplaceType" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Workplace type"
+                      variant="standard"
+                      placeholder="Workplace type"
+                      value={watch().workplaceType || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      <MenuItem value="On-site">On-Site</MenuItem>
+                      <MenuItem value="Hybrid">Hybrid</MenuItem>
+                      <MenuItem value="Remote">Remote</MenuItem>
+                    </Select>
+                  )} />
+                </FormControl>
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Employment Status?</InputLabel>
+                  <Controller control={control} name="employmentStatus" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Employment Status"
+                      variant="standard"
+                      placeholder="Workplace type"
+                      value={watch().employmentStatus || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      {(Object.keys(EmploymentStatus) as Array<keyof typeof EmploymentStatus>).map((key) => (
+                        <MenuItem value={key} key={key}>{EmploymentStatus[key]}</MenuItem>
+                      ))}
+                    </Select>
+                  )} />
+                </FormControl>
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Work remove allowed?</InputLabel>
+                  <Controller control={control} name="workRemoteAllowed" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Work remote allowed"
+                      variant="standard"
+                      placeholder="Work remote allowed?"
+                      value={watch().workRemoteAllowed || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      <MenuItem value={`${true}`}>True</MenuItem>
+                      <MenuItem value={`${false}`}>False</MenuItem>
+                    </Select>)}
+                  />
+                </FormControl>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion expanded={true}>
+            <AccordionSummary sx={{
+              '& .MuiAccordionSummary-expandIconWrapper': {
+                color: theme.palette.secondary.light
+              }
+            }} expandIcon={<ExpandMoreIcon />}>
+              5. Benefits
+            </AccordionSummary>
+            <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light }}>
+              <Box sx={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Health Insurance?</InputLabel>
+                  <Controller control={control} name="privateHealthInsurance" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Health Insurance"
+                      variant="standard"
+                      placeholder="Health Insurance"
+                      value={watch().privateHealthInsurance || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      <MenuItem value="true">Yes</MenuItem>
+                      <MenuItem value="false">No</MenuItem>
+                    </Select>
+                  )} />
+                </FormControl>
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Dental Insurance?</InputLabel>
+                  <Controller control={control} name="dentalHealthInsurance" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Dental Insurance"
+                      variant="standard"
+                      placeholder="Dental Insurance"
+                      value={watch().dentalHealthInsurance || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      <MenuItem value="true">Yes</MenuItem>
+                      <MenuItem value="false">No</MenuItem>
+                    </Select>
+                  )} />
+                </FormControl>
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Vision Insurance?</InputLabel>
+                  <Controller control={control} name="visionHealthInsurance" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Vision Insurance"
+                      variant="standard"
+                      placeholder="Vision Insurance"
+                      value={watch().visionHealthInsurance || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      <MenuItem value="true">Yes</MenuItem>
+                      <MenuItem value="false">No</MenuItem>
+                    </Select>
+                  )} />
+                </FormControl>
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Life Insurance?</InputLabel>
+                  <Controller control={control} name="lifeInsurance" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Life Insurance"
+                      variant="standard"
+                      placeholder="Life Insurance"
+                      value={watch().lifeInsurance || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      <MenuItem value="true">Yes</MenuItem>
+                      <MenuItem value="false">No</MenuItem>
+                    </Select>
+                  )} />
+                </FormControl>
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Wellness Packages (i.e. gym)?</InputLabel>
+                  <Controller control={control} name="wellnessPackages" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Wellness Packages (i.e. gym)"
+                      variant="standard"
+                      placeholder="Wellness Packages (i.e. gym)"
+                      value={watch().wellnessPackages || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      <MenuItem value="true">Yes</MenuItem>
+                      <MenuItem value="false">No</MenuItem>
+                    </Select>
+                  )} />
+                </FormControl>
+                <TextField
+                  label="Working hours per week"
+                  type='number'
+                  variant="standard"
+                  fullWidth
+                  {...register('workingHoursPerWeek')}
+                />
+                <TextField
+                  label="Number of holidays"
+                  type='number'
+                  variant="standard"
+                  fullWidth
+                  {...register('numberOfHolidays')}
+                />
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Free Food and Drinks?</InputLabel>
+                  <Controller control={control} name="freeFoodAndDrink" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      multiple
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Free food and drink"
+                      variant="standard"
+                      placeholder="Free food and drink?"
+                      value={watch().freeFoodAndDrink || []}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      {(Object.keys(FoodAndDrink) as Array<keyof typeof FoodAndDrink>).map((key) => (
+                        <MenuItem value={key} key={key}>{FoodAndDrink[key]}</MenuItem>
+                      ))}
+                    </Select>)}
+                  />
+                </FormControl>
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Training & Development?</InputLabel>
+                  <Controller control={control} name="trainingAndDevelopment" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Training & Development"
+                      variant="standard"
+                      placeholder="Training & Development"
+                      value={watch().trainingAndDevelopment || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      <MenuItem value="true">Yes</MenuItem>
+                      <MenuItem value="false">No</MenuItem>
+                    </Select>
+                  )} />
+                </FormControl>
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-label">Work from home package?</InputLabel>
+                  <Controller control={control} name="workFromHomePackage" render={({
+                    field: { onChange, onBlur, value, name, ref }
+                  }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Work from home package"
+                      variant="standard"
+                      placeholder="Work from home package"
+                      value={watch().workFromHomePackage || ''}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      ref={ref}
+                    >
+                      <MenuItem value="true">Yes</MenuItem>
+                      <MenuItem value="false">No</MenuItem>
+                    </Select>
+                  )} />
+                </FormControl>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion expanded={true}>
+            <AccordionSummary sx={{
+              '& .MuiAccordionSummary-expandIconWrapper': {
+                color: theme.palette.secondary.light
+              }
+            }} expandIcon={<ExpandMoreIcon />}>
+              6. Compensation
+            </AccordionSummary>
+            <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light }}>
+              <Box sx={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
+                <TextField
+                  label="RSUS (up to) %"
+                  type='number'
+                  variant="standard"
+                  fullWidth
+                  {...register('rsus')}
+                />
+                <TextField
+                  label="Bonus (up to) %"
+                  type='number'
+                  variant="standard"
+                  fullWidth
+                  {...register('bonus')}
+                />
+                <CurrencyInput
+                  placeholder="Annual Salary"
+                  decimalsLimit={2}
+                  prefix="£"
+                  style={{
+                    fontSize: "1.4rem",
+                    padding: '1rem',
+                    backgroundColor: theme.palette.grey[200],
+                    border: 'none',
+                  }}
+                />
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+          <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <Button
+              onClick={() => {
+                toast.info('Form has been reset')
+                reset()
+              }}
+              variant='contained'
+              size='large'
+              sx={{ width: 'fit-content' }}
+              color='info'
+            >
+              Reset Form
+            </Button>
+            <Button
+              disabled={!isValid || !isDirty}
+              type='submit'
+              variant='contained'
+              size='large'
+              sx={{ width: 'fit-content' }}
+              color='success'
+            >
+              Submit Job Listing
+            </Button>
+          </Box>
         </Box>
       </form>
       <Backdrop open={loading} />

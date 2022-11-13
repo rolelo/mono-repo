@@ -1,5 +1,5 @@
-import { model, Model, Schema } from "mongoose";
-import { ApplicantStatus, IApplicant, IUser, User } from ".";
+import { model, Model, Schema } from "mongoose"
+import { ApplicantStatus, IApplicant, IUser, TechSkills, User } from "."
 export interface ListingBase {
   organisationId: string;
   jobPostingOperationType: JobOperationType;
@@ -7,7 +7,6 @@ export interface ListingBase {
   advertisingMediums: AdvertisingMedium[];
   description: string;
   location: string;
-  categories: (keyof typeof LinkedInJobFunctionCodes)[];
   skillsDescription: string;
   workRemoteAllowed: boolean;
   workplaceType: WorkPlaceType;
@@ -15,52 +14,35 @@ export interface ListingBase {
   experienceLevel: ExperienceLevel;
   expireAt: string;
   listingType: ListingType;
-  currency: ListingCurrency,
-  salary: number,
-  // industries:
+  currency: ListingCurrency;
+  salary: number;
+  rsus: number;
+  bonus: number;
+  techSkills: TechSkills[];
+  numberOfHolidays: number;
+  privateHealthInsurance: boolean;
+  dentalHealthInsurance: boolean;
+  visionHealthInsurance: boolean;
+  lifeInsurance: boolean;
+  workingHoursPerWeek: number;
+  freeFoodAndDrink: FoodAndDrink[];
+  trainingAndDevelopment: boolean;
+  wellnessPackages: boolean;
+  workFromHomePackage: boolean;
 }
 export interface ListingInput extends ListingBase {}
+export enum FoodAndDrink {
+  "DRINKS" = "Drinks",
+  "BREAKFAST" = "Breakfast",
+  "FRUIT" = "Fruit",
+  "SNACKS" = "Snacks",
+  "LUNCH" = "Lunch",
+  'DINNER' = 'Dinner',
+}
 export enum AdvertisingMedium {
   "LinkedIn" = "LinkedIn",
   "Indeed" = "Indeed",
   "Google" = "Google",
-}
-export enum LinkedInJobFunctionCodes {
-  "acct" = "Accounting / Auditing",
-  "adm" = "Administrative",
-  "advr" = "Advertising",
-  "anls" = "Analyst",
-  "art" = "Art / Creative",
-  "bd" = "Business Development",
-  "cnsl" = "Consulting",
-  "cust" = "Customer Service",
-  "dist" = "Distribution",
-  "dsgn" = "Design",
-  "edu" = "Education",
-  "eng" = "Engineering",
-  "fin" = "Finance",
-  "genb" = "General Business",
-  "hcpr" = "HealthCare Provider",
-  "hr" = "Human Resources",
-  "it" = "Information Technology",
-  "lgl" = "Legal",
-  "mgmt" = "Management",
-  "mnfc" = "Manufacturing",
-  "mrkt" = "Marketing",
-  "othr" = "Other",
-  "pr" = "Public Relations",
-  "prch" = "Purchasing",
-  "prdm" = "Product Management",
-  "prjm" = "Project Management",
-  "prod" = "Production",
-  "qa" = "QualityAssurance",
-  "rsch" = "Research",
-  "sale" = "Sales",
-  "sci" = "Science",
-  "stra" = "Strategy / Planning",
-  "supl" = "Supply Chain",
-  "trng" = "Training",
-  "wrt" = "Writing / Editing",
 }
 export enum JobOperationType {
   "CREATE" = "CREATE",
@@ -94,43 +76,43 @@ export enum ExperienceLevel {
 export enum ListingType  {
   "BASIC" = "BASIC",
   "PREMIUM" = "PREMIUM"
-};
+}
 export enum ListingCurrency {
   "USD" = "USD",
   "GBP" = "GBP",
   "EUR" = "EUR",
 }
 export interface ListingSchema extends ListingBase {
-  _id: string;
-  organisationName: string;
-  organisationDescription: string;
-  organisationLogo: string;
-  organisationWebsite: string;
-  createdDate: string;
-  createdById: string;
-  createdByName: string;
-  applicants: IApplicant[];
+  _id: string
+  organisationName: string
+  organisationDescription: string
+  organisationLogo: string
+  organisationWebsite: string
+  createdDate: string
+  createdById: string
+  createdByName: string
+  applicants: IApplicant[]
 }
 
 export type ListingApplicant = {
-  user: User;
-  createdDate: string;
-  status: ApplicantStatus;
-  id: string;
-};
+  user: User
+  createdDate: string
+  status: ApplicantStatus
+  id: string
+}
 export interface Listing extends ListingBase {
-  _id: string;
-  organisationName: string;
-  organisationDescription: string;
-  organisationLogo: string;
-  organisationWebsite: string;
-  createdDate: string;
-  createdById: string;
-  createdByName: string;
-  applicants: ListingApplicant[];
+  _id: string
+  organisationName: string
+  organisationDescription: string
+  organisationLogo: string
+  organisationWebsite: string
+  createdDate: string
+  createdById: string
+  createdByName: string
+  applicants: ListingApplicant[]
 }
 export interface ListingForClient extends Listing {
-  alreadyApplied: boolean;
+  alreadyApplied: boolean
 }
 const listingSchema = new Schema<ListingSchema>({
   _id: { type: String, required: true },
@@ -159,11 +141,6 @@ const listingSchema = new Schema<ListingSchema>({
   },
   salary: { type: Number, required: true },
   location: { type: String, required: true },
-  categories: {
-    type: [String],
-    enum: Object.keys(LinkedInJobFunctionCodes),
-    required: true,
-  },
   skillsDescription: { type: String, required: true },
   workRemoteAllowed: { type: Boolean, required: true },
   workplaceType: {
@@ -186,8 +163,8 @@ const listingSchema = new Schema<ListingSchema>({
   applicants: { type: [Object], required: true, default: [] },
   createdById: { type: String, required: true, index: true },
   createdByName: { type: String, required: true },
-});
+})
 export const Listing: Model<ListingSchema> = model(
   "Listing",
   listingSchema
-);
+)
