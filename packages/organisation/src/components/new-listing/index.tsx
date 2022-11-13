@@ -23,6 +23,7 @@ import {
   ExperienceLevel,
   FoodAndDrink,
   JobOperationType,
+  ListingCurrency,
   ListingInput,
   ListingType,
   TechSkills
@@ -112,7 +113,6 @@ const NewListing: React.FC = () => {
   };
 
   const onSubmit = (data: ListingInput) => {
-    //@ts-ignore
     const input: ListingInput = {
       advertisingMediums: data.advertisingMediums,
       description: data.description,
@@ -128,6 +128,20 @@ const NewListing: React.FC = () => {
       workRemoteAllowed: Boolean(data.workRemoteAllowed),
       organisationId: data.organisationId,
       salary: +data.salary,
+      currency: ListingCurrency.GBP,
+      bonus: +data.bonus,
+      dentalHealthInsurance: `${data.dentalHealthInsurance}` === 'true',
+      visionHealthInsurance: `${data.visionHealthInsurance}` === 'true',
+      lifeInsurance: `${data.lifeInsurance}` === 'true',
+      privateHealthInsurance: `${data.privateHealthInsurance}` === 'true',
+      freeFoodAndDrink: data.freeFoodAndDrink,
+      numberOfHolidays: +data.numberOfHolidays,
+      rsus: +data.rsus,
+      techSkills: data.techSkills,
+      trainingAndDevelopment: `${data.trainingAndDevelopment}` === 'true',
+      wellnessPackages: `${data.wellnessPackages}` === 'true',
+      workFromHomePackage: `${data.workFromHomePackage}` === 'true',
+      workingHoursPerWeek: +data.workingHoursPerWeek,
     }
 
     mutation({

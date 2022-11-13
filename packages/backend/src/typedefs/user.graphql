@@ -3,48 +3,19 @@ enum AdvertisingMedium {
   Indeed
   Google
 }
+enum FoodAndDrink {
+  DRINKS
+  BREAKFAST
+  FRUIT
+  SNACKS
+  LUNCH
+  DINNER
+}
 enum JobOperationType {
   CREATE
   UPDATE
   REVIEW
   CLOSE
-}
-enum LinkedInJobFunctionCodes {
-  acct
-  adm
-  advr
-  anls
-  art
-  bd
-  cnsl
-  cust
-  dist
-  dsgn
-  edu
-  eng
-  fin
-  genb
-  hcpr
-  hr
-  it
-  lgl
-  mgmt
-  mnfc
-  mrkt
-  othr
-  pr
-  prch
-  prdm
-  prjm
-  prod
-  qa
-  rsch
-  sale
-  sci
-  stra
-  supl
-  trng
-  wrt
 }
 enum JobOperationType {
   CREATE
@@ -130,6 +101,19 @@ input ListingInput  {
   expireAt: String!
   currency: ListingCurrency!
   salary: Int!
+  rsus: number;
+  bonus: number;
+  techSkills: [String];
+  numberOfHolidays: Int;
+  privateHealthInsurance: Boolean;
+  dentalHealthInsurance: Boolean;
+  visionHealthInsurance: Boolean;
+  lifeInsurance: Boolean;
+  workingHoursPerWeek: Int;
+  freeFoodAndDrink: [FoodAndDrink];
+  trainingAndDevelopment: Boolean;
+  wellnessPackages: Boolean;
+  workFromHomePackage: Boolean;
 }
 input JobApplicationInput {
   jobId: String!
