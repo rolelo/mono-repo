@@ -163,7 +163,24 @@ const listingSchema = new Schema<ListingSchema>({
   applicants: { type: [Object], required: true, default: [] },
   createdById: { type: String, required: true, index: true },
   createdByName: { type: String, required: true },
-})
+  rsus: { type: Number, required: true },
+  bonus: { type: Number, required: true },
+  numberOfHolidays: { type: Number, required: true },
+  techSkills: { type: [String], enum: Object.keys(TechSkills), default: [] },
+  privateHealthInsurance: { type: Boolean, required: true },
+  dentalHealthInsurance: { type: Boolean, required: true },
+  visionHealthInsurance: { type: Boolean, required: true },
+  lifeInsurance: { type: Boolean, required: true },
+  workingHoursPerWeek: { type: Number, required: true },
+  freeFoodAndDrink: {
+    type: [String],
+    enum: Object.keys(FoodAndDrink),
+    default: [],
+  },
+  trainingAndDevelopment: { type: Boolean, required: true },
+  wellnessPackages: { type: Boolean, required: true },
+  workFromHomePackage: { type: Boolean, required: true },
+});
 export const Listing: Model<ListingSchema> = model(
   "Listing",
   listingSchema
