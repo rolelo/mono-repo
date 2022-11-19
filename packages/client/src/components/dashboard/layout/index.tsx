@@ -55,7 +55,6 @@ const DashboardLayout: React.FC = () => {
             User Profile
           </MenuItem>,
         ]} appbarLinks={[]} avatarMenu />
-        <div className="wrapper" style={{ padding: '2rem' }}>
           <Outlet />
           <RDrawer
             open={open}
@@ -66,7 +65,6 @@ const DashboardLayout: React.FC = () => {
           >
             <UserProfile />
           </RDrawer>
-        </div>
       </Container>
     </Fade>
   );

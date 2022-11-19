@@ -74,12 +74,13 @@ const AvatarMenu: React.FC<Omit<Props, 'appbarLinks' | 'avatarMenu'>> = ({ dropd
 
 export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu }: Props): JSX.Element {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, zIndex: 100 }}>
       <AppBar
         position="static"
         sx={{
           backgroundColor: theme.palette.background.default,
           color: theme.palette.secondary.light,
+          boxShadow: "none",
         }}>
         <Toolbar>
           <IconButton

@@ -31,7 +31,13 @@ export interface ListingBase {
   wellnessPackages: boolean;
   workFromHomePackage: boolean;
 }
-export interface ListingInput extends ListingBase {}
+export interface ListingInput extends ListingBase { }
+export type ClientListingsInput = {
+  description: string
+  workplaceTypes: WorkPlaceType[]
+  employmentStatus: EmploymentStatus[]
+  salary?: number
+};
 export enum FoodAndDrink {
   "DRINKS" = "Drinks",
   "BREAKFAST" = "Breakfast",
@@ -65,6 +71,15 @@ export enum EmploymentStatus {
   "VOLUNTEER" = "VOLUNTEER",
   "OTHER" = "OTHER",
 }
+export enum EmploymentStatusFriendly {
+  "FULL_TIME" = "Full-Time",
+  "PART_TIME" = "Part-Time",
+  "CONTRACT" = "Contract",
+  "INTERNSHIP" = "Internship",
+  "TEMPORARY" = "Temporary",
+  "VOLUNTEER" = "Volunteer",
+  "OTHER" = "Other",
+}
 export enum ExperienceLevel {
   "ENTRY_LEVEL" = "ENTRY LEVEL",
   "MID_SENIOR_LEVEL" = "MID SENIOR LEVEL",
@@ -73,6 +88,15 @@ export enum ExperienceLevel {
   "INTERNSHIP" = "INTERNSHIP",
   "ASSOCIATE" = "ASSOCIATE",
   "NOT_APPLICABLE" = "NOT APPLICABLE",
+}
+export enum ExperienceLevelFriendly {
+  "ENTRY_LEVEL" = "Entry Level",
+  "MID_SENIOR_LEVEL" = "Mid-Senior Level",
+  "DIRECTOR" = "Director",
+  "EXECUTIVE" = "Executive",
+  "INTERNSHIP" = "Internship",
+  "ASSOCIATE" = "Associate",
+  "NOT_APPLICABLE" = "Not Applicable",
 }
 export enum ListingType  {
   "BASIC" = "BASIC",
@@ -95,6 +119,12 @@ export interface ListingSchema extends ListingBase {
   applicants: IApplicant[]
 }
 
+export type ListingDocument = Omit<ListingSchema, '_id'> & { listingId: string }
+export type ClientListing = Omit<ListingForClient, "alreadyApplied" | "applicants">;
+export type SearchListing = {
+  listings: ClientListing[]
+  hits: number
+};
 export type ListingApplicant = {
   user: User
   createdDate: string

@@ -67,6 +67,13 @@ input UpdateApplicationStatusInput {
   userId: String!
   status: ApplicantStatus!
 }
+input ClientListingsInput {
+  description: String!
+  workplaceTypes: [String]
+  employmentStatus: [EmploymentStatus]
+  salary: Int
+}
+
 interface IListing {
   jobPostingOperationType: JobOperationType!
   title: String!
@@ -200,11 +207,40 @@ type Listing implements IListing {
   applicants: [Applicant]
   alreadyApplied: Boolean
 }
+type ClientListing implements IListing {
+  _id: String
+  organisationName: String
+  organisationDescription: String
+  organisationWebsite: String
+  organisationLogo: String
+  createdDate: String
+  createdById: String
+  createdByName: String
+  jobPostingOperationType: JobOperationType!
+  title: String!
+  advertisingMediums: [AdvertisingMedium]
+  description: String!
+  location: String!
+  skillsDescription: String!
+  workRemoteAllowed: Boolean
+  workplaceType: String!
+  employmentStatus: EmploymentStatus!
+  experienceLevel: ExperienceLevel!
+  expireAt: String!
+  listingType: ListingType!
+  currency: ListingCurrency!
+  salary: Int!
+}
+type SearchListing {
+  listings: [ClientListing]
+  hits: Int!
+}
 type Query {
   user: User!
   listings(organisationId: String): [Listing]
   jobApplicants(jobId: String!): [Applicant]
   clientListing(id: String!): Listing
+  clientListings(input: ClientListingsInput!): SearchListing
 }
 type Mutation {
   createProfile(input: ProfileInput!): Profile!

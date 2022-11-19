@@ -1,11 +1,20 @@
 import { v4 as uuidv4 } from "uuid";
 import {
-  Context, IApplicant, JobApplicationInput, Listing,
+  ClientListingsInput,
+  Context,
+  IApplicant,
+  JobApplicationInput,
+  Listing,
+  ListingDocument,
   ListingForClient,
-  ListingInput, ListingSchema, Organisation,
+  ListingInput,
+  ListingSchema,
+  Organisation,
+  SearchListing,
   UpdateApplicationStatusInput,
-  User
+  User,
 } from "../../../common/models";
+import { client } from "../elastic";
 
 export const resolvers = {
   Query: {
@@ -17,8 +26,18 @@ export const resolvers = {
       const query = {
         ...(organisationId ? { organisationId } : { createdById: sub }),
       };
-      const listings = await Listing.find(query).exec();
-      return listings.map((l) => l.toObject());
+
+      const result = await client.search({
+        index: "listings",
+        query: {
+          match: query,
+        },
+      });
+
+      return result.hits.hits.map((h) => ({
+        ...(h._source as ListingDocument),
+        _id: (h._source as ListingDocument)?.listingId,
+      }));
     },
     async clientListing(
       _,
@@ -35,6 +54,64 @@ export const resolvers = {
         ...listing,
         applicants: [],
         alreadyApplied,
+      };
+    },
+    async clientListings(
+      _,
+      {
+        input: { description, employmentStatus, workplaceTypes, salary },
+      }: { input: ClientListingsInput }
+    ): Promise<SearchListing> {
+      const result = await client.search({
+        index: "listings",
+        query: {
+          bool: {
+            must: [
+              {
+                query_string: {
+                  query: description,
+                },
+              },
+            ],
+            filter: {
+              bool: {
+                must: [
+                  ...(employmentStatus.length
+                    ? [
+                        {
+                          terms: {
+                            ...(employmentStatus.length
+                              ? {
+                                  "employmentStatus.keyword": employmentStatus,
+                                }
+                              : {}),
+                            ...(workplaceTypes.length
+                              ? { "workplaceType.keyword": workplaceTypes }
+                              : {}),
+                          },
+                        },
+                      ]
+                    : []),
+                  {
+                    range: {
+                      salary: {
+                        gte: salary || 0,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      });
+
+      return {
+        listings: result.hits.hits.map((h) => ({
+          ...(h._source as ListingDocument),
+          _id: (h._source as ListingDocument)?.listingId,
+        })),
+        hits: +(result.hits.total["value"] || 0),
       };
     },
     async jobApplicants(_, { jobId }: JobApplicationInput, { sub }: Context) {
@@ -71,22 +148,36 @@ export const resolvers = {
       const listing = new Listing(newListing);
       await listing.save();
 
+      const { _id, ...listingWithoutId } = newListing;
+      await client.index<ListingDocument>({
+        index: "listings",
+        document: {
+          ...listingWithoutId,
+          listingId: _id,
+        },
+      });
+
       return { ...listing.toObject() };
     },
-    async updateApplicantStatus(_, { input: { jobId, status, userId } }: { input: UpdateApplicationStatusInput }) {
+    async updateApplicantStatus(
+      _,
+      {
+        input: { jobId, status, userId },
+      }: { input: UpdateApplicationStatusInput }
+    ) {
       await Listing.updateOne(
-        { _id: jobId, 'applicants.userId': userId },
+        { _id: jobId, "applicants.userId": userId },
         {
-          '$set': {
-            'applicants.$.status': status,
-          }
+          $set: {
+            "applicants.$.status": status,
+          },
         }
       );
 
       return {
         status,
-      }
-    }
+      };
+    },
   },
   Applicant: {
     user: async ({ userId }: IApplicant, _, { sub }: Context) => {

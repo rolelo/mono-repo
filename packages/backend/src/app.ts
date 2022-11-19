@@ -13,8 +13,6 @@ import http from 'http';
 import mongoose from 'mongoose';
 import { Context } from '../../common/models';
 import * as resolvers from './resolvers';
-import { Client } from '@elastic/elasticsearch';
-import { run } from './elastic/test';
 const {loadFiles} = require('@graphql-tools/load-files');
 const cors = require('cors');
 
@@ -24,17 +22,6 @@ export const s3Client = new AWS.S3({
   region: "eu-west-1",
 });
 
-export const client = new Client({
-  node: "https://localhost:9200",
-  auth: {
-    username: "elastic",
-    password: process.env.ELASTIC_PASSWORD,
-    apiKey: "lDB1t1LfQ9exFGAZkvvncw",
-  },
-});
-
-
-run();
 
 const verifier = CognitoJwtVerifier.create({
   userPoolId: process.env.USERPOOL_ID,

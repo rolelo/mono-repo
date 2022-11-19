@@ -1,17 +1,39 @@
-import {Context, IOrganisation, IUser, Organisation, Profile, User} from '../../../common/models';
+import {
+  Context,
+  IOrganisation,
+  IUser,
+  Organisation,
+  Profile,
+  User,
+} from "../../../common/models";
+
+const createUser = async (_id, name, email, phoneNumber) => {
+  const user = new User({
+    _id,
+    name,
+    email,
+    phoneNumber,
+  });
+
+  await user.save();
+  return user.toObject();
+};
 
 export const resolvers = {
   Query: {
-    user: async (parent, args, { sub }: Context): Promise<IUser> => {
-      const { _id, name, email, phoneNumber, organisationIds, profile } =
-        await User.findById(sub);
+    user: async (
+      parent,
+      args,
+      { sub, email, name, phoneNumber }: Context
+    ): Promise<IUser> => {
+      const user = await (await User.findById(sub)).toObject();
+
+      if (!user) {
+        return createUser(sub, name, email, phoneNumber);
+      }
+
       return {
-        _id,
-        name,
-        email,
-        phoneNumber,
-        organisationIds,
-        profile,
+        ...user
       };
     },
   },
@@ -19,18 +41,12 @@ export const resolvers = {
     createUser: async (
       parent,
       { sub, email, name, phoneNumber }: Context
-    ): Promise<IUser> => {
-      const user = new User({
-        _id: sub,
-        name,
-        email,
-        phoneNumber,
-      });
-
-      await user.save();
-      return user.toObject();
-    },
-    createProfile: async (parent, { input }: { input: Profile }, { sub }: Context): Promise<Profile> => {
+    ): Promise<IUser> => createUser(sub, name, email, phoneNumber),
+    createProfile: async (
+      parent,
+      { input }: { input: Profile },
+      { sub }: Context
+    ): Promise<Profile> => {
       const user = await User.findById(sub);
       user.profile = input;
       await user.save();
