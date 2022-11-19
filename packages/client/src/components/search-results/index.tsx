@@ -52,19 +52,21 @@ const SearchResults = () => {
       description: searchParams.get('searchfield') || '',
       employmentStatus: [],
       workplaceTypes: [],
+      experienceLevels: [],
     }
   });
 
   const [query, { data, loading }] = useLazyQuery<
     { clientListings: SearchListing },
     { input: ClientListingsInput }>(GET_LISTINGS, {
-    nextFetchPolicy: 'network-only',
-  });
+      nextFetchPolicy: 'network-only',
+    });
 
   const es = watch().employmentStatus;
   const wt = watch().workplaceTypes;
   const salary = watch().salary;
   const description = watch().description;
+  const el = watch().experienceLevels;
 
   useEffect(() => {
     query({
@@ -73,21 +75,28 @@ const SearchResults = () => {
           description,
           employmentStatus: es,
           workplaceTypes: wt,
+          experienceLevels: el,
           salary: salary ? Number((salary as unknown as string).replace(/[^0-9.-]+/g, "")) : undefined,
         },
       },
       fetchPolicy: 'network-only',
     })
-  }, [query, searchParams, es, wt, salary, description]);
+  }, [query, searchParams, es, wt, salary, description, el]);
 
-  const onSubmit: SubmitHandler<FieldValues> = ({ description, workplaceTypes, employmentStatus }) => {
+  const onSubmit: SubmitHandler<FieldValues> = ({
+    description,
+    workplaceTypes,
+    employmentStatus,
+    experienceLevels,
+  }) => {
     if (!isValid || !isDirty) return;
     query({
       variables: {
         input: {
           description,
           workplaceTypes,
-          employmentStatus
+          employmentStatus,
+          experienceLevels,
         }
       },
       onCompleted: () => {
@@ -191,7 +200,7 @@ const SearchResults = () => {
             )
           }
         </div>
-        <div style={{ flex:1 }}>
+        <div style={{ flex: 1 }}>
           <RecentListing />
         </div>
 

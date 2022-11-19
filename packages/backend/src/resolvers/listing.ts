@@ -59,7 +59,13 @@ export const resolvers = {
     async clientListings(
       _,
       {
-        input: { description, employmentStatus, workplaceTypes, salary },
+        input: {
+          description,
+          employmentStatus,
+          experienceLevels,
+          workplaceTypes,
+          salary
+        },
       }: { input: ClientListingsInput }
     ): Promise<SearchListing> {
       const result = await client.search({
@@ -80,14 +86,25 @@ export const resolvers = {
                     ? [
                         {
                           terms: {
-                            ...(employmentStatus.length
-                              ? {
-                                  "employmentStatus.keyword": employmentStatus,
-                                }
-                              : {}),
-                            ...(workplaceTypes.length
-                              ? { "workplaceType.keyword": workplaceTypes }
-                              : {}),
+                            "employmentStatus.keyword": employmentStatus,
+                          },
+                        },
+                      ]
+                    : []),
+                  ...(workplaceTypes.length
+                    ? [
+                        {
+                          terms: {
+                            "workplaceType.keyword": workplaceTypes,
+                          },
+                        },
+                      ]
+                    : []),
+                  ...(experienceLevels.length
+                    ? [
+                        {
+                          terms: {
+                            "experienceLevel.keyword": experienceLevels,
                           },
                         },
                       ]

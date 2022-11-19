@@ -71,6 +71,7 @@ input ClientListingsInput {
   description: String!
   workplaceTypes: [String]
   employmentStatus: [EmploymentStatus]
+  experienceLevels: [ExperienceLevel]
   salary: Int
 }
 
@@ -88,6 +89,7 @@ interface IListing {
   expireAt: String!
   listingType: ListingType!
   currency: ListingCurrency!
+  techSkills: [String]
   salary: Int!
 }
 input ListingInput  {
@@ -204,6 +206,7 @@ type Listing implements IListing {
   listingType: ListingType!
   currency: ListingCurrency!
   salary: Int!
+  techSkills: [String]
   applicants: [Applicant]
   alreadyApplied: Boolean
 }
@@ -229,6 +232,7 @@ type ClientListing implements IListing {
   expireAt: String!
   listingType: ListingType!
   currency: ListingCurrency!
+  techSkills: [String]
   salary: Int!
 }
 type SearchListing {

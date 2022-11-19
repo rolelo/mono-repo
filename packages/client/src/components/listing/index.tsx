@@ -1,12 +1,13 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import { Box, Button, Typography } from '@mui/material';
+import { alpha, Avatar, Box, Button, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import { EmploymentStatus, IUser, JobApplicationInput, ListingForClient } from 'common/models';
-import { format } from 'date-fns';
-import { useParams } from 'react-router-dom';
+import { IUser, JobApplicationInput, ListingForClient } from 'common/models';
+import theme from 'common/static/theme';
+import { formatDistance } from 'date-fns';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
 
 const GET_LISTING = gql`
   query clientListing($id: String!) {
@@ -32,8 +33,9 @@ const GET_LISTING = gql`
       expireAt
       listingType
       currency
-      salary
+      salary 
       alreadyApplied
+      techSkills
     }
   }
 `;
@@ -58,18 +60,39 @@ const LeftPane = styled('div')({
   boxSizing: 'border-box',
   flex: '0.5',
   borderRadius: '8px',
-  height: '200px'
+  height: '200px',
+  '> div': {
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: '2rem',
+    backgroundColor: theme.palette.background.default,
+    padding: '2rem',
+    borderRadius: '8px',
+    rowGap: '2rem',
+    color: 'white',
+  }
 });
 
 const RightPane = styled('div')({
   padding: '2rem',
   boxSizing: 'border-box',
   flex: '1.2',
-  borderRadius: '8px'
+  borderRadius: '8px',
+  backgroundColor: 'white',
 });
+
+const Chip = styled('div')({
+  backgroundColor: alpha(theme.palette.secondary.main, 0.8),
+  color: 'black',
+  borderRadius: '0.4rem',
+  padding: '1rem',
+  textTransform: 'lowercase',
+  fontWeight: 'bold',
+})
 
 const Listing: React.FC = () => {
   const { id } = useParams();
+  const nav = useNavigate();
   const { data } = useQuery<{ clientListing: ListingForClient }>(GET_LISTING, {
     variables: {
       id,
@@ -90,30 +113,99 @@ const Listing: React.FC = () => {
   return (
     <Box sx={{ padding: '2rem', display: "flex", flexDirection: "row", columnGap: '2rem', boxSizing: 'border-box' }}>
       <LeftPane>
-        <Box sx={{
-          display: "flex",
-          flexDirection: "row",
-          marginBottom: '2rem',
-        }}>
-          <Button color='primary' variant='contained' size='large' sx={{ flex: "1" }}>Featured</Button>
-          <Button color='primary' size='large' sx={{ flex: "1" }}>Similar Jobs</Button>
-          <Button color='primary' size='large' sx={{ flex: "1" }}>Most Recent</Button>
+        <Box>
+          <Typography variant='body1'>Tech Stack</Typography>
+          <div style={{ display: "flex", flexDirection: "row", columnGap: '1rem', rowGap: '1rem', flexWrap: 'wrap' }}>
+            {data?.clientListing.techSkills.map(ts => <Chip key={ts}>{ts}</Chip>)}
+          </div>
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
-          <Box sx={{ padding: '2rem', borderRadius: "8px", maxHeight: "300px" }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '1rem', alignItems: 'center', }}>
-                <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" width="50px" />
-                <Typography variant='h5' fontWeight="600">{data?.clientListing.title}</Typography>
-              </Box>
-              <Box>
-                <Typography variant="h5" fontWeight="bolder">{`${data?.clientListing.currency} ${data?.clientListing.salary}`}</Typography>
-              </Box>
-            </Box>
-            <Typography variant='body1' fontWeight="300" style={{ margin: '1rem 0 0.5rem 0', height: '43px', overflow: 'hidden' }}>
-              {data?.clientListing.description}
+        <Box>
+          <div style={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
+            <Avatar />
+            <div>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: theme.palette.secondary.light
+                }}>
+                {data?.clientListing.createdByName}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: theme.palette.secondary.light
+                }}>
+                Hiring Manager
+              </Typography>
+            </div>
+          </div>
+          <div style={{ backgroundColor: "white", borderRadius: "5px", padding: '2rem' }}>
+            <Typography variant='body1' sx={{ color: 'black' }}>
+              {
+                data?.clientListing.organisationDescription
+              }
             </Typography>
-          </Box>
+          </div>
+        </Box>
+        <Box>
+          <Typography
+            variant="h5"
+            textAlign="center"
+            sx={{
+              color: theme.palette.secondary.light
+            }}>
+            Find Similar Jobs
+          </Typography>
+          <Button variant='contained' color='secondary'
+            onClick={() => {
+              nav('/search')
+            }}>
+            Find Similar Jobs
+          </Button>
+        </Box>
+        <Box>
+          <Typography
+            variant="h5"
+            textAlign="center"
+            sx={{
+              color: theme.palette.secondary.light
+            }}>
+            Sounds like a match?
+          </Typography>
+          {id && (
+            <Button
+              disabled={data?.clientListing.alreadyApplied}
+              variant="contained"
+              component="label"
+              startIcon={<UploadFileIcon />}
+              size="large"
+              color='primary'
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                '&.Mui-disabled': {
+                  backgroundColor: theme.palette.primary.main
+                }
+              }}
+              onClick={() => mutation({
+                variables: {
+                  input: {
+                    jobId: id
+                  }
+                }
+              })}>
+              {
+                data?.clientListing.alreadyApplied ? "You have already applied to this position" : "Direct Apply"
+              }
+            </Button>
+          )}
+          <Button variant='outlined'
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              toast.info("Link copied to clipboard");
+            }}>
+            Share Job
+            <InsertLinkIcon sx={{ marginLeft: '1rem' }} />
+          </Button>
         </Box>
       </LeftPane>
       <RightPane sx={{ padding: '2rem', boxSizing: 'border-box', flex: '1.2', borderRadius: '8px' }}>
@@ -123,56 +215,30 @@ const Listing: React.FC = () => {
             <Typography variant='h4' fontWeight="600">{data?.clientListing.title}</Typography>
           </Box>
           <Box>
-            <Typography variant="h4" fontWeight="bolder">{`${data?.clientListing.currency} ${data?.clientListing.salary}`}</Typography>
-            <Typography variant='h6' textAlign="right">{format(new Date(+(data?.clientListing.createdDate || 0)), "dd/MM/yyyy")}</Typography>
+            <Typography variant="h4" fontWeight="bolder">{`${data?.clientListing.currency} ${data?.clientListing.salary.toLocaleString('en-gb', {
+              style: 'currency',
+              currency: 'GBP',
+            })}`}</Typography>
+            <Typography variant='h6' textAlign="right">Posted {formatDistance(new Date(), new Date(+(data?.clientListing.createdDate || 0)))} ago</Typography>
           </Box>
         </Box>
-        <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>About</Typography>
-        <Typography variant='h5' fontWeight="300">{data?.clientListing.organisationDescription}</Typography>
-
-        <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>Job Description</Typography>
-        <Typography variant='h5' fontWeight="300">{data?.clientListing.description}</Typography>
-
-        <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>Skills Description</Typography>
-        <Typography variant='h5' fontWeight="300">{data?.clientListing.skillsDescription}</Typography>
-
-        <Box sx={{ display: "flex", flexDirection: 'row', columnGap: '1.5rem', margin: '2rem 0' }}>
-          <Box sx={{ display: "flex", flexDirection: "column", padding: '1rem', borderRadius: "8px" }}>
-            <Typography variant='h6' fontWeight="600">Experience Level</Typography>
-            <Typography variant='h6' fontWeight="400">{data?.clientListing.experienceLevel}</Typography>
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", padding: '1rem', borderRadius: "8px" }}>
-            <Typography variant='h6' fontWeight="600">Workplace Type</Typography>
-            <Typography variant='h6' fontWeight="400">{data?.clientListing.workplaceType}</Typography>
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", padding: '1rem', borderRadius: "8px" }}>
-            <Typography variant='h6' fontWeight="600">Location</Typography>
-            <Typography variant='h6' fontWeight="400">{data?.clientListing.location}</Typography>
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", padding: '1rem', borderRadius: "8px" }}>
-            <Typography variant='h6' fontWeight="600">Employment Status</Typography>
-            <Typography variant='h6' fontWeight="400">{EmploymentStatus[data?.clientListing.employmentStatus as keyof typeof EmploymentStatus]}</Typography>
-          </Box>
+        <Box sx={{ display: "flex", flexDirection: "row", columnGap: "1rem", margin: '2rem 0' }}>
+          <Chip>{data?.clientListing.workplaceType}</Chip>
+          <Chip>{data?.clientListing.employmentStatus}</Chip>
+          <Chip>{data?.clientListing.experienceLevel}</Chip>
         </Box>
-
-        <Box style={{ padding: '2rem 0 4rem 0' }}>
-          <Typography variant='h5' fontWeight="600" style={{ padding: "2rem 0 1rem 0" }}>Skills Required</Typography>
+        <Box sx={{ display: "flex", flexDirection: "row"}}>
+          <div>
+            <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>Job Description</Typography>
+            <Typography variant='body1' fontWeight="300">{data?.clientListing.description}</Typography>
+          </div>
+          <div>
+            <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>Skills Description</Typography>
+            <Typography variant='body1' fontWeight="300">{data?.clientListing.skillsDescription}</Typography>
+          </div>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
           <a href={data?.clientListing.organisationWebsite} target="_blank" rel="noreferrer">{data?.clientListing.organisationWebsite}</a>
-          {id && (
-            <Button disabled={data?.clientListing.alreadyApplied} variant="contained" component="label" startIcon={<UploadFileIcon />} size="large" onClick={() => mutation({
-              variables: {
-                input: {
-                  jobId: id
-                }
-              }
-            })}>
-              {
-                data?.clientListing.alreadyApplied ? "You have already applied to this position" : "Direct Apply"
-              }
-            </Button>
-          )}
         </Box>
       </RightPane>
     </Box>

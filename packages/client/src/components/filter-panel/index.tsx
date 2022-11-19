@@ -1,7 +1,7 @@
 import React from 'react'
 import { Typography, Button, Divider } from "@mui/material";
 import theme from 'common/static/theme';
-import { ClientListingsInput, EmploymentStatus, WorkPlaceType } from 'common/models';
+import { ClientListingsInput, EmploymentStatus, ExperienceLevel, ExperienceLevelFriendly, WorkPlaceType } from 'common/models';
 import CurrencyInput from 'react-currency-input-field';
 import { UseFormWatch, UseFormSetValue, UseFormRegister, UseFormGetValues } from 'react-hook-form';
 
@@ -14,8 +14,8 @@ type Props = {
 
 const FilterPanel: React.FC<Props> = ({ register, watch, setValue, getValues }) => {
   const handleButtonClick = (
-    value: keyof typeof EmploymentStatus | keyof typeof WorkPlaceType,
-    type: 'employmentStatus' | 'workplaceTypes') => {
+    value: keyof typeof EmploymentStatus | keyof typeof WorkPlaceType | keyof typeof ExperienceLevel,
+    type: 'employmentStatus' | 'workplaceTypes' | 'experienceLevels') => {
     const currValue = getValues(type)
     const itemIndex = currValue.findIndex((es) => es === value)
     if (itemIndex > -1) {
@@ -75,6 +75,31 @@ const FilterPanel: React.FC<Props> = ({ register, watch, setValue, getValues }) 
             onClick={() => handleButtonClick(key, 'workplaceTypes')}
             key={key}>
             {WorkPlaceType[key]}
+          </Button>
+        ))}
+      </div>
+      <Divider />
+      <div style={{ display: "flex", flexDirection: "column", rowGap: "0.2rem" }}>
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          style={{
+            color: theme.palette.grey[400]
+          }}>Experience Level</Typography>
+        {(Object.keys(ExperienceLevel) as Array<keyof typeof ExperienceLevel>).map((key) => (
+          <Button
+            sx={{
+              textAlign: "left",
+              color: watch('experienceLevels').findIndex(wt => wt === key) > -1
+                ? theme.palette.primary.main
+                : "black",
+              fontWeight: "bold",
+              width: "fit-content"
+            }}
+            value={key}
+            onClick={() => handleButtonClick(key, 'experienceLevels')}
+            key={key}>
+            {ExperienceLevelFriendly[key]}
           </Button>
         ))}
       </div>

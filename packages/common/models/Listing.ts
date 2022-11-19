@@ -36,6 +36,7 @@ export type ClientListingsInput = {
   description: string
   workplaceTypes: WorkPlaceType[]
   employmentStatus: EmploymentStatus[]
+  experienceLevels: ExperienceLevel[]
   salary?: number
 };
 export enum FoodAndDrink {

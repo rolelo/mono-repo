@@ -3,7 +3,7 @@ import { createTheme } from '@mui/material';
 const theme = createTheme({
   typography: {
     fontSize: 20,
-    fontFamily: "proxima-nova, sans-serif",
+    fontFamily: "'Lato', sans-serif",
   },
   palette: {
     background: {
