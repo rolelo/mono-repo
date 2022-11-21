@@ -3,12 +3,13 @@ import {
   Button, Divider, Fade, TextField, Typography,
 } from '@mui/material';
 import Amplify from 'common/services/Amplify';
-import React from 'react';
+import React, { useEffect } from 'react';
 import GoogleButton from 'react-google-button';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Auth, Hub } from 'aws-amplify';
 
 const CustomForm = styled('form')({
   width: '100%',
@@ -39,9 +40,8 @@ const Login: React.FC = () => {
   const mutation = useMutation(({ email, password }: TLogin) => Amplify.login(email, password), {
     onSuccess: () => {
       toast.success('Successfully logged in');
-      const urlParams = new URLSearchParams(window.location.search);
-      const redirectUrl = urlParams.get('redirectUrl');
-      if(redirectUrl) window.location.href = redirectUrl;
+      const redirectUrl = searchParams.get('redirectUrl');
+      window.location.href = redirectUrl || "https://localhost:3004";
     },
     onError: (error) => {
       toast.error(error instanceof Error ? error.message : 'Login Error');
@@ -50,6 +50,21 @@ const Login: React.FC = () => {
   const { handleSubmit, register } = useForm({
     mode: 'onBlur',
   });
+
+  useEffect(() => {
+    const sub = Hub.listen('auth', ({ payload: { event, data } }) => {
+
+      console.log(data);
+      switch (event) {
+        case 'cognitoHostedUI':
+        case 'customOAuthState':
+          console.log(data);
+          window.location.href = typeof data === 'string' ? data : 'https://localhost:3004';
+      }
+    });
+
+    return sub;
+  }, [])
 
   return (
     <Fade in timeout={600}>
@@ -72,7 +87,12 @@ const Login: React.FC = () => {
           <Link to="/auth/signup">Sign Up</Link>
         </div>
         <Typography variant="body1">Or</Typography>
-        <GoogleButton />
+        <GoogleButton onClick={
+          () => Auth.federatedSignIn({
+            provider: 'Google' as any,
+            customState: searchParams.get('redirectUrl') || ''
+          })
+        } />
       </CustomForm>
     </Fade>
   );

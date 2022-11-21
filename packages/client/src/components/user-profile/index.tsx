@@ -131,7 +131,6 @@ const UserProfile: React.FC = () => {
   }): Promise<void> => {
     let uuid;
     if (!user?.profile?.cv || fileUploaded) {
-      console.log('in here');
       uuid = await uploadToS3();
     }
     submitForm({
@@ -151,8 +150,8 @@ const UserProfile: React.FC = () => {
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", rowGap: '2rem' }}>
-      <Alert color={viewOnly ? 'success' : 'warning'}>
-        {viewOnly ? 'Profile successfully setup' : user?.profile ? 'You are editing your profile' : 'You still need to setup a profile'}
+      <Alert severity={!user?.profile ? 'error' : !viewOnly ? 'warning' : 'success'}>
+        {!user?.profile ? 'You do not have a profile' : user?.profile && !viewOnly ? 'You are editing your profile' : 'You have completed your profile'}
       </Alert>
       <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
         <FormControl fullWidth>

@@ -206,7 +206,19 @@ type Listing implements IListing {
   listingType: ListingType!
   currency: ListingCurrency!
   salary: Int!
+  rsus: Int!
+  bonus: Int!
   techSkills: [String]
+  numberOfHolidays: Int!
+  privateHealthInsurance: Boolean
+  dentalHealthInsurance: Boolean
+  visionHealthInsurance: Boolean
+  lifeInsurance: Boolean!
+  workingHoursPerWeek: Int!
+  freeFoodAndDrink: [FoodAndDrink]
+  trainingAndDevelopment: Boolean!
+  wellnessPackages: Boolean!
+  workFromHomePackage: Boolean!
   applicants: [Applicant]
   alreadyApplied: Boolean
 }

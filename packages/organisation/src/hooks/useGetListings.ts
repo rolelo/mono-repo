@@ -25,6 +25,19 @@ const GET_LISTINGS = gql`
       listingType
       currency
       salary
+      rsus
+      bonus
+      techSkills
+      numberOfHolidays
+      privateHealthInsurance
+      dentalHealthInsurance
+      visionHealthInsurance
+      lifeInsurance
+      workingHoursPerWeek
+      freeFoodAndDrink
+      trainingAndDevelopment
+      wellnessPackages
+      workFromHomePackage
       applicants {
         id
         createdDate

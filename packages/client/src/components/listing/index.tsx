@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { alpha, Avatar, Box, Button, Typography } from '@mui/material';
@@ -8,6 +8,9 @@ import theme from 'common/static/theme';
 import { formatDistance } from 'date-fns';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import { userVar } from '../dashboard/layout';
 
 const GET_LISTING = gql`
   query clientListing($id: String!) {
@@ -35,7 +38,18 @@ const GET_LISTING = gql`
       currency
       salary 
       alreadyApplied
+      rsus
+      bonus
       techSkills
+      numberOfHolidays
+      privateHealthInsurance
+      dentalHealthInsurance
+      visionHealthInsurance
+      lifeInsurance
+      workingHoursPerWeek
+      freeFoodAndDrink
+      trainingAndDevelopment
+      wellnessPackages
     }
   }
 `;
@@ -55,6 +69,23 @@ const CREATE_JOB_APPLICATION = gql`
     }
   }
 `;
+
+const DataView = styled('div')({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+})
+
+const BlueDiv = styled('div')({
+  display: "flex",
+  flexDirection: "column",
+  marginBottom: '2rem',
+  backgroundColor: theme.palette.background.paper,
+  padding: '2rem',
+  borderRadius: '8px',
+  rowGap: '2rem',
+  color: 'black',
+});
 
 const LeftPane = styled('div')({
   boxSizing: 'border-box',
@@ -81,7 +112,7 @@ const RightPane = styled('div')({
   backgroundColor: 'white',
 });
 
-const Chip = styled('div')({
+export const Chip = styled('div')({
   backgroundColor: alpha(theme.palette.secondary.main, 0.8),
   color: 'black',
   borderRadius: '0.4rem',
@@ -91,6 +122,7 @@ const Chip = styled('div')({
 })
 
 const Listing: React.FC = () => {
+  const user = useReactiveVar(userVar);
   const { id } = useParams();
   const nav = useNavigate();
   const { data } = useQuery<{ clientListing: ListingForClient }>(GET_LISTING, {
@@ -111,7 +143,7 @@ const Listing: React.FC = () => {
     }
   });
   return (
-    <Box sx={{ padding: '2rem', display: "flex", flexDirection: "row", columnGap: '2rem', boxSizing: 'border-box' }}>
+    <Box sx={{ padding: '2rem', display: "flex", flexDirection: "row-reverse", columnGap: '2rem', boxSizing: 'border-box' }}>
       <LeftPane>
         <Box>
           <Typography variant='body1'>Tech Stack</Typography>
@@ -154,32 +186,16 @@ const Listing: React.FC = () => {
             sx={{
               color: theme.palette.secondary.light
             }}>
-            Find Similar Jobs
-          </Typography>
-          <Button variant='contained' color='secondary'
-            onClick={() => {
-              nav('/search')
-            }}>
-            Find Similar Jobs
-          </Button>
-        </Box>
-        <Box>
-          <Typography
-            variant="h5"
-            textAlign="center"
-            sx={{
-              color: theme.palette.secondary.light
-            }}>
             Sounds like a match?
           </Typography>
           {id && (
             <Button
-              disabled={data?.clientListing.alreadyApplied}
+              disabled={data?.clientListing.alreadyApplied || !user?.profile}
               variant="contained"
               component="label"
               startIcon={<UploadFileIcon />}
               size="large"
-              color='primary'
+              color={'primary'}
               sx={{
                 backgroundColor: theme.palette.primary.main,
                 '&.Mui-disabled': {
@@ -194,54 +210,187 @@ const Listing: React.FC = () => {
                 }
               })}>
               {
-                data?.clientListing.alreadyApplied ? "You have already applied to this position" : "Direct Apply"
+                data?.clientListing.alreadyApplied
+                  ? "You have already applied for this position"
+                  : !user?.profile ? 'Please create a profile'
+                    : 'One click apply'
               }
             </Button>
           )}
-          <Button variant='outlined'
-            onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-              toast.info("Link copied to clipboard");
-            }}>
-            Share Job
-            <InsertLinkIcon sx={{ marginLeft: '1rem' }} />
-          </Button>
+          <div style={{ display: 'flex', flexDirection: "row", columnGap: '2rem' }}>
+            <Button variant='outlined' style={{ flex: 1 }}
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                toast.info("Link copied to clipboard");
+              }}>
+              Share Job
+              <InsertLinkIcon sx={{ marginLeft: '1rem' }} />
+            </Button>
+            <Button variant='contained' color='secondary' style={{ flex: 1 }}
+              onClick={() => {
+                nav('/search');
+              }}>
+              Find Similar Jobs
+            </Button>
+          </div>
         </Box>
       </LeftPane>
-      <RightPane sx={{ padding: '2rem', boxSizing: 'border-box', flex: '1.2', borderRadius: '8px' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '2rem', alignItems: 'center', }}>
-            <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" width="70px" />
-            <Typography variant='h4' fontWeight="600">{data?.clientListing.title}</Typography>
+      <div style={{ boxSizing: 'border-box', flex: '1.2', borderRadius: '8px' }}>
+        <RightPane sx={{ padding: '2rem', boxSizing: 'border-box', flex: '1.2', borderRadius: '8px' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '2rem', alignItems: 'center', }}>
+              <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" width="70px" />
+              <Typography variant='h4' fontWeight="600">{data?.clientListing.title}</Typography>
+            </Box>
+            <Box>
+              <Typography variant="h4" fontWeight="bolder">{data?.clientListing.salary.toLocaleString('en-gb', {
+                style: 'currency',
+                currency: 'GBP',
+              })}</Typography>
+              <Typography variant='h6' textAlign="right">Posted {formatDistance(new Date(), new Date(+(data?.clientListing.createdDate || 0)))} ago</Typography>
+            </Box>
           </Box>
-          <Box>
-            <Typography variant="h4" fontWeight="bolder">{`${data?.clientListing.currency} ${data?.clientListing.salary.toLocaleString('en-gb', {
-              style: 'currency',
-              currency: 'GBP',
-            })}`}</Typography>
-            <Typography variant='h6' textAlign="right">Posted {formatDistance(new Date(), new Date(+(data?.clientListing.createdDate || 0)))} ago</Typography>
+          <Box sx={{ display: "flex", flexDirection: "row", columnGap: "1rem", margin: '2rem 0' }}>
+            <Chip>{data?.clientListing.workplaceType}</Chip>
+            <Chip>{data?.clientListing.employmentStatus}</Chip>
+            <Chip>{data?.clientListing.experienceLevel}</Chip>
           </Box>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "row", columnGap: "1rem", margin: '2rem 0' }}>
-          <Chip>{data?.clientListing.workplaceType}</Chip>
-          <Chip>{data?.clientListing.employmentStatus}</Chip>
-          <Chip>{data?.clientListing.experienceLevel}</Chip>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "row"}}>
-          <div>
-            <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>Job Description</Typography>
-            <Typography variant='body1' fontWeight="300">{data?.clientListing.description}</Typography>
-          </div>
-          <div>
-            <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>Skills Description</Typography>
-            <Typography variant='body1' fontWeight="300">{data?.clientListing.skillsDescription}</Typography>
-          </div>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <a href={data?.clientListing.organisationWebsite} target="_blank" rel="noreferrer">{data?.clientListing.organisationWebsite}</a>
-        </Box>
-      </RightPane>
-    </Box>
+          <Box sx={{ display: "flex", flexDirection: "row" }}>
+            <div style={{ flex: 1 }}>
+              <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>Job Description</Typography>
+              <Typography variant='body1' fontWeight="300">{data?.clientListing.description}</Typography>
+            </div>
+            <div style={{ flex: 1 }}>
+              <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>Skills Description</Typography>
+              <Typography variant='body1' fontWeight="300">{data?.clientListing.skillsDescription}</Typography>
+            </div>
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
+            <a href={data?.clientListing.organisationWebsite} target="_blank" rel="noreferrer">{data?.clientListing.organisationWebsite}</a>
+          </Box>
+        </RightPane>
+        <div style={{ display: "flex", flexDirection: "row", columnGap: '1rem', marginTop: '2rem' }}>
+          <BlueDiv style={{ flex: 1 }}>
+            <Typography variant='body1' fontWeight='bold'>Compensation & Holidays</Typography>
+            <div style={{ display: 'flex', flexDirection: 'column', rowGap: '1rem' }}>
+              <DataView>
+                <Typography variant='body2'>Salary</Typography>
+                <Typography variant='body2' fontWeight='bold'>
+                  {data?.clientListing.salary.toLocaleString('en-gb', {
+                    style: 'currency',
+                    currency: 'GBP',
+                  })}
+                </Typography>
+              </DataView>
+              <DataView>
+                <Typography variant='body2'>RSUS (% of Salary)</Typography>
+                <Typography variant='body2' fontWeight='bold'>
+                  {data?.clientListing.rsus}%
+                </Typography>
+              </DataView>
+              <DataView>
+                <Typography variant='body2'>Bonus (% of Salary)</Typography>
+                <Typography variant='body2' fontWeight='bold'>
+                  {data?.clientListing.bonus}%
+                </Typography>
+              </DataView>
+              <DataView>
+                <Typography variant='body2'>
+                  Number of holidays (exc Bank Holidays):
+                </Typography>
+                <Typography variant='body2' fontWeight='bold'>
+                  {data?.clientListing.numberOfHolidays}
+                </Typography>
+              </DataView>
+              <DataView>
+                <Typography variant='body2'>
+                  Weekly Working Hours:
+                </Typography>
+                <Typography variant='body2' fontWeight='bold'>
+                  {data?.clientListing.workingHoursPerWeek}
+                </Typography>
+              </DataView>
+            </div>
+          </BlueDiv>
+          <BlueDiv style={{ flex: 1 }}>
+            <Typography variant='body1' fontWeight='bold'>Health Insurance</Typography>
+            <DataView>
+              <Typography variant='body2'>
+                Dental Health Insurnce:
+              </Typography>
+              {
+                data?.clientListing.dentalHealthInsurance
+                  ? <CheckCircleOutlinedIcon color='success' />
+                  : <CancelOutlinedIcon color='error' />
+              }
+            </DataView>
+            <DataView>
+              <Typography variant='body2'>
+                Life Insurance:
+              </Typography>
+              {
+                data?.clientListing.lifeInsurance
+                  ? <CheckCircleOutlinedIcon color='success' />
+                  : <CancelOutlinedIcon color='error' />
+              }
+            </DataView>
+            <DataView>
+              <Typography variant='body2'>
+                Private Health Insurance:
+              </Typography>
+              {
+                data?.clientListing.privateHealthInsurance
+                  ? <CheckCircleOutlinedIcon color='success' />
+                  : <CancelOutlinedIcon color='error' />
+              }
+            </DataView>
+            <DataView>
+              <Typography variant='body2'>
+                Vision Insurance: {data?.clientListing.visionHealthInsurance}
+              </Typography>
+              {
+                data?.clientListing.privateHealthInsurance
+                  ? <CheckCircleOutlinedIcon color='success' />
+                  : <CancelOutlinedIcon color='error' />
+              }
+            </DataView>
+          </BlueDiv>
+          <BlueDiv style={{ flex: 1 }}>
+            <Typography variant='body1' fontWeight='bold'>Career Development & Benefits</Typography>
+            <DataView>
+              <Typography variant='body2'>
+                Training & Development:
+              </Typography>
+              {
+                data?.clientListing.trainingAndDevelopment
+                  ? <CheckCircleOutlinedIcon color='success' />
+                  : <CancelOutlinedIcon color='error' />
+              }
+            </DataView>
+            <DataView>
+              <Typography variant='body2'>
+                Home Setup Package:
+              </Typography>
+              {
+                data?.clientListing.workFromHomePackage
+                  ? <CheckCircleOutlinedIcon color='success' />
+                  : <CancelOutlinedIcon color='error' />
+              }
+            </DataView>
+            <DataView>
+              <Typography variant='body2'>
+                Free Office Food & Drink:
+              </Typography>
+              {
+                data?.clientListing.freeFoodAndDrink
+                  ? <CheckCircleOutlinedIcon color='success' />
+                  : <CancelOutlinedIcon color='error' />
+              }
+            </DataView>
+          </BlueDiv>
+        </div>
+      </div>
+    </Box >
   )
 }
 

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useMutation } from 'react-query';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Amplify, { UserAttributes } from 'common/services/Amplify';
+import { Auth } from 'aws-amplify';
 
 export const UserInformationContext = React.createContext<UserAttributes | null>(null);
 
@@ -11,7 +12,7 @@ type Props = {
 const PrivateRoute: React.FC<Props> = ({ redirectUrl }) => {
   const [userAttributes, setUserAttributes] = React.useState<UserAttributes | null>(null);
   const location = useLocation();
-  const { mutate } = useMutation(() => Amplify.verifyUser(), {
+  const { mutate } = useMutation(() => Auth.currentAuthenticatedUser(), {
     onError: () => {
       if (!location.pathname.includes('/auth')) {
         window.location.href = `https://localhost:3000/auth/login?redirectUrl=${redirectUrl}`

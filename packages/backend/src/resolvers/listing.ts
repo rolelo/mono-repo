@@ -75,7 +75,7 @@ export const resolvers = {
             must: [
               {
                 query_string: {
-                  query: description,
+                  query: description || '*',
                 },
               },
             ],

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Button, Divider } from "@mui/material";
+import { Typography, Button, Divider, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import theme from 'common/static/theme';
 import { ClientListingsInput, EmploymentStatus, ExperienceLevel, ExperienceLevelFriendly, WorkPlaceType } from 'common/models';
 import CurrencyInput from 'react-currency-input-field';
@@ -27,90 +27,69 @@ const FilterPanel: React.FC<Props> = ({ register, watch, setValue, getValues }) 
     setValue(type, currValue)
   }
   return (
-    <div style={{ display: "flex", flexDirection: "column", rowGap: "1rem", padding: "0 8rem" }}>
-      <Typography variant="h5" fontWeight="bold">Filters</Typography>
+    <div style={{ display: "flex", flexDirection: "column", rowGap: "1rem", backgroundColor: 'white', padding: '2rem', borderRadius: '0.8rem' }}>
       <div style={{ display: "flex", flexDirection: "column", rowGap: "0.2rem" }}>
         <Typography
           variant="h6"
           fontWeight="bold"
-          style={{
-            color: theme.palette.grey[400]
-          }}>Employment Status</Typography>
-        {(Object.keys(EmploymentStatus) as Array<keyof typeof EmploymentStatus>).map((key) => (
-          <Button
-            sx={{
-              textAlign: "left",
-              color: watch('employmentStatus').findIndex(es => es === key) > -1
-                ? theme.palette.primary.main
-                : "black",
-              fontWeight: "bold",
-              width: "fit-content"
-            }}
-            value={key}
-            onClick={() => handleButtonClick(key, 'employmentStatus')}
-            key={key}>
-            {EmploymentStatus[key]}
-          </Button>
-        ))}
+        >Employment Status</Typography>
+        <FormGroup>
+          {(Object.keys(EmploymentStatus) as Array<keyof typeof EmploymentStatus>).map((key) => (
+            <FormControlLabel key={key} control={
+              <Checkbox
+                onChange={() => handleButtonClick(key, 'employmentStatus')}
+                checked={watch('employmentStatus').findIndex(es => es === key) > -1}
+              />
+            }
+              label={EmploymentStatus[key]}
+            />
+          ))}
+        </FormGroup>
       </div>
       <Divider />
       <div style={{ display: "flex", flexDirection: "column", rowGap: "0.2rem" }}>
         <Typography
           variant="h6"
           fontWeight="bold"
-          style={{
-            color: theme.palette.grey[400]
-          }}>Workplace Type</Typography>
-        {(Object.keys(WorkPlaceType) as Array<keyof typeof WorkPlaceType>).map((key) => (
-          <Button
-            sx={{
-              textAlign: "left",
-              color: watch('workplaceTypes').findIndex(wt => wt === key) > -1
-                ? theme.palette.primary.main
-                : "black",
-              fontWeight: "bold",
-              width: "fit-content"
-            }}
-            value={key}
-            onClick={() => handleButtonClick(key, 'workplaceTypes')}
-            key={key}>
-            {WorkPlaceType[key]}
-          </Button>
-        ))}
+        >Workplace Type</Typography>
+        <FormGroup>
+          {(Object.keys(WorkPlaceType) as Array<keyof typeof WorkPlaceType>).map((key) => (
+            <FormControlLabel key={key} control={
+              <Checkbox
+                onChange={() => handleButtonClick(key, 'workplaceTypes')}
+                checked={watch('workplaceTypes').findIndex(wt => wt === key) > -1}
+              />
+            }
+              label={WorkPlaceType[key]}
+            />
+          ))}
+        </FormGroup>
       </div>
       <Divider />
       <div style={{ display: "flex", flexDirection: "column", rowGap: "0.2rem" }}>
         <Typography
           variant="h6"
           fontWeight="bold"
-          style={{
-            color: theme.palette.grey[400]
-          }}>Experience Level</Typography>
-        {(Object.keys(ExperienceLevel) as Array<keyof typeof ExperienceLevel>).map((key) => (
-          <Button
-            sx={{
-              textAlign: "left",
-              color: watch('experienceLevels').findIndex(wt => wt === key) > -1
-                ? theme.palette.primary.main
-                : "black",
-              fontWeight: "bold",
-              width: "fit-content"
-            }}
-            value={key}
-            onClick={() => handleButtonClick(key, 'experienceLevels')}
-            key={key}>
-            {ExperienceLevelFriendly[key]}
-          </Button>
-        ))}
+        >Experience Level</Typography>
+        <FormGroup>
+          {(Object.keys(ExperienceLevel) as Array<keyof typeof ExperienceLevel>).map((key) => (
+            <FormControlLabel key={key} control={
+              <Checkbox
+                onChange={() => handleButtonClick(key, 'experienceLevels')}
+                checked={watch('experienceLevels').findIndex(wt => wt === key) > -1}
+              />
+            }
+              label={ExperienceLevel[key]}
+            />
+          ))}
+        </FormGroup>
       </div>
       <Divider />
       <div style={{ display: "flex", flexDirection: "column", rowGap: "0.2rem" }}>
         <Typography
           variant="h6"
           fontWeight="bold"
-          style={{
-            color: theme.palette.grey[400]
-          }}>Salary</Typography>
+        >Salary</Typography>
         <CurrencyInput
           placeholder="Annual Salary"
           decimalsLimit={2}
@@ -118,9 +97,10 @@ const FilterPanel: React.FC<Props> = ({ register, watch, setValue, getValues }) 
           style={{
             fontSize: "1.4rem",
             borderRadius: "8px",
-            padding: '1rem',
+            backgroundColor: theme.palette.grey[200],
+            padding: '1.5rem',
             border: 'none',
-            width: "100px",
+            width: "200px",
           }}
           {...register('salary')}
         />

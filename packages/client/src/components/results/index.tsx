@@ -1,12 +1,21 @@
-import { Avatar, Typography, IconButton, Button } from "@mui/material";
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
-import { ClientListing, EmploymentStatusFriendly, ExperienceLevelFriendly, SearchListing } from 'common/models';
+import { alpha, Avatar, Button, IconButton, styled, Typography } from "@mui/material";
+import { ClientListing, EmploymentStatusFriendly, ExperienceLevelFriendly, SearchListing, WorkPlaceType } from 'common/models';
 import theme from 'common/static/theme';
 import { formatDistance } from "date-fns";
-import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-type Props = SearchListing;
+type Props = SearchListing ;
+
+export const Chip = styled('div')({
+  backgroundColor: alpha(theme.palette.secondary.main, 0.3),
+  color: '#5971e4',
+  borderRadius: '0.4rem',
+  padding: '1rem',
+  textTransform: 'lowercase',
+  fontWeight: 'bold',
+})
 
 const Result: React.FC<ClientListing> = ({
   organisationLogo,
@@ -14,35 +23,51 @@ const Result: React.FC<ClientListing> = ({
   organisationName,
   experienceLevel,
   employmentStatus,
+  workplaceType,
   createdDate,
+  createdByName,
   salary,
   _id,
 }) => {
   const nav = useNavigate();
   return (
-    <div style={{
-      backgroundColor: theme.palette.secondary.light,
-      borderRadius: "8px",
-      boxSizing: 'border-box',
-      boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-      marginBottom: "4rem",
-    }}>
+    <Button
+      onClick={() => nav(`/listing/${_id}`)}
+      style={{
+        border: '1px solid lightGrey',
+        backgroundColor: theme.palette.secondary.light,
+        borderRadius: "8px",
+        boxSizing: 'border-box',
+        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+        marginBottom: "4rem",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        padding: 0,
+        color: 'black',
+        width: '385px',
+      }}>
       <div style={{
         display: "flex",
         flexDirection: "row",
-        padding: '1rem',
+        padding: '2rem',
+        paddingBottom: 0,
       }}>
         <Avatar
           sx={{
             width: '100px',
             height: '100px',
-            marginRight: '2rem',
+            '& > img': {
+              backgroundColor: theme.palette.grey[200],
+              borderRadius: '0.8rem',
+            }
           }}
           color='primary'
           variant='rounded'
           src={organisationLogo} />
         <div style={{
-          padding: "1rem",
+          padding: "0 2rem",
           display: "flex",
           flex: 1,
           flexDirection: "column",
@@ -57,14 +82,17 @@ const Result: React.FC<ClientListing> = ({
               position: 'relative',
             }}>
               <Typography
-                variant="h5"
+                variant="h6"
                 fontWeight="bolder"
+                textAlign='left'
                 style={{
-                  height: 'fit-content'
+                  height: 'fit-content',
+                  fontSize: '1.4rem',
                 }}>
                 {title}
               </Typography>
               <Typography
+                textAlign='left'
                 variant="subtitle1"
                 fontWeight="bold"
                 style={{
@@ -72,86 +100,14 @@ const Result: React.FC<ClientListing> = ({
                   position: 'relative',
                   height: 'fit-content'
                 }}>
-                {organisationName}
+                {`${organisationName} - ${createdByName}`}
               </Typography>
-            </div>
-            <Button
-              variant="contained"
-              sx={{
-                height: "fit-content"
-              }}
-              onClick={() => nav(`/listing/${_id}`)}
-            >
-              View Job
-            </Button>
-          </div>
-          <div style={{
-            display: "flex",
-            flexDirection: "row",
-            columnGap: "4rem",
-            paddingTop: "2rem",
-          }}>
-            <div>
               <Typography
+                textAlign='left'
                 variant="subtitle1"
                 fontWeight="bold"
                 style={{
-                  color: theme.palette.grey[500],
                   position: 'relative',
-                  height: 'fit-content'
-                }}>
-                Experience
-              </Typography>
-              <Typography
-                variant="h5"
-                fontWeight="bolder"
-                style={{
-                  height: 'fit-content'
-                }}>
-                {
-                  //@ts-ignore
-                  ExperienceLevelFriendly[experienceLevel]
-                }
-              </Typography>
-            </div>
-            <div>
-              <Typography
-                variant="subtitle1"
-                fontWeight="bold"
-                style={{
-                  color: theme.palette.grey[500],
-                  position: 'relative',
-                  height: 'fit-content'
-                }}>
-                Job Type
-              </Typography>
-              <Typography
-                variant="h5"
-                fontWeight="bolder"
-                style={{
-                  height: 'fit-content'
-                }}>
-                {
-                  //@ts-ignore
-                  EmploymentStatusFriendly[employmentStatus]
-                }
-              </Typography>
-            </div>
-            <div>
-              <Typography
-                variant="subtitle1"
-                fontWeight="bold"
-                style={{
-                  color: theme.palette.grey[500],
-                  position: 'relative',
-                  height: 'fit-content'
-                }}>
-                Salary
-              </Typography>
-              <Typography
-                variant="h5"
-                fontWeight="bolder"
-                style={{
                   height: 'fit-content'
                 }}>
                 {salary.toLocaleString('en-gb', {
@@ -164,23 +120,49 @@ const Result: React.FC<ClientListing> = ({
         </div>
       </div>
       <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        columnGap: '1rem',
+        rowGap: '2rem',
+        padding: '2rem',
+      }}>
+        <Chip>
+          {
+            //@ts-ignore
+            EmploymentStatusFriendly[employmentStatus]
+          }
+        </Chip>
+        <Chip>
+          {
+            //@ts-ignore
+            ExperienceLevelFriendly[experienceLevel]
+          }
+        </Chip>
+        <Chip>
+          {
+            //@ts-ignore
+            WorkPlaceType[workplaceType]
+          }
+        </Chip>
+      </div>
+      <div style={{
         display: "flex",
-        padding: "1rem 1rem 1rem 3rem",
+        padding: "1rem 2rem",
         width: "100%",
         marginTop: "2rem",
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.palette.grey[200],
         borderBottomRightRadius: "0.8rem",
         borderBottomLeftRadius: "0.8rem",
         boxSizing: 'border-box',
         justifyContent: 'space-between',
         alignItems: 'center',
       }}>
-        <p>Posted {formatDistance(new Date(), new Date(+(createdDate || 0)))} ago</p>
+        <p>{formatDistance(new Date(), new Date(+(createdDate || 0)))} ago</p>
         <IconButton>
           <BookmarkAddOutlinedIcon />
         </IconButton>
       </div>
-    </div >
+    </Button >
   )
 }
 
@@ -190,14 +172,21 @@ const Results: React.FC<Props> = ({ listings, hits }) => {
       display: "flex",
       flexDirection: "column",
       width: "100%",
+      padding: '0 2rem',
     }}>
       <p style={{
         color: theme.palette.grey[800],
         fontSize: '1.2rem',
         margin: 0,
+        fontWeight: 'bold',
         marginBottom: '2rem',
-      }}>{hits} Results found</p>
-      {listings.map(l => <Result key={l._id} {...l} />)}
+        position: 'relative'
+      }}>
+        {`${hits} Results found`}
+      </p>
+      <div style={{ flexWrap: 'wrap', display: 'flex', flexDirection: 'row', rowGap: '2rem', columnGap: '2rem' }}>
+        {listings.map(l => <Result key={l._id} {...l} />)}
+      </div>
     </div>
   )
 }

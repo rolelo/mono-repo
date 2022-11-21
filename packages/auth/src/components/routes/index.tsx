@@ -16,12 +16,15 @@ const Routes = () => {
         children: [{
           path: 'login',
           element: <Login />,
-      }, {
+        }, {
           path: 'signup',
           element: <SignUp />,
         }, {
           path: 'confirm',
           element: <Confirm />,
+        }, {
+          path: '',
+          element: <Login />
         }],
       }],
     },

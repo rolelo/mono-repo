@@ -1,13 +1,11 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import { Button, TextField, Typography } from '@mui/material';
-import RBackdrop from "common/components/backdrop";
 import { ClientListingsInput, SearchListing } from "common/models";
 import theme from "common/static/theme";
 import { useEffect } from "react";
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useSearchParams } from "react-router-dom";
 import FilterPanel from "../filter-panel";
-import RecentListing from "../recent-listings";
 import Results from "../results";
 
 
@@ -79,7 +77,7 @@ const SearchResults = () => {
           salary: salary ? Number((salary as unknown as string).replace(/[^0-9.-]+/g, "")) : undefined,
         },
       },
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'cache-and-network',
     })
   }, [query, searchParams, es, wt, salary, description, el]);
 
@@ -118,14 +116,8 @@ const SearchResults = () => {
         position: "relative",
       }}>
         <div style={{
-          backgroundColor: "#e7eafb",
-          position: "absolute",
-          width: "100vw",
-          height: "11.5rem",
-          bottom: "0",
-        }} />
-        <div style={{
           margin: "8rem",
+          marginTop: "4rem",
           width: "70vw",
           maxWidth: "900px",
         }}>
@@ -180,14 +172,14 @@ const SearchResults = () => {
               Search
             </Button>
           </form>
-          {loading && <RBackdrop open={loading} />}
         </div>
       </div>
       <div style={{
         display: "flex",
         flexDirection: "row",
+        padding: '4rem',
       }}>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 0.5 }}>
           <FilterPanel register={register} watch={watch} setValue={setValue} getValues={getValues} />
         </div>
         <div style={{
@@ -196,14 +188,13 @@ const SearchResults = () => {
         }}>
           {
             data?.clientListings && (
-              <Results hits={data.clientListings.hits} listings={data.clientListings.listings} />
+              <Results
+                hits={data.clientListings.hits}
+                listings={data.clientListings.listings}
+              />
             )
           }
         </div>
-        <div style={{ flex: 1 }}>
-          <RecentListing />
-        </div>
-
       </div>
     </>
   );

@@ -26,7 +26,10 @@ const Routes = () => {
           }, {
           path: 'listings/:listingId/applicants',
           element: <Applicants />,
-        }],
+          }, {
+            path: '/',
+            element: <Listings />,
+          }],
       }],
     }
   ]);
