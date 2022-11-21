@@ -9,7 +9,7 @@ const Routes = () => {
   const element = useRoutes([
     {
       path: '/',
-      element: <PrivateRoute redirectUrl="https://localhost:3004" />,
+      element: <PrivateRoute />,
       children: [{
         path: '/',
         element: <DashboardLayout />,

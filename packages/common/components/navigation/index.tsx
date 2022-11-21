@@ -1,5 +1,6 @@
+import { useReactiveVar } from '@apollo/client';
 import {
-  Avatar, Menu, MenuItem, Tooltip
+  Avatar, Button, Menu, MenuItem, Tooltip
 } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -11,6 +12,7 @@ import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Logo from '../../logo/logo.png';
+import { User } from '../../models';
 import Amplify from '../../services/Amplify';
 import theme from '../../static/theme';
 
@@ -18,8 +20,9 @@ type Props = {
   dropdownLinks?: JSX.Element[]
   appbarLinks?: JSX.Element[]
   avatarMenu: boolean
+  user: User | null
 }
-const AvatarMenu: React.FC<Omit<Props, 'appbarLinks' | 'avatarMenu'>> = ({ dropdownLinks }) => {
+const AvatarMenu: React.FC<Omit<Props, 'appbarLinks' | 'avatarMenu' | 'user'>> = ({ dropdownLinks }) => {
   const navigator = useNavigate();
   const { mutate } = useMutation(Amplify.signOut, {
     onSuccess: () => {
@@ -72,7 +75,7 @@ const AvatarMenu: React.FC<Omit<Props, 'appbarLinks' | 'avatarMenu'>> = ({ dropd
   );
 };
 
-export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu }: Props): JSX.Element {
+export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu, user }: Props): JSX.Element {
   return (
     <Box sx={{ flexGrow: 1, zIndex: 100 }}>
       <AppBar
@@ -93,12 +96,22 @@ export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu }: P
             <img src={Logo} alt="Rolelo" style={{ width: 25 }} />
           </IconButton>
           {appbarLinks}
-          {
-            avatarMenu &&
-            <Box sx={{ flexGrow: 1, justifyContent: 'flex-end', textAlign: 'right' }}>
+          <Box sx={{ flexGrow: 1, justifyContent: 'flex-end', textAlign: 'right' }}>
+            {
+              !user && (
+                <Button
+                  variant='outlined'
+                  component='a'
+                  href='https://localhost:3000/auth/login'>
+                  Sign In
+                </Button>
+              )
+            }
+            {
+              avatarMenu && user &&
               <AvatarMenu dropdownLinks={dropdownLinks} />
-            </Box>
-          }
+            }
+          </Box>
         </Toolbar>
       </AppBar>
     </Box >

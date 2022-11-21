@@ -36,7 +36,7 @@ type TLogin = {
 }
 
 const Login: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const mutation = useMutation(({ email, password }: TLogin) => Amplify.login(email, password), {
     onSuccess: () => {
       toast.success('Successfully logged in');

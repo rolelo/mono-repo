@@ -14,7 +14,7 @@ const PrivateRoute: React.FC<Props> = ({ redirectUrl }) => {
   const location = useLocation();
   const { mutate } = useMutation(() => Auth.currentAuthenticatedUser(), {
     onError: () => {
-      if (!location.pathname.includes('/auth')) {
+      if (!location.pathname.includes('/auth') && redirectUrl) {
         window.location.href = `https://localhost:3000/auth/login?redirectUrl=${redirectUrl}`
       }
     },

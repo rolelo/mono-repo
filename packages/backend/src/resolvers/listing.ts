@@ -1,3 +1,4 @@
+import { UnauthorizedError } from "express-jwt";
 import { v4 as uuidv4 } from "uuid";
 import {
   ClientListingsInput,
@@ -64,7 +65,7 @@ export const resolvers = {
           employmentStatus,
           experienceLevels,
           workplaceTypes,
-          salary
+          salary,
         },
       }: { input: ClientListingsInput }
     ): Promise<SearchListing> {
@@ -75,7 +76,7 @@ export const resolvers = {
             must: [
               {
                 query_string: {
-                  query: description || '*',
+                  query: description || "*",
                 },
               },
             ],
@@ -133,6 +134,11 @@ export const resolvers = {
     },
     async jobApplicants(_, { jobId }: JobApplicationInput, { sub }: Context) {
       const job = await Listing.findById(jobId);
+      if (job.createdById === sub) {
+        throw new UnauthorizedError("invalid_token", {
+          message: "You do not have access to this JobId",
+        });
+      }
       return job.applicants;
     },
   },

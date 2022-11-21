@@ -41,7 +41,7 @@ const Container = styled('div')({
 export const userVar = makeVar<User | null>(null);
 const DashboardLayout: React.FC = () => {
   const [open, setOpen] = useState(false);
-  useQuery<{ user: User }>(GET_USER, {
+  const { data } = useQuery<{ user: User }>(GET_USER, {
     onCompleted: ({ user }) => {
       console.log(user);
       userVar(user);
@@ -50,7 +50,7 @@ const DashboardLayout: React.FC = () => {
   return (
     <Fade in timeout={600}>
       <Container>
-        <Navigation dropdownLinks={[
+        <Navigation user={data?.user || null} dropdownLinks={[
           <MenuItem selected={true} key="New Listing" onClick={() => setOpen(true)}>
             User Profile
           </MenuItem>,

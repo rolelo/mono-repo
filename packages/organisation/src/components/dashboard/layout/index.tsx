@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import { Fade, MenuItem, Typography } from '@mui/material';
 import Navigation from 'common/components/navigation';
 import { User } from 'common/models';
-import theme from 'common/static/theme';
 import React from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 
@@ -37,7 +36,7 @@ const Container = styled('div')({
 export const userVar = makeVar<User | null>(null);
 const DashboardLayout: React.FC = () => {
   const navigator = useNavigate();
-  useQuery<{ user: User }>(GET_USER, {
+  const { data } = useQuery<{ user: User }>(GET_USER, {
     onCompleted: ({ user }) => {
       userVar(user);
     }
@@ -45,7 +44,7 @@ const DashboardLayout: React.FC = () => {
   return (
     <Fade in timeout={600}>
       <Container>
-        <Navigation appbarLinks={[
+        <Navigation user={data?.user || null} appbarLinks={[
           <MenuItem key="New Listing" onClick={() => navigator('/new-listing')}>
             <Link to="/new-listing" style={{ color: 'inherit', textDecoration: 'none' }}>New Listing</Link>
           </MenuItem>,
