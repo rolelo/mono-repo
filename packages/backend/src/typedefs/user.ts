@@ -19,7 +19,7 @@ input ProfileInput {
     techSkills: [String]
     yearsOfExperience: Int
   }
-  type User @auth(requires: USER) {
+  type User {
     id: String!
     name: String!
     email: String!

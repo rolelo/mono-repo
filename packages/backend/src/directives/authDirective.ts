@@ -20,9 +20,7 @@ function authDirective(
 ) {
   const typeDirectiveArgumentMaps: Record<string, any> = {};
   return {
-    authDirectiveTypeDefs: `directive @${directiveName}(
-      requires: Role = ADMIN,
-    ) on OBJECT | FIELD_DEFINITION
+    authDirectiveTypeDefs: `directive @${directiveName} on OBJECT | FIELD_DEFINITION
  
     enum Role {
       ADMIN
@@ -44,8 +42,7 @@ function authDirective(
             getDirective(schema, fieldConfig, directiveName)?.[0] ??
             typeDirectiveArgumentMaps[typeName];
           if (authDirective) {
-            const { requires } = authDirective;
-            if (requires) {
+            if (authDirective) {
               const { resolve = defaultFieldResolver } = fieldConfig;
               fieldConfig.resolve = async function (source, args, context, info) {
                 const user = await getUserFn(context.headers.authorization);

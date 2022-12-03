@@ -24,7 +24,7 @@ export const resolvers = {
     user: async (
       _parent,
       _args,
-      { sub, email, name, phoneNumber, ...rest }: Context
+      { sub, email, name, phoneNumber }: Context
     ): Promise<IUser> => {
       const user = await (await User.findById(sub)).toObject();
 

@@ -12,7 +12,7 @@ const { authDirectiveTransformer, authDirectiveTypeDefs } = authDirective;
 
 const Query = `
   type Query {
-    user: User! @auth(requires: USER)
+    user: User! @auth
     listings(organisationId: String): [Listing]
     jobApplicants(jobId: String!): [Applicant]
     clientListing(id: String!): Listing
