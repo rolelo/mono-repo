@@ -22,11 +22,16 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext(async (_, { headers }) => {
-  const token = await Amplify.verifyUser();
+  let token;
+  try {
+    token = await Amplify.verifyUser();
+  } catch {
+    token = ''
+  }
   return {
     headers: {
       ...headers,
-      authorization: token || '',
+      authorization: token,
     },
   };
 });

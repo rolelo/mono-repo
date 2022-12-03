@@ -15,7 +15,7 @@ const Query = `
     user: User! @auth
     listings(organisationId: String): [Listing] @auth
     jobApplicants(jobId: String!): [Applicant] @auth
-    clientListing(id: String!): Listing @auth
+    clientListing(id: String!): Listing
     clientListings(input: ClientListingsInput!): SearchListing
   }
 `;
