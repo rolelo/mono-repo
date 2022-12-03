@@ -12,7 +12,6 @@ import http from 'http';
 import mongoose from 'mongoose';
 import { Context } from '../../common/models';
 import schema from './schema';
-const {loadFiles} = require('@graphql-tools/load-files');
 const cors = require('cors');
 
 dotenv.config();
