@@ -134,7 +134,7 @@ export const resolvers = {
     },
     async jobApplicants(_, { jobId }: JobApplicationInput, { sub }: Context) {
       const job = await Listing.findById(jobId);
-      if (job.createdById === sub) {
+      if (job.createdById !== sub) {
         throw new UnauthorizedError("invalid_token", {
           message: "You do not have access to this JobId",
         });
