@@ -42,17 +42,15 @@ function authDirective(
             getDirective(schema, fieldConfig, directiveName)?.[0] ??
             typeDirectiveArgumentMaps[typeName];
           if (authDirective) {
-            if (authDirective) {
-              const { resolve = defaultFieldResolver } = fieldConfig;
-              fieldConfig.resolve = async function (source, args, context, info) {
-                const user = await getUserFn(context.headers.authorization);
-                if (!user.sub) {
-                  throw new Error("not authorized");
-                }
-                return resolve(source, args, { ...context, ...user }, info);
-              };
-              return fieldConfig;
-            }
+            const { resolve = defaultFieldResolver } = fieldConfig;
+            fieldConfig.resolve = async function (source, args, context, info) {
+              const user = await getUserFn(context.headers.authorization);
+              if (!user.sub) {
+                throw new Error("not authorized");
+              }
+              return resolve(source, args, { ...context, ...user }, info);
+            };
+            return fieldConfig;
           }
         },
       }),
@@ -72,7 +70,6 @@ const getUser = async (token: string): Promise<Context> => {
   }
 };
 
-
 const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective(
   "auth",
   getUser
@@ -81,4 +78,4 @@ const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective(
 export default {
   authDirectiveTypeDefs,
   authDirectiveTransformer,
-}
+};
