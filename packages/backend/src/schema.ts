@@ -13,9 +13,9 @@ const { authDirectiveTransformer, authDirectiveTypeDefs } = authDirective;
 const Query = `
   type Query {
     user: User! @auth
-    listings(organisationId: String): [Listing]
-    jobApplicants(jobId: String!): [Applicant]
-    clientListing(id: String!): Listing
+    listings(organisationId: String): [Listing] @auth
+    jobApplicants(jobId: String!): [Applicant] @auth
+    clientListing(id: String!): Listing @auth
     clientListings(input: ClientListingsInput!): SearchListing
   }
 `;
