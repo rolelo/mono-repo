@@ -22,9 +22,9 @@ const createUser = async (_id, name, email, phoneNumber) => {
 export const resolvers = {
   Query: {
     user: async (
-      parent,
-      args,
-      { sub, email, name, phoneNumber }: Context
+      _parent,
+      _args,
+      { sub, email, name, phoneNumber, ...rest }: Context
     ): Promise<IUser> => {
       const user = await (await User.findById(sub)).toObject();
 
@@ -39,11 +39,11 @@ export const resolvers = {
   },
   Mutation: {
     createUser: async (
-      parent,
+      _parent,
       { sub, email, name, phoneNumber }: Context
     ): Promise<IUser> => createUser(sub, name, email, phoneNumber),
     createProfile: async (
-      parent,
+      _parent,
       { input }: { input: Profile },
       { sub }: Context
     ): Promise<Profile> => {

@@ -2,14 +2,17 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 
 import * as resolvers from "./resolvers";
 import { typedef as applicantTd } from "./typedefs/applicant";
-import { typedef as listingTd } from "./typedefs/applicant";
+import { typedef as listingTd } from "./typedefs/listing";
 import { typedef as organisationTd } from "./typedefs/organisation";
 import { typedef as signedUrlTd } from "./typedefs/signedUrl";
 import { typedef as userTd } from "./typedefs/user";
+import authDirective from './directives/authDirective';
+
+const { authDirectiveTransformer, authDirectiveTypeDefs } = authDirective;
 
 const Query = `
   type Query {
-    user: User!
+    user: User! @auth(requires: USER)
     listings(organisationId: String): [Listing]
     jobApplicants(jobId: String!): [Applicant]
     clientListing(id: String!): Listing
@@ -32,8 +35,9 @@ const Mutation = `
   }
 `;
 
-const schema = makeExecutableSchema({
+let schema = makeExecutableSchema({
   typeDefs: [
+    authDirectiveTypeDefs,
     applicantTd,
     listingTd,
     organisationTd,
@@ -49,5 +53,7 @@ const schema = makeExecutableSchema({
     resolvers.jobApplicationResolvers.resolvers,
   ],
 });
+
+schema = authDirectiveTransformer(schema);
 
 export default schema;

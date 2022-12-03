@@ -1,9 +1,22 @@
 import { GraphQLSchema, defaultFieldResolver } from "graphql";
 import { mapSchema, getDirective, MapperKind } from "@graphql-tools/utils";
+import { CognitoJwtVerifier } from "aws-jwt-verify";
+import { AuthenticationError } from "apollo-server-core";
+import * as dotenv from "dotenv";
+
+import { Context } from "../../../common/models";
+
+dotenv.config();
+
+const verifier = CognitoJwtVerifier.create({
+  userPoolId: process.env.USERPOOL_ID,
+  tokenUse: process.env.TOKEN_USE as "id" | "access",
+  clientId: process.env.CLIENT_ID,
+});
 
 function authDirective(
   directiveName: string,
-  getUserFn: (token: string) => { hasRole: (role: string) => boolean }
+  getUserFn: (token: string) => Promise<Context>
 ) {
   const typeDirectiveArgumentMaps: Record<string, any> = {};
   return {
@@ -34,12 +47,12 @@ function authDirective(
             const { requires } = authDirective;
             if (requires) {
               const { resolve = defaultFieldResolver } = fieldConfig;
-              fieldConfig.resolve = function (source, args, context, info) {
-                const user = getUserFn(context.headers.authToken);
-                if (!user.hasRole(requires)) {
+              fieldConfig.resolve = async function (source, args, context, info) {
+                const user = await getUserFn(context.headers.authorization);
+                if (!user.sub) {
                   throw new Error("not authorized");
                 }
-                return resolve(source, args, context, info);
+                return resolve(source, args, { ...context, ...user }, info);
               };
               return fieldConfig;
             }
@@ -49,4 +62,26 @@ function authDirective(
   };
 }
 
-export default authDirective;
+const getUser = async (token: string): Promise<Context> => {
+  try {
+    const payload = await verifier.verify(token);
+    return {
+      sub: payload.sub,
+      name: payload.name.toString(),
+      email: payload.email.toString(),
+    };
+  } catch (err) {
+    throw new AuthenticationError("Unauthorized");
+  }
+};
+
+
+const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective(
+  "auth",
+  getUser
+);
+
+export default {
+  authDirectiveTypeDefs,
+  authDirectiveTransformer,
+}

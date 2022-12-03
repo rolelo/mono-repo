@@ -110,7 +110,7 @@ input ListingInput {
   wellnessPackages: Boolean!
   workFromHomePackage: Boolean!
 }
-  type Listing @auth(requires: ADMIN) {
+  type Listing {
     _id: String
     organisationName: String
     organisationDescription: String
