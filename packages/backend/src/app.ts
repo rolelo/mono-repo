@@ -1,4 +1,3 @@
-import { makeExecutableSchema } from '@graphql-tools/schema';
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,
@@ -12,7 +11,7 @@ import express from 'express';
 import http from 'http';
 import mongoose from 'mongoose';
 import { Context } from '../../common/models';
-import * as resolvers from './resolvers';
+import schema from './schema';
 const {loadFiles} = require('@graphql-tools/load-files');
 const cors = require('cors');
 
@@ -34,16 +33,6 @@ const startApolloServer = async () => {
   const app = express();
   const httpServer = http.createServer(app);
 
-  const typeDefs = await loadFiles('./**/*.graphql');
-  const schema = makeExecutableSchema({
-    typeDefs,
-    resolvers: [
-      resolvers.userResolvers.resolvers,
-      resolvers.oganisationResolvers.resolvers,
-      resolvers.listingResolvers.resolvers,
-      resolvers.jobApplicationResolvers.resolvers,
-    ],
-  });
   const server = new ApolloServer({
     schema,
     csrfPrevention: false,
@@ -53,12 +42,10 @@ const startApolloServer = async () => {
       try {
         const payload = await verifier.verify(token);
         return {
+          headers: req.headers,
           sub:  payload.sub,
           name: payload.name.toString(),
           email: payload.email.toString(),
-          // sub:  '6b9e61bc-374e-4669-9ed8-2bf42a1c0812', //payload.sub,
-          // name: 'Amir Shojae', //payload.name.toString(),
-          // email: 'amiralishojaee123@gmail.com', //payload.email.toString(),
         };
       } catch (err) {
         throw new AuthenticationError('Unauthorized');
