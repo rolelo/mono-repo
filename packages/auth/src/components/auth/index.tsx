@@ -15,7 +15,6 @@ const Container = styled('div')({
 const Wrapper = styled('div')({
   borderRadius: '1rem',
   padding: '3rem',
-  width: '35rem',
   display: 'flex',
   flexDirection: 'column',
   maxWidth: '80%',

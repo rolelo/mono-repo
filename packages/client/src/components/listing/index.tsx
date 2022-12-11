@@ -91,7 +91,6 @@ const LeftPane = styled('div')({
   boxSizing: 'border-box',
   flex: '0.5',
   borderRadius: '8px',
-  height: '200px',
   '> div': {
     display: "flex",
     flexDirection: "column",
@@ -121,6 +120,37 @@ export const Chip = styled('div')({
   fontWeight: 'bold',
 })
 
+export const Wrapper = styled('div')({
+  padding: '2rem',
+  display: "flex",
+  flexDirection: "row-reverse",
+  columnGap: '2rem',
+  boxSizing: 'border-box',
+  '@media(max-width: 450px)': {
+    flexDirection: 'column-reverse',
+  }
+})
+
+export const JobInformation = styled('div')({
+  display: "flex",
+  flexDirection: "row",
+  columnGap: '2rem',
+  marginBottom: '2rem',
+  '@media(max-width: 450px)': {
+    flexDirection: "column"
+  }
+})
+
+export const Benefits = styled('div')({
+  display: "flex",
+  flexDirection: "row",
+  columnGap: '1rem',
+  marginTop: '2rem',
+  '@media(max-width: 450px)': {
+    flexDirection: "column",
+  }
+})
+
 const Listing: React.FC = () => {
   const user = useReactiveVar(userVar);
   const { id } = useParams();
@@ -143,7 +173,7 @@ const Listing: React.FC = () => {
     }
   });
   return (
-    <Box sx={{ padding: '2rem', display: "flex", flexDirection: "row-reverse", columnGap: '2rem', boxSizing: 'border-box' }}>
+    <Wrapper>
       <LeftPane>
         <Box>
           <Typography variant='body1'>Tech Stack</Typography>
@@ -213,8 +243,8 @@ const Listing: React.FC = () => {
                 data?.clientListing.alreadyApplied
                   ? "You have already applied for this position"
                   : !user ? 'Please sign in'
-                  : !user?.profile ? 'Please create a profile'
-                    : 'One click apply'
+                    : !user?.profile ? 'Please create a profile'
+                      : 'One click apply'
               }
             </Button>
           )}
@@ -256,7 +286,7 @@ const Listing: React.FC = () => {
             <Chip>{data?.clientListing.employmentStatus}</Chip>
             <Chip>{data?.clientListing.experienceLevel}</Chip>
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <JobInformation>
             <div style={{ flex: 1 }}>
               <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>Job Description</Typography>
               <Typography variant='body1' fontWeight="300">{data?.clientListing.description}</Typography>
@@ -265,12 +295,12 @@ const Listing: React.FC = () => {
               <Typography variant='h5' fontWeight="600" style={{ margin: '2rem 0 1rem 0' }}>Skills Description</Typography>
               <Typography variant='body1' fontWeight="300">{data?.clientListing.skillsDescription}</Typography>
             </div>
-          </Box>
+          </JobInformation>
           <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
             <a href={data?.clientListing.organisationWebsite} target="_blank" rel="noreferrer">{data?.clientListing.organisationWebsite}</a>
           </Box>
         </RightPane>
-        <div style={{ display: "flex", flexDirection: "row", columnGap: '1rem', marginTop: '2rem' }}>
+        <Benefits>
           <BlueDiv style={{ flex: 1 }}>
             <Typography variant='body1' fontWeight='bold'>Compensation & Holidays</Typography>
             <div style={{ display: 'flex', flexDirection: 'column', rowGap: '1rem' }}>
@@ -389,9 +419,9 @@ const Listing: React.FC = () => {
               }
             </DataView>
           </BlueDiv>
-        </div>
+        </Benefits>
       </div>
-    </Box >
+    </Wrapper >
   )
 }
 
