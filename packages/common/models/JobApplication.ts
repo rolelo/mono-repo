@@ -20,4 +20,5 @@ export type IApplicant = {
   userId: string;
   createdDate: string;
   status: ApplicantStatus;
+  jobId?: string;
 }

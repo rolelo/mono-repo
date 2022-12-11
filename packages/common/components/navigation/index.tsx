@@ -76,6 +76,7 @@ const AvatarMenu: React.FC<Omit<Props, 'appbarLinks' | 'avatarMenu' | 'user'>> =
 };
 
 export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu, user }: Props): JSX.Element {
+  const navigator = useNavigate();
   return (
     <Box sx={{ flexGrow: 1, zIndex: 100 }}>
       <AppBar
@@ -91,6 +92,7 @@ export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu, use
             edge="start"
             color="inherit"
             aria-label="menu"
+            onClick={() => navigator('/')}
             sx={{ mr: 2 }}
           >
             <img src={Logo} alt="Rolelo" style={{ width: 25 }} />

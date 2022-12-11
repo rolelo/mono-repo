@@ -1,8 +1,29 @@
 import { v4 as uuidv4 } from "uuid";
-import { ApplicantStatus, Context, IApplicant, JobApplicationInput, Listing } from '../../../common/models';
+import { ApplicantStatus, Context, IApplicant, JobApplicationInput, Listing, User } from '../../../common/models';
 import { s3Client } from '../app';
 
 export const resolvers = {
+  Query: {
+    jobApplications: async (_parent, _params, { sub }): Promise<IApplicant[]> => {
+      const user = (await User.findById(sub)).toObject();
+
+      if (!user) throw Error("No user found");
+      const listings = await Listing.find({
+        _id: {
+          $in: user.jobApplicants
+        }
+      });
+
+      const applicants: IApplicant[] = [];
+      
+      listings.forEach(l => {
+        const application = l.applicants.find(a => a.userId === sub);
+        if (application) applicants.push({ ...application, jobId: l.id });
+      })
+
+      return applicants;
+    }
+  },
   Mutation: {
     async createCVS3PreSignedUrl(_, { contentType }) {
       const uuid = uuidv4();
@@ -27,11 +48,12 @@ export const resolvers = {
       };
     },
     createJobApplication: async (
-      parent,
+      _parent,
       { input: { jobId } }: { input: JobApplicationInput },
       { sub }: Context
     ): Promise<IApplicant> => {
       const applicationId = uuidv4();
+      const user = await User.findById(sub);
       const listing = await Listing.findById(jobId);
       const createdDate = Date.now().toString();
       listing.applicants.push({
@@ -40,7 +62,10 @@ export const resolvers = {
         userId: sub,
         status: ApplicantStatus.PENDING
       });
-      await listing.save();
+      user.jobApplicants.push(listing.id);
+
+      await Promise.all([listing.save(), user.save()]);
+
       return {
         id: applicationId,
         createdDate,

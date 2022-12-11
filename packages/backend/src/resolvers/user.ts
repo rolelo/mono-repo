@@ -26,7 +26,7 @@ export const resolvers = {
       _args,
       { sub, email, name, phoneNumber }: Context
     ): Promise<IUser> => {
-      const user = await (await User.findById(sub)).toObject();
+      const user = (await User.findById(sub)).toObject();
 
       if (!user) {
         return createUser(sub, name, email, phoneNumber);

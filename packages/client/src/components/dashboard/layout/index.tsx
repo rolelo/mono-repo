@@ -5,7 +5,7 @@ import RDrawer from 'common/components/drawer';
 import Navigation from 'common/components/navigation';
 import { User } from 'common/models';
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import UserProfile from '../../user-profile';
 
 export const GET_USER = gql`
@@ -40,6 +40,7 @@ const Container = styled('div')({
 
 export const userVar = makeVar<User | null>(null);
 const DashboardLayout: React.FC = () => {
+  const navigator = useNavigate();
   const [open, setOpen] = useState(false);
   const { data } = useQuery<{ user: User }>(GET_USER, {
     onCompleted: ({ user }) => {
@@ -50,21 +51,27 @@ const DashboardLayout: React.FC = () => {
   return (
     <Fade in timeout={600}>
       <Container>
-        <Navigation user={data?.user || null} dropdownLinks={[
-          <MenuItem selected={true} key="New Listing" onClick={() => setOpen(true)}>
-            User Profile
-          </MenuItem>,
-        ]} appbarLinks={[]} avatarMenu />
-          <Outlet />
-          <RDrawer
-            open={open}
-            onClose={() => setOpen(false)}
-            title="User & Job Profile"
-            subtitle="Stand out from the crowd"
-            extraInformation="Use this section to stand out from the crowd, by building an attractive job profile you increase the chances of landing your dream position"
-          >
-            <UserProfile />
-          </RDrawer>
+        <Navigation user={data?.user || null}
+          dropdownLinks={[
+            <MenuItem selected={true} key="New Listing" onClick={() => setOpen(true)}>
+              User Profile
+            </MenuItem>,
+          ]} appbarLinks={[
+            ...(data?.user ? [<MenuItem key="Jobs Applied" onClick={() => navigator('/jobs/applied')}>
+              <Link to="/jobs/applied" style={{ color: 'inherit', textDecoration: 'none' }}>View Your Applied Jobs</Link>
+            </MenuItem>,
+            ] : [])
+          ]} avatarMenu />
+        <Outlet />
+        <RDrawer
+          open={open}
+          onClose={() => setOpen(false)}
+          title="User & Job Profile"
+          subtitle="Stand out from the crowd"
+          extraInformation="Use this section to stand out from the crowd, by building an attractive job profile you increase the chances of landing your dream position"
+        >
+          <UserProfile />
+        </RDrawer>
       </Container>
     </Fade>
   );

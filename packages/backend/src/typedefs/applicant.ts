@@ -12,6 +12,7 @@ input UpdateApplicationStatusInput {
     createdDate: String!
     user: User!
     status: ApplicantStatus
+    jobId: String!
   }
   type JobApplication {
     name: String!

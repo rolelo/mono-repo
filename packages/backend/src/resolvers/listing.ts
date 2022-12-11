@@ -132,6 +132,8 @@ export const resolvers = {
         hits: +(result.hits.total["value"] || 0),
       };
     },
+    async clientAppliedListings(_parent, _args, { sub }: Context) {
+    },
     async jobApplicants(_, { jobId }: JobApplicationInput, { sub }: Context) {
       const job = await Listing.findById(jobId);
       if (job.createdById !== sub) {

@@ -9,6 +9,7 @@ export interface User {
   phoneNumber: string
   organisations: Organisation[]
   profile?: Profile
+  jobApplicants: string[]
 }
 
 export interface IUser {
@@ -18,6 +19,7 @@ export interface IUser {
   phoneNumber?: string;
   organisationIds: string[];
   profile?: Profile;
+  jobApplicants: string[];
 }
 
 const userSchema = new Schema<IUser>({
@@ -27,6 +29,7 @@ const userSchema = new Schema<IUser>({
   organisationIds: {type: [String], required: true, default: []},
   phoneNumber: { type: String, required: false },
   profile: { type: Object, required: false },
+  jobApplicants: { type: [String], required: true, default: [] }
 });
 
 export const User: Model<IUser> = model('User', userSchema);

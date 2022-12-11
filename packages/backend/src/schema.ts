@@ -15,8 +15,10 @@ const Query = `
     user: User! @auth
     listings(organisationId: String): [Listing] @auth
     jobApplicants(jobId: String!): [Applicant] @auth
+    jobApplications: [Applicant] @auth
     clientListing(id: String!): Listing
     clientListings(input: ClientListingsInput!): SearchListing
+    clientAppliedListings: [Listing] @auth
   }
 `;
 
@@ -24,7 +26,7 @@ const Mutation = `
   type Mutation {
     createProfile(input: ProfileInput!): Profile!
     createListing(input: ListingInput!): Listing!
-    createJobApplication(input: JobApplicationInput!): Applicant!
+    createJobApplication(input: JobApplicationInput!): Applicant! @auth
     createUser: User!
     updateUser: User!
     updateApplicantStatus(input: UpdateApplicationStatusInput!): Applicant!

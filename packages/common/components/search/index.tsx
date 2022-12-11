@@ -33,30 +33,40 @@ const GET_LISTINGS = gql`
   }
 `;
 
-const Search = () => {
+type Props = {
+  home?: boolean
+};
+
+const Search: React.FC<Props> = ({ home }) => {
   const navigate = useNavigate();
   const { handleSubmit, register, formState: { isValid, isDirty } } = useForm({
     mode: 'all'
   });
-  const [query] = useLazyQuery<{}>(GET_LISTINGS);
 
   const onSubmit: SubmitHandler<FieldValues> = ({ description }) => {
-    navigate(`/search?searchfield=${description}`);
+    if (home && window.top) {
+      window.top.location = `https://localhost:3004/search?searchfield=${description}`;
+    } else {
+      navigate(`/search?searchfield=${description}`);
+    }
   }
+
 
   return (
     <Box style={{
       backgroundColor: theme.palette.background.default,
-      height: '100vh',
-      width: '100vw',
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      overflow: 'hidden',
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
+      ...(home ? {} : {
+        height: '100vh',
+        width: '100vw',
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        overflow: 'hidden',
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      })
     }}>
       <Box style={{
         position: "relative",
@@ -88,7 +98,7 @@ const Search = () => {
             placeholder='Search for your desired job'
             color="primary"
             sx={{
-              flex: 3,
+              flex: 2,
               '& input': {
                 fontSize: "3rem",
                 color: theme.palette.grey[100],
@@ -106,8 +116,11 @@ const Search = () => {
             type="submit"
             style={{
               fontSize: "1.5rem",
-              height: "100%",
-              flex: 0.5
+              fontWeight: "bold",
+              height: "83px",
+              padding: "1.5rem",
+              flex: 0.5,
+              boxShadow: "rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
             }}>
             Get Started
           </Button>

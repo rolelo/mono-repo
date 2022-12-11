@@ -1,12 +1,18 @@
+import { Box } from "@mui/material";
 import PrivateRoute from "common/components/private-route";
 import Search from "common/components/search";
-import { useRoutes } from 'react-router-dom';
+import { useRoutes, Outlet } from 'react-router-dom';
 import DashboardLayout from "../dashboard/layout";
+import JobApplications from "../job-applications";
 import Listing from "../listing";
 import SearchResults from "../search-results";
 
 const Routes = () => {
   const element = useRoutes([
+    {
+      path: '/home',
+      element: <Search home={true} />
+    },
     {
       path: '/',
       element: <PrivateRoute />,
@@ -22,6 +28,13 @@ const Routes = () => {
         }, {
           path: '/',
           element: <Search />
+        }, {
+          path: '/jobs',
+          element: <Box sx={{ padding: '2rem' }}><Outlet /></Box>,
+          children: [{
+            path: '/jobs/applied',
+            element: <JobApplications />
+          }]
         }],
       }],
     }
