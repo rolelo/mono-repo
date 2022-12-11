@@ -1,9 +1,9 @@
-import React from 'react'
-import { Typography, Button, Divider, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import { Checkbox, Divider, FormControlLabel, FormGroup, Typography } from "@mui/material";
+import { ClientListingsInput, EmploymentStatus, ExperienceLevel, WorkPlaceType } from 'common/models';
 import theme from 'common/static/theme';
-import { ClientListingsInput, EmploymentStatus, ExperienceLevel, ExperienceLevelFriendly, WorkPlaceType } from 'common/models';
+import React, { useState } from 'react';
 import CurrencyInput from 'react-currency-input-field';
-import { UseFormWatch, UseFormSetValue, UseFormRegister, UseFormGetValues } from 'react-hook-form';
+import { UseFormGetValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 
 type Props = {
   register: UseFormRegister<ClientListingsInput>

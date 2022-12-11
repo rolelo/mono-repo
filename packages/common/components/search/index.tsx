@@ -1,37 +1,25 @@
-import { gql, useLazyQuery } from '@apollo/client';
+import styled from '@emotion/styled';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import theme from '../../static/theme';
 
-const GET_LISTINGS = gql`
-  query ClientListings($input: String!) {
-    clientListings(textField: $input) {
-      _id
-      organisationName
-      organisationDescription
-      organisationWebsite
-      organisationLogo
-      createdDate
-      createdById
-      createdByName
-      jobPostingOperationType
-      title
-      advertisingMediums
-      description
-      location
-      skillsDescription
-      workRemoteAllowed
-      workplaceType
-      employmentStatus
-      experienceLevel
-      expireAt
-      listingType
-      currency
-      salary
+const Form = styled('form')({
+  position: "relative",
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  columnGap: "4rem",
+  borderRadius: "8px",
+  '@media(max-width: 450px)': {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    rowGap: '2rem',
+    '> div, > button': {
+      width: '100%',
     }
   }
-`;
+})
 
 type Props = {
   home?: boolean
@@ -70,6 +58,7 @@ const Search: React.FC<Props> = ({ home }) => {
     }}>
       <Box style={{
         position: "relative",
+        padding: '2rem',
         display: "flex",
         flexDirection: "column",
         rowGap: "4rem",
@@ -86,14 +75,7 @@ const Search: React.FC<Props> = ({ home }) => {
             fontSize: "3rem",
           }}>Apply to every single job with <i><b>literally</b></i> one click!</Typography>
         </Box>
-        <form onSubmit={handleSubmit(onSubmit)} style={{
-          position: "relative",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          columnGap: "4rem",
-          borderRadius: "8px",
-        }}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             placeholder='Search for your desired job'
             color="primary"
@@ -124,7 +106,7 @@ const Search: React.FC<Props> = ({ home }) => {
             }}>
             Get Started
           </Button>
-        </form>
+        </Form>
       </Box>
     </Box>
   )

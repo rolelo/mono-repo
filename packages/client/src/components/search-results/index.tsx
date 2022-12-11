@@ -1,13 +1,54 @@
 import { gql, useLazyQuery } from "@apollo/client";
+import styled from "@emotion/styled";
 import { Button, TextField, Typography } from '@mui/material';
+import RDrawer from "common/components/drawer";
 import { ClientListingsInput, SearchListing } from "common/models";
 import theme from "common/static/theme";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useSearchParams } from "react-router-dom";
 import FilterPanel from "../filter-panel";
 import Results from "../results";
 
+const Wrapper = styled('div')({
+  backgroundColor: theme.palette.background.default,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  position: "relative",
+  '> div': {
+    margin: "8rem",
+    marginTop: "4rem",
+    width: "70vw",
+    maxWidth: "900px",
+  },
+  'form': {
+    position: "relative",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    columnGap: "4rem",
+    borderRadius: "8px",
+    marginTop: "1rem"
+  },
+  '@media(max-width: 450px)': {
+    alignItems: 'flex-start',
+    '& > div': {
+      padding: '2rem',
+      margin: '0',
+      width: "100%"
+    },
+    '& form': {
+      alignItems: 'flex-start',
+      flexDirection: 'column',
+      rowGap: '2rem',
+      ' > *': {
+        width: '100%',
+      }
+    }
+  }
+});
 
 const GET_LISTINGS = gql`
   query ClientListings($input: ClientListingsInput!) {
@@ -42,6 +83,7 @@ const GET_LISTINGS = gql`
 `;
 
 const SearchResults = () => {
+  const [open, setOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { handleSubmit, register, watch, setValue, getValues, formState: { isValid, isDirty } } = useForm<ClientListingsInput>({
@@ -107,20 +149,8 @@ const SearchResults = () => {
 
   return (
     <>
-      <div className="wrapper" style={{
-        backgroundColor: theme.palette.background.default,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        position: "relative",
-      }}>
-        <div style={{
-          margin: "8rem",
-          marginTop: "4rem",
-          width: "70vw",
-          maxWidth: "900px",
-        }}>
+      <Wrapper className="wrapper">
+        <div>
           <Typography
             variant="h1"
             style={{
@@ -132,15 +162,7 @@ const SearchResults = () => {
           >
             Find your dream job
           </Typography>
-          <form onSubmit={handleSubmit(onSubmit)} style={{
-            position: "relative",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            columnGap: "4rem",
-            borderRadius: "8px",
-            marginTop: "1rem"
-          }}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
               placeholder='Search for your desired job'
               color="primary"
@@ -173,29 +195,26 @@ const SearchResults = () => {
             </Button>
           </form>
         </div>
+      </Wrapper>
+      <div>
+        {
+          data?.clientListings && (
+            <Results
+              hits={data.clientListings.hits}
+              listings={data.clientListings.listings}
+              handleFilter={() => setOpen(true)}
+            />
+          )
+        }
       </div>
-      <div style={{
-        display: "flex",
-        flexDirection: "row",
-        padding: '4rem',
-      }}>
-        <div style={{ flex: 0.5 }}>
-          <FilterPanel register={register} watch={watch} setValue={setValue} getValues={getValues} />
-        </div>
-        <div style={{
-          width: "70vw",
-          maxWidth: "900px",
-        }}>
-          {
-            data?.clientListings && (
-              <Results
-                hits={data.clientListings.hits}
-                listings={data.clientListings.listings}
-              />
-            )
-          }
-        </div>
-      </div>
+      <RDrawer
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Filter"
+        subtitle=""
+      >
+        <FilterPanel register={register} watch={watch} setValue={setValue} getValues={getValues} />
+      </RDrawer>
     </>
   );
 };

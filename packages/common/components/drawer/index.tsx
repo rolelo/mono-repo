@@ -18,7 +18,6 @@ const RDrawer: React.FC<Props> = ({
     anchor="right"
     sx={{
       '& > .MuiPaper-root': {
-        width: '60rem',
         padding: '2rem',
         boxSizing: 'border-box',
         backgroundColor: theme.palette.secondary.light,

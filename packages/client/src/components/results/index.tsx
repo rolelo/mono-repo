@@ -6,7 +6,7 @@ import { formatDistance } from "date-fns";
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-type Props = SearchListing ;
+type Props = SearchListing & { handleFilter: () => void };
 
 export const Chip = styled('div')({
   backgroundColor: alpha(theme.palette.secondary.main, 0.3),
@@ -166,7 +166,7 @@ const Result: React.FC<ClientListing> = ({
   )
 }
 
-const Results: React.FC<Props> = ({ listings, hits }) => {
+const Results: React.FC<Props> = ({ listings, hits, handleFilter }) => {
   return (
     <div style={{
       display: "flex",
@@ -174,16 +174,17 @@ const Results: React.FC<Props> = ({ listings, hits }) => {
       width: "100%",
       padding: '0 2rem',
     }}>
+      <div style={{ display: "flex", margin: "2rem", flexDirection: "row", justifyContent: "space-between"}}>
       <p style={{
         color: theme.palette.grey[800],
         fontSize: '1.2rem',
-        margin: 0,
         fontWeight: 'bold',
-        marginBottom: '2rem',
         position: 'relative'
       }}>
         {`${hits} Results found`}
       </p>
+      <Button variant='contained' color='info' onClick={handleFilter}>Filter</Button>
+      </div>
       <div style={{ flexWrap: 'wrap', display: 'flex', flexDirection: 'row', rowGap: '2rem', columnGap: '2rem' }}>
         {listings.map(l => <Result key={l._id} {...l} />)}
       </div>

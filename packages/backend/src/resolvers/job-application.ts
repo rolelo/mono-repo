@@ -62,6 +62,10 @@ export const resolvers = {
         userId: sub,
         status: ApplicantStatus.PENDING
       });
+
+      const isExist = user.jobApplicants.find(ja => ja === listing.id);
+
+      if (isExist) throw Error("You have applied to this position already");
       user.jobApplicants.push(listing.id);
 
       await Promise.all([listing.save(), user.save()]);
