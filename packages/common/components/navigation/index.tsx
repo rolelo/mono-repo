@@ -66,7 +66,10 @@ const AvatarMenu: React.FC<Omit<Props, 'appbarLinks' | 'avatarMenu' | 'user'>> =
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        {dropdownLinks}
+        <div onClick={handleCloseUserMenu}>
+          {dropdownLinks}
+        </div>
+
         <MenuItem key="logout" onClick={() => mutate()}>
           <Typography textAlign="center">Logout</Typography>
         </MenuItem>
