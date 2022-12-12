@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import {
   Avatar, Button, Menu, MenuItem, Tooltip
 } from '@mui/material';
@@ -23,10 +22,9 @@ type Props = {
   user: User | null
 }
 const AvatarMenu: React.FC<Omit<Props, 'appbarLinks' | 'avatarMenu' | 'user'>> = ({ dropdownLinks }) => {
-  const navigator = useNavigate();
   const { mutate } = useMutation(Amplify.signOut, {
     onSuccess: () => {
-      navigator('/');
+      window.location.reload();
       toast.success('You have signed out successfully');
     },
     onError: (error) => {
@@ -34,6 +32,8 @@ const AvatarMenu: React.FC<Omit<Props, 'appbarLinks' | 'avatarMenu' | 'user'>> =
     },
   });
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);

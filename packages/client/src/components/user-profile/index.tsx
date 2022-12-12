@@ -9,6 +9,7 @@ import { useDropzone } from 'react-dropzone';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import 'react-phone-number-input/style.css';
 import { toast } from 'react-toastify';
+import ChangePassword from '../change-password';
 import { GET_USER, userVar } from '../dashboard/layout';
 
 var countries = require('i18n-iso-countries');
@@ -79,7 +80,6 @@ const UserProfile: React.FC = () => {
     setFileUploaded(null);
   }
   const handleUploadCV = async (f: File[]) => {
-    console.log(f);
     if (f?.length) {
       try {
         const file = f[0];
@@ -148,209 +148,220 @@ const UserProfile: React.FC = () => {
       }
     });
   }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", rowGap: '2rem' }}>
-      <Alert severity={!user?.profile ? 'error' : !viewOnly ? 'warning' : 'success'}>
-        {!user?.profile ? 'You do not have a profile' : user?.profile && !viewOnly ? 'You are editing your profile' : 'You have completed your profile'}
-      </Alert>
-      <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Country of Residence</InputLabel>
-          <Controller
-            control={control}
-            name='countryOfResidence'
-            render={({ field }) => (
-              <Select
-                disabled={viewOnly}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="countryOfResidence"
-                {...field}
-                value={field.value || ""}
-              >
-                {Object.keys(countryList).map((key) => (
-                  <MenuItem key={countryList[key]} value={countryList[key]}>{countryList[key]}</MenuItem>
-                ))}
-              </Select>
-            )}
-          />
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Right to Work In UK</InputLabel>
-          <Controller
-            control={control}
-            name='rightToWorkInUK'
-            render={({ field }) => (
-              <Select
-                disabled={viewOnly}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="rightToWorkInUK"
-                {...field}
-                value={field.value || ""}
-              >
-                <MenuItem value="true">Yes</MenuItem>
-                <MenuItem value="false">No</MenuItem>
-              </Select>
-            )}
-          />
-        </FormControl>
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Right to Work In EU</InputLabel>
-          <Controller
-            control={control}
-            name='rightToWorkInEU'
-            render={({ field }) => (
-              <Select
-                labelId="demo-simple-select-label"
-                disabled={viewOnly}
-                id="demo-simple-select"
-                label="rightToWorkInEU"
-                {...field}
-                value={field.value || ""}
-              >
-                <MenuItem value="true">Yes</MenuItem>
-                <MenuItem value="false">No</MenuItem>
-              </Select>
-            )}
-          />
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Right to Work In US</InputLabel>
-          <Controller
-            control={control}
-            name='rightToWorkInUS'
-            render={({ field }) => (
-              <Select
-                labelId="demo-simple-select-label"
-                disabled={viewOnly}
-                id="demo-simple-select"
-                label="rightToWorkInUS"
-                {...field}
-                value={field.value || ""}
-              >
-                <MenuItem value="true">Yes</MenuItem>
-                <MenuItem value="false">No</MenuItem>
-              </Select>
-            )}
-          />
-        </FormControl>
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Years of Experience</InputLabel>
-          <Controller
-            control={control}
-            name='yearsOfExperience'
-            render={({
-              field
-            }) => (
-              <Select
-                labelId="demo-simple-select-label"
-                disabled={viewOnly}
-                id="demo-simple-select"
-                label="yearsOfExperience"
-                {...field}
-                value={field.value || ""}
-              >
-                {
-                  ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"].map((value) => (
-                    <MenuItem value={value} key={value}>{value}</MenuItem>
-                  ))
-                }
-              </Select>
-            )}
-          />
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Tech Skills</InputLabel>
-          <Controller
-            control={control}
-            name='techSkills'
-            render={({
-              field: { onChange, onBlur, value, name, ref }
-            }) => (
-              <Select
-                multiple
-                multiline
-                value={watch().techSkills || []}
-                labelId="demo-simple-select-label"
-                disabled={viewOnly}
-                id="demo-simple-select"
-                label="techSkills"
-                onChange={onChange}
-                onBlur={onBlur}
-                ref={ref}
-              >
-                {(Object.keys(TechSkills) as Array<keyof typeof TechSkills>).map((key) => (
-                  <MenuItem value={TechSkills[key]} key={TechSkills[key]}>{TechSkills[key]}</MenuItem>
-                ))}
-              </Select>
-            )}
-          />
-        </FormControl>
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
-        <FormControl fullWidth>
-          <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-amount"
-            {...register('salaryLookingFor')}
-            disabled={viewOnly}
-            startAdornment={<InputAdornment position="start">£</InputAdornment>}
-            label="Amount"
-          />
-        </FormControl>
-      </Box>
-      {
-        !viewOnly ? (
-          <section>
-            <div {...getRootProps()}>
-              <input
-                {...getInputProps()}
-              />
-              <Box sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "4rem",
-                '&:hover': { cursor: 'pointer' }
-              }}>
-                <UploadFileIcon sx={{ fontSize: "4rem" }} />
-                {
-                  fileUploaded?.file.name ?
-                    <Typography variant="h6" textAlign="center">{fileUploaded.file.name}</Typography>
-                    : <Typography variant="h6" textAlign="center">Drag & Drop or Click here to upload your latest CV</Typography>
-                }
-              </Box>
-            </div>
-          </section>
-        ) : (
-          <Box sx={{ display: 'flex', justifyContent: "space-between" }}>
-            <Button
-              variant="contained"
-              color="info"
-              component="a"
-              href={user?.profile?.cv}
-              target="_blank"
-              referrerPolicy='no-referrer'>
-              View Your Uploaded CV
+    <div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          flex: 3,
+          display: "flex",
+          flexDirection: "column",
+          rowGap: '2rem'
+        }}>
+        <Alert severity={!user?.profile ? 'error' : !viewOnly ? 'warning' : 'success'}>
+          {!user?.profile ? 'You do not have a profile' : user?.profile && !viewOnly ? 'You are editing your profile' : 'You have completed your profile'}
+        </Alert>
+        <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Country of Residence</InputLabel>
+            <Controller
+              control={control}
+              name='countryOfResidence'
+              render={({ field }) => (
+                <Select
+                  disabled={viewOnly}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="countryOfResidence"
+                  {...field}
+                  value={field.value || ""}
+                >
+                  {Object.keys(countryList).map((key) => (
+                    <MenuItem key={countryList[key]} value={countryList[key]}>{countryList[key]}</MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Right to Work In UK</InputLabel>
+            <Controller
+              control={control}
+              name='rightToWorkInUK'
+              render={({ field }) => (
+                <Select
+                  disabled={viewOnly}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="rightToWorkInUK"
+                  {...field}
+                  value={field.value || ""}
+                >
+                  <MenuItem value="true">Yes</MenuItem>
+                  <MenuItem value="false">No</MenuItem>
+                </Select>
+              )}
+            />
+          </FormControl>
+        </Box>
+        <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Right to Work In EU</InputLabel>
+            <Controller
+              control={control}
+              name='rightToWorkInEU'
+              render={({ field }) => (
+                <Select
+                  labelId="demo-simple-select-label"
+                  disabled={viewOnly}
+                  id="demo-simple-select"
+                  label="rightToWorkInEU"
+                  {...field}
+                  value={field.value || ""}
+                >
+                  <MenuItem value="true">Yes</MenuItem>
+                  <MenuItem value="false">No</MenuItem>
+                </Select>
+              )}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Right to Work In US</InputLabel>
+            <Controller
+              control={control}
+              name='rightToWorkInUS'
+              render={({ field }) => (
+                <Select
+                  labelId="demo-simple-select-label"
+                  disabled={viewOnly}
+                  id="demo-simple-select"
+                  label="rightToWorkInUS"
+                  {...field}
+                  value={field.value || ""}
+                >
+                  <MenuItem value="true">Yes</MenuItem>
+                  <MenuItem value="false">No</MenuItem>
+                </Select>
+              )}
+            />
+          </FormControl>
+        </Box>
+        <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Years of Experience</InputLabel>
+            <Controller
+              control={control}
+              name='yearsOfExperience'
+              render={({
+                field
+              }) => (
+                <Select
+                  labelId="demo-simple-select-label"
+                  disabled={viewOnly}
+                  id="demo-simple-select"
+                  label="yearsOfExperience"
+                  {...field}
+                  value={field.value || ""}
+                >
+                  {
+                    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"].map((value) => (
+                      <MenuItem value={value} key={value}>{value}</MenuItem>
+                    ))
+                  }
+                </Select>
+              )}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Tech Skills</InputLabel>
+            <Controller
+              control={control}
+              name='techSkills'
+              render={({
+                field: { onChange, onBlur, value, name, ref }
+              }) => (
+                <Select
+                  multiple
+                  multiline
+                  value={watch().techSkills || []}
+                  labelId="demo-simple-select-label"
+                  disabled={viewOnly}
+                  id="demo-simple-select"
+                  label="techSkills"
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  ref={ref}
+                >
+                  {(Object.keys(TechSkills) as Array<keyof typeof TechSkills>).map((key) => (
+                    <MenuItem value={TechSkills[key]} key={TechSkills[key]}>{TechSkills[key]}</MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </FormControl>
+        </Box>
+        <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
+          <FormControl fullWidth>
+            <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-amount"
+              {...register('salaryLookingFor')}
+              disabled={viewOnly}
+              startAdornment={<InputAdornment position="start">£</InputAdornment>}
+              label="Amount"
+            />
+          </FormControl>
+        </Box>
+        {
+          !viewOnly ? (
+            <section>
+              <div {...getRootProps()}>
+                <input
+                  {...getInputProps()}
+                />
+                <Box sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "4rem",
+                  '&:hover': { cursor: 'pointer' }
+                }}>
+                  <UploadFileIcon sx={{ fontSize: "4rem" }} />
+                  {
+                    fileUploaded?.file.name ?
+                      <Typography variant="h6" textAlign="center">{fileUploaded.file.name}</Typography>
+                      : <Typography variant="h6" textAlign="center">Drag & Drop or Click here to upload your latest CV</Typography>
+                  }
+                </Box>
+              </div>
+            </section>
+          ) : (
+            <Box sx={{ display: 'flex', justifyContent: "space-between" }}>
+              <Button
+                variant="contained"
+                color="info"
+                component="a"
+                href={user?.profile?.cv}
+                target="_blank"
+                referrerPolicy='no-referrer'>
+                View Your Uploaded CV
+              </Button>
+              <Button onClick={() => setViewOnly(false)} variant="contained" color="secondary">Edit Your Profile</Button>
+            </Box>
+          )
+        }
+        {
+          !viewOnly && (
+            <Button disabled={(!isValid || !isDirty) && !user?.profile} type="submit" variant="contained" fullWidth>
+              {user?.profile ? 'Update Profile' : 'Create profile'}
             </Button>
-            <Button onClick={() => setViewOnly(false)} variant="contained" color="secondary">Edit Your Profile</Button>
-          </Box>
-        )
-      }
-      {
-        !viewOnly && (
-          <Button disabled={(!isValid || !isDirty) && !user?.profile} type="submit" variant="contained" fullWidth>
-            {user?.profile ? 'Update Profile' : 'Create profile'}
-          </Button>
-        )
-      }
-    </form>
+          )
+        }
+      </form>
+      <ChangePassword />
+    </div>
   )
 }
 

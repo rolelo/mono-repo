@@ -78,6 +78,7 @@ export default {
   userSubject,
   userSignedIn,
   userInfo,
+  Auth,
   signUp,
   confirmSignUp,
   resendConfirmationCode,
