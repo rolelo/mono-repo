@@ -3,7 +3,7 @@ import { useQueryString } from 'common/hooks';
 import Amplify from 'common/services/Amplify';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import OtpInput from 'react-otp-input';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { CustomForm } from '../../login';
 import { toast } from 'react-toastify';
 
@@ -18,7 +18,7 @@ type PasswordResetCode = {
 const ResetPasswordCode = () => {
   const navigate = useNavigate()
   const query = useQueryString();
-  const { handleSubmit, register, formState: { isDirty, isValid } } = useForm<PasswordResetCode>({
+  const { handleSubmit, setValue, register, watch, formState: { isDirty, isValid } } = useForm<PasswordResetCode>({
     mode: 'onBlur',
     defaultValues: {
       username: query.get('username') || '',
@@ -28,7 +28,7 @@ const ResetPasswordCode = () => {
   const onSubmit: SubmitHandler<PasswordResetCode> = ({ code, username, new_password }) => {
     if (!username) navigate('/auth/login');
     Auth.forgotPasswordSubmit(username, code, new_password)
-      .then((data) => {
+      .then(() => {
         toast.success('Password changed');
         navigate('/auth/login');
       })
@@ -36,13 +36,26 @@ const ResetPasswordCode = () => {
         toast.error(err.message)
       });
   }
+
   return (
     <Fade in timeout={600}>
       <CustomForm onSubmit={handleSubmit(onSubmit)}>
+        <h1>Password Reset Code</h1>
         <OtpInput
           numInputs={6}
-          separator={<span>-</span>}
-          {...register('code')}
+          value={watch('code')}
+          onChange={(code: string) => setValue('code', code)}
+          containerStyle={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%',
+          }}
+          inputStyle={{
+            width: '40px',
+            height: '40px',
+            fontSize: '2rem',
+          }}
         />
         <TextField label="New Password" variant="filled" type="password" fullWidth {
           ...register('new_password', {
@@ -56,8 +69,9 @@ const ResetPasswordCode = () => {
           size="large"
           disabled={!isValid || !isDirty}
         >
-          Get Code
+          Reset Password
         </Button>
+        <Link to="/auth/login">Back to login</Link>
       </CustomForm>
     </Fade>
   )
