@@ -11,7 +11,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Auth, Hub } from 'aws-amplify';
 
-const CustomForm = styled('form')({
+export const CustomForm = styled('form')({
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
@@ -72,6 +72,7 @@ const Login: React.FC = () => {
         <h1>Log In</h1>
         <TextField label="Username" variant="filled" fullWidth {...register('email')} />
         <TextField label="Password" variant="filled" fullWidth {...register('password')} type="password" />
+        <Link to="/auth/reset-password">Forgot Password?</Link>
         <Button
           variant="contained"
           type="submit"

@@ -3,6 +3,8 @@ import { useRoutes } from 'react-router-dom';
 import Auth from '../auth';
 import Confirm from '../confirm';
 import Login from '../login';
+import ResetPassword from "../reset-password";
+import ResetPasswordCode from "../reset-password/Code";
 import SignUp from '../signup';
 
 const Routes = () => {
@@ -22,6 +24,15 @@ const Routes = () => {
         }, {
           path: 'confirm',
           element: <Confirm />,
+        }, {
+          path: 'reset-password',
+          children: [{
+            path: 'code',
+            element: <ResetPasswordCode />
+          },{
+            path: '',
+            element: <ResetPassword /> 
+          }]
         }, {
           path: '',
           element: <Login />
