@@ -40,6 +40,7 @@ service:
   type: NodePort
   port: 8080
   nodePort: 30007
+  endpoint: dev-api.rolelo.com
 
 ingress:
   enabled: false
