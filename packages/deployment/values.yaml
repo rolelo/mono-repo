@@ -37,9 +37,9 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: NodePort
-  port: 8080
-  nodePort: 30007
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080
   endpoint: dev-api.rolelo.com
 
 ingress:
