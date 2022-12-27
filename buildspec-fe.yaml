@@ -3,8 +3,7 @@ phases:
   pre_build:
     commands:
       - echo Installing source NPM dependencies...
-      - yarn global add lerna
-      - yarn
+      - yarn global add @babel/cli
       - lerna bootstrap --include-dependencies
   build:
     commands:
