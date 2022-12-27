@@ -9,5 +9,6 @@
   ],
   "dependencies": {
     "date-fns": "^2.29.3"
-  }
+  },
+  "version": "0.0.0"
 }
