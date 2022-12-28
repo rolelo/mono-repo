@@ -96,7 +96,7 @@ const SearchResults = () => {
     }
   });
 
-  const [query, { data, loading }] = useLazyQuery<
+  const [query, { data }] = useLazyQuery<
     { clientListings: SearchListing },
     { input: ClientListingsInput }>(GET_LISTINGS, {
       nextFetchPolicy: 'network-only',

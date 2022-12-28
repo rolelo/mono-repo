@@ -1,7 +1,7 @@
 import { Checkbox, Divider, FormControlLabel, FormGroup, Typography } from "@mui/material";
 import { ClientListingsInput, EmploymentStatus, ExperienceLevel, WorkPlaceType } from 'common/models';
 import theme from 'common/static/theme';
-import React, { useState } from 'react';
+import React from 'react';
 import CurrencyInput from 'react-currency-input-field';
 import { UseFormGetValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 
