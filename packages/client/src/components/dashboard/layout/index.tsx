@@ -5,10 +5,8 @@ import RDrawer from 'common/components/drawer';
 import Navigation from 'common/components/navigation';
 import { User } from 'common/models';
 import React, { useState } from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import UserProfile from '../../user-profile';
-import { CognitoUser } from 'amazon-cognito-identity-js';
-import { Auth } from 'aws-amplify';
 
 export const GET_USER = gql`
   query GET_USER {
@@ -44,17 +42,11 @@ export const userVar = makeVar<User | null>(null);
 const DashboardLayout: React.FC = () => {
   const navigator = useNavigate();
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState<CognitoUser>();
   const { data } = useQuery<{ user: User }>(GET_USER, {
     onCompleted: ({ user }) => {
       userVar(user);
     }
   });
-
-  React.useEffect(() => {
-    Auth.currentAuthenticatedUser()
-      .then(r => setUser(r));
-  }, []);
 
   return (
     <Fade in timeout={600}>
