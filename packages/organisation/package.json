@@ -18,6 +18,7 @@
     "ka-table": "^7.6.3",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
+    "common": "*",
     "react-currency-input-field": "^3.6.9",
     "react-dom": "^18.2.0",
     "react-pdf": "^5.7.2",
@@ -31,9 +32,9 @@
   },
   "scripts": {
     "start": "PORT=3001 REACT_APP_ENV=dev HTTPS=true craco start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": [
