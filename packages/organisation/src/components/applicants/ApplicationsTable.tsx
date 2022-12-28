@@ -8,7 +8,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import { ApplicantStatus, Listing, ListingApplicant, UpdateApplicationStatusInput } from 'common/models';
 import { format } from 'date-fns';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -77,7 +77,7 @@ const ApplicantsTable: React.FC<Props> = ({ handleRowClick }) => {
 
   const gridRef = useRef<AgGridReact>();
 
-  const handleUpdateStatus = (jobId: string | undefined, userId: string, status: ApplicantStatus): void => {
+  const handleUpdateStatus = useCallback((jobId: string | undefined, userId: string, status: ApplicantStatus): void => {
     if (!jobId) {
       toast.error('Listing Id undefined');
       return;
@@ -91,7 +91,7 @@ const ApplicantsTable: React.FC<Props> = ({ handleRowClick }) => {
         }
       }
     })
-  }
+  }, [mutation])
 
   const columnDefs = useMemo<ColDef<ListingApplicant>[]>(() => ([
     {
