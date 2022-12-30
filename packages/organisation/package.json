@@ -2,6 +2,7 @@
   "name": "organisation",
   "version": "0.1.0",
   "private": true,
+  "homepage": "organisation",
   "dependencies": {
     "@apollo/client": "^3.7.0",
     "@craco/craco": "^6.4.5",
