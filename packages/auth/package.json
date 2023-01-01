@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "PORT=3000 REACT_APP_ENV=dev HTTPS=true craco start",
-    "build": "PUBLIC_URL=https://dev-app.rolelo.com craco build",
+    "build": "PUBLIC_URL=https://dev-app.rolelo.com/${WORKSPACE} craco build",
     "test": "craco test",
     "eject": "craco eject"
   },
