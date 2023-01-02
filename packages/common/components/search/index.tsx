@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Button, TextField, Typography } from '@mui/material';
+import React from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import theme from '../../static/theme';
@@ -33,7 +34,7 @@ const Search: React.FC<Props> = ({ home }) => {
 
   const onSubmit: SubmitHandler<FieldValues> = ({ description }) => {
     if (home && window.top) {
-      window.top.location = `https://localhost:3004/search?searchfield=${description}`;
+      window.top.location = `https://dev-client.rolelo.com/search?searchfield=${description}`;
     } else {
       navigate(`/search?searchfield=${description}`);
     }
