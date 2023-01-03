@@ -2,7 +2,7 @@ import axios from 'axios';
 import Amplify from '../services/Amplify';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/',
+  baseURL: process.env.BACKEND_URL,
 });
 
 instance.interceptors.request.use(async (config) => {
