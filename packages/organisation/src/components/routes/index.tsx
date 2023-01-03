@@ -10,7 +10,7 @@ const Routes = () => {
   const element = useRoutes([
     {
       path: '/',
-      element: <PrivateRoute redirectUrl="https://localhost:3001" />,
+      element: <PrivateRoute redirectUrl={process.env.ORGANISAION_URL} />,
       children: [{
         path: '/',
         element: <DashboardLayout />,
