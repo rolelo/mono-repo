@@ -41,7 +41,7 @@ const Login: React.FC = () => {
     onSuccess: () => {
       toast.success('Successfully logged in');
       const redirectUrl = searchParams.get('redirectUrl');
-      window.location.href = redirectUrl || "https://localhost:3004";
+      window.location.href = redirectUrl || process.env.REDIRECT_URL!;
     },
     onError: (error) => {
       toast.error(error instanceof Error ? error.message : 'Login Error');
@@ -59,7 +59,7 @@ const Login: React.FC = () => {
         case 'cognitoHostedUI':
         case 'customOAuthState':
           console.log(data);
-          window.location.href = typeof data === 'string' ? data : 'https://localhost:3004';
+          window.location.href = typeof data === 'string' ? data : process.env.CLIENT_URL!;
       }
     });
 
