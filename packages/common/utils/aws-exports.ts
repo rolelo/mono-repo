@@ -5,7 +5,7 @@ const awsExports = {
     userPoolId: environmentVars.REACT_APP_COGNITO.poolId,
     userPoolWebClientId: environmentVars.REACT_APP_COGNITO.clientId,
     cookieStorage: {
-      domain: "localhost", //localhost or .<domain>.com`
+      domain: process.env.DOMAIN, //localhost or .<domain>.com`
       path: "/",
       expires: 365,
       sameSite: "strict",
@@ -15,8 +15,8 @@ const awsExports = {
   oauth: {
     domain: "rolelo.auth.eu-west-1.amazoncognito.com",
     scope: ["email", "profile", "openid", "aws.cognito.signin.user.admin"],
-    redirectSignIn: "https://localhost:3000/auth/login",
-    redirectSignOut: "https://localhost:3000/auth/login",
+    redirectSignIn: `${process.env.AUTH_URL}/auth/login`,
+    redirectSignOut: `${process.env.AUTH_URL}/auth/login`,
     responseType: "code",
   },
 };
