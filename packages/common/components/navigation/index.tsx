@@ -10,6 +10,7 @@ import * as React from 'react';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+//@ts-ignore
 import Logo from '../../logo/logo.png';
 import { User } from '../../models';
 import Amplify from '../../services/Amplify';
@@ -107,7 +108,7 @@ export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu, use
                 <Button
                   variant='outlined'
                   component='a'
-                  href='https://dev-auth.rolelo.com/auth/login'>
+                  href={`${process.env.AUTH_URL}/auth/login`}>
                   Sign In
                 </Button>
               )
