@@ -1,11 +1,12 @@
 import environmentVars from './env.variables';
 
+console.log(environmentVars);
 const awsExports = {
   Auth: {
     userPoolId: environmentVars.REACT_APP_COGNITO.poolId,
     userPoolWebClientId: environmentVars.REACT_APP_COGNITO.clientId,
     cookieStorage: {
-      domain: process.env.DOMAIN, //localhost or .<domain>.com`
+      domain: window.location.hostname, //localhost or .<domain>.com`
       path: "/",
       expires: 365,
       sameSite: "strict",
@@ -15,8 +16,8 @@ const awsExports = {
   oauth: {
     domain: "rolelo.auth.eu-west-1.amazoncognito.com",
     scope: ["email", "profile", "openid", "aws.cognito.signin.user.admin"],
-    redirectSignIn: `${process.env.AUTH_URL}/auth/login`,
-    redirectSignOut: `${process.env.AUTH_URL}/auth/login`,
+    redirectSignIn: `${window.location.hostname}/auth/login`,
+    redirectSignOut: `${window.location.hostname}/auth/login`,
     responseType: "code",
   },
 };
