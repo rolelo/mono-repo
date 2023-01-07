@@ -1,5 +1,8 @@
 version: 0.2
 phases:
+  install:
+    runtime-version:
+      nodejs: 16
   pre_build:
     commands:
      - aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 619680812856.dkr.ecr.eu-west-1.amazonaws.com
