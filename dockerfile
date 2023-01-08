@@ -2,11 +2,7 @@ FROM node:18-alpine
 
 #create app directory
 WORKDIR /app
-COPY ./packages/backend ./packages/backend
-COPY ./packages/common ./packages/common
-COPY ./lerna.json .
-COPY ./yarn.lock .
-COPY ./package.json .
+COPY . .
 RUN yarn global add lerna
 RUN yarn global add @babel/cli
 RUN yarn
