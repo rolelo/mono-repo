@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: amirali26/rolelo-be
+  repository: 619680812856.dkr.ecr.eu-west-1.amazonaws.com/dev-registry-clientbackendf728ad9b-kkvu07aaz58s
   # pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest
