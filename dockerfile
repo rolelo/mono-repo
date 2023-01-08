@@ -4,7 +4,7 @@ FROM node:18-alpine
 WORKDIR /app
 COPY ./packages/backend ./backend
 COPY ./packages/common ./common
-WORKDIR /backend
+WORKDIR /app/backend
 RUN npm install
 EXPOSE 8080
 CMD ["npm", "run", "start"];
