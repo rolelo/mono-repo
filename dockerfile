@@ -8,5 +8,6 @@ WORKDIR /app/backend
 RUN npm install
 WORKDIR /app/common
 RUN npm install
+WORKDIR /app/backend
 EXPOSE 8080
 CMD ["npm", "run", "start"];
