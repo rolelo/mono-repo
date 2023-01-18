@@ -17,7 +17,9 @@ export const s3Client = new AWS.S3({
 });
 
 const startApolloServer = async () => {
-  await mongoose.connect(process.env.DATABASE_URL);
+  await mongoose.connect(
+    `mongodb://root:${process.env.MONGO_PASSWORD}@${process.env.MONGO_URL}:27017`
+  );
   const app = express();
   const httpServer = http.createServer(app);
 
