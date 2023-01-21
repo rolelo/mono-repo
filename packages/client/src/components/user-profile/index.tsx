@@ -3,7 +3,6 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { Alert, Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import axios from 'axios';
 import { Profile, ProfileInput, SignedUrl, TechSkills } from 'common/models';
-import environmentVars from 'common/utils/env.variables';
 import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -141,7 +140,7 @@ const UserProfile: React.FC = () => {
           rightToWorkInUK,
           rightToWorkInUS,
           techSkills,
-          cv: `${environmentVars.s3BucketUrl}/cv/${uuid}` || cv,
+          cv: `${process.env.REACT_APP_S3_BUCKET_URL}/cv/${uuid}` || cv,
           salaryLookingFor: +salaryLookingFor,
           yearsOfExperience: +yearsOfExperience,
         }

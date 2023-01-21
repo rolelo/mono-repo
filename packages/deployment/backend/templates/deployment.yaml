@@ -32,18 +32,28 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          env:
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-mongodb
+                  key: mongodb-root-password
+            - name: MONGO_URL
+              value: 172.20.160.182
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
           livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
             httpGet:
-              path: /
+              path: /graphql?query=%7B__typename%7D
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /graphql?query=%7B__typename%7D
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

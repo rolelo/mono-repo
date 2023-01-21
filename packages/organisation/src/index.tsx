@@ -5,7 +5,6 @@ import { setContext } from '@apollo/client/link/context';
 import Amplify from 'common/services/Amplify';
 import { Amplify as AmplifyMain } from 'aws-amplify';
 import awsExports from 'common/utils/aws-exports';
-import environmentVars from 'common/utils/env.variables';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -18,7 +17,7 @@ const root = ReactDOM.createRoot(
 );
 
 const httpLink = createHttpLink({
-  uri: environmentVars.serverUrl,
+  uri: process.env.REACT_APP_SERVER_URL,
 });
 
 const authLink = setContext(async (_, { headers }) => {

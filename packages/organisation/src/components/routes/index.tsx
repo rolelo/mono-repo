@@ -10,7 +10,7 @@ const Routes = () => {
   const element = useRoutes([
     {
       path: '/',
-      element: <PrivateRoute redirectUrl={process.env.ORGANISAION_URL} />,
+      element: <PrivateRoute redirectUrl={process.env.REACT_APP_ORGANISAION_URL} />,
       children: [{
         path: '/',
         element: <DashboardLayout />,

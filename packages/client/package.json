@@ -20,6 +20,7 @@
     "add": "^2.0.6",
     "aws-sdk": "^2.1238.0",
     "graphql": "^16.6.0",
+    "date-fns": "^2.29.3",
     "i18n-iso-countries": "^7.5.0",
     "common": "*",
     "react": "^18.2.0",
