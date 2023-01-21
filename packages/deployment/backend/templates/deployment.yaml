@@ -39,21 +39,21 @@ spec:
                   name: mongo-mongodb
                   key: mongodb-root-password
             - name: MONGO_URL
-              value: 172.20.36.117
+              value: 172.20.160.182
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
           livenessProbe:
-            initialDelaySeconds: 200
-            periodSeconds: 100
+            initialDelaySeconds: 20
+            periodSeconds: 10
             httpGet:
-              path: /
+              path: /graphql?query=%7B__typename%7D
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /graphql?query=%7B__typename%7D
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
