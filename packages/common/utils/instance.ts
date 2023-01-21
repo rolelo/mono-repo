@@ -2,7 +2,7 @@ import axios from 'axios';
 import Amplify from '../services/Amplify';
 
 const instance = axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: process.env.REACT_APP_SERVER_URL,
 });
 
 instance.interceptors.request.use(async (config) => {
