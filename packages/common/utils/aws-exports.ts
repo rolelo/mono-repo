@@ -1,10 +1,8 @@
-import environmentVars from './env.variables';
 
-console.log(environmentVars);
 const awsExports = {
   Auth: {
-    userPoolId: environmentVars.REACT_APP_COGNITO.poolId,
-    userPoolWebClientId: environmentVars.REACT_APP_COGNITO.clientId,
+    userPoolId: process.env.REACT_APP_COGNITO_POOLID,
+    userPoolWebClientId: process.env.REACT_APP_COGNITO_CLIENT_ID,
     cookieStorage: {
       domain: window.location.hostname, //localhost or .<domain>.com`
       path: "/",

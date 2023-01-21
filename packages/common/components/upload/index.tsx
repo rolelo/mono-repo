@@ -6,7 +6,6 @@ import React from 'react';
 import { gql, useMutation } from '@apollo/client';
 //@ts-ignore
 import EmptyProfileImage from 'common/logo/empty-profile-image.png';
-import environmentVars from 'common/utils/env.variables';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import theme from '../../static/theme';
@@ -61,7 +60,7 @@ const ImageUpload: React.FC<Props> = ({
           data: formData,
         });
 
-        submitImage(`${environmentVars.s3BucketUrl}/organisation-logos/${uuid}`);
+        submitImage(`${process.env.REACT_APP_S3_BUCKET_URL}/organisation-logos/${uuid}`);
       } catch (e) {
         console.log(e);
         toast.error('Something went wrong uploading your file');
