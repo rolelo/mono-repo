@@ -14,15 +14,11 @@ vpc:
           id: subnet-07e63f02be72e7097
       eu-west-1b:
           id: subnet-0f2ecd9d3278eddfa
-      eu-west-1c:
-          id: subnet-0fa98db8b78ce7f2b
     public:
       eu-west-1a:
           id: subnet-05b56a9efc49dd152
       eu-west-1b:
           id: subnet-0a57e2cc8c50ebe66
-      eu-west-1c:
-          id: subnet-02dd914a77b97695a
 
 managedNodeGroups:
   - name: ng-1
