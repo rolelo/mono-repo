@@ -3,14 +3,17 @@ kind: Service
 metadata:
   annotations:
     external-dns.alpha.kubernetes.io/hostname: {{ .Values.service.endpoint }}
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-west-1:619680812856:certificate/5b26b028-24ce-483a-8adb-2d3c3a376fc4
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
   name: {{ include "deployment.fullname" . }}
   labels:
     {{- include "deployment.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - name: https
+      port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
-      protocol: TCP
   selector:
     {{- include "deployment.selectorLabels" . | nindent 4 }}
