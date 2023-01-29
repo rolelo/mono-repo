@@ -1,2 +1,14 @@
 global:
   storageClass: mongo-sc
+useStatefulSet: true
+resources:
+  limits:
+    cpu: 200m
+readinessProbe:
+  periodSeconds: 100
+  initialDelaySeconds: 100
+  timeoutSeconds: 50
+livenessProbe:
+  periodSeconds: 100
+  initialDelaySeconds: 100
+  timeoutSeconds: 50
