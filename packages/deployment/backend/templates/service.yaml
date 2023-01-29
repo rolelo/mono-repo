@@ -15,5 +15,8 @@ spec:
     - name: https
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
+    - name: http
+      port: 80
+      targetPort: 8080
   selector:
     {{- include "deployment.selectorLabels" . | nindent 4 }}

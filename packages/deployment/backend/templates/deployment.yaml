@@ -39,7 +39,7 @@ spec:
                   name: mongo-mongodb
                   key: mongodb-root-password
             - name: MONGO_URL
-              value: 172.20.202.214
+              value: 172.20.118.73
             - name: ELASTIC_URL
               value: 172.20.37.122
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -48,12 +48,14 @@ spec:
               containerPort: 8080
               protocol: TCP
           livenessProbe:
-            initialDelaySeconds: 20
-            periodSeconds: 10
+            initialDelaySeconds: 100
+            periodSeconds: 20
             httpGet:
               path: /graphql?query=%7B__typename%7D
               port: http
           readinessProbe:
+            initialDelaySeconds: 100
+            periodSeconds: 20
             httpGet:
               path: /graphql?query=%7B__typename%7D
               port: http
