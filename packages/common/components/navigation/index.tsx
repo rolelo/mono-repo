@@ -108,7 +108,7 @@ export default function Navigation({ dropdownLinks, appbarLinks, avatarMenu, use
                 <Button
                   variant='outlined'
                   component='a'
-                  href={`${process.env.AUTH_URL}/auth/login`}>
+                  href={`${process.env.REACT_APP_AUTH_URL}/auth/login`}>
                   Sign In
                 </Button>
               )
