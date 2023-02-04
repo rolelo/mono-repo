@@ -33,7 +33,7 @@
   },
   "scripts": {
     "start": "PORT=3001 REACT_APP_ENV=dev HTTPS=true craco start",
-    "build:dev": "env-cmd -f .env.development craco build",
+    "build:development": "env-cmd -f .env.development craco build",
     "build:production": "env-cmd -f .env.development craco build",
     "test": "craco test",
     "eject": "craco eject"
