@@ -54,12 +54,11 @@ const Login: React.FC = () => {
   useEffect(() => {
     const sub = Hub.listen('auth', ({ payload: { event, data } }) => {
 
-      console.log(data);
       switch (event) {
         case 'cognitoHostedUI':
         case 'customOAuthState':
-          console.log(data);
-          window.location.href = typeof data === 'string' ? data : process.env.CLIENT_URL!;
+          console.log(data, process.env.REACT_APP_CLIENT_URL);
+          window.location.href = typeof data === 'string' ? data : process.env.REACT_APP_CLIENT_URL!;
       }
     });
 
