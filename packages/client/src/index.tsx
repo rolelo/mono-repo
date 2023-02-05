@@ -17,7 +17,7 @@ const root = ReactDOM.createRoot(
 );
 
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_SERVER_URL,
+  uri: process.env.REACT_APP_BACKEND_URL,
 });
 
 const authLink = setContext(async (_, { headers }) => {
