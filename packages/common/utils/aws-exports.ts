@@ -14,8 +14,8 @@ const awsExports = {
   oauth: {
     domain: "rolelo.auth.eu-west-1.amazoncognito.com",
     scope: ["email", "profile", "openid", "aws.cognito.signin.user.admin"],
-    redirectSignIn: `${window.location.hostname}/auth/login`,
-    redirectSignOut: `${window.location.hostname}/auth/login`,
+    redirectSignIn: process.env.REACT_APP_SIGNIN,
+    redirectSignOut: process.env.REACT_APP_SIGNIN,
     responseType: "code",
   },
 };
