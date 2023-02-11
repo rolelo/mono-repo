@@ -4,7 +4,7 @@ const awsExports = {
     userPoolId: process.env.REACT_APP_COGNITO_POOLID,
     userPoolWebClientId: process.env.REACT_APP_COGNITO_CLIENT_ID,
     cookieStorage: {
-      domain: '.rolelo.com', //localhost or .<domain>.com`
+      domain: window.location.href.includes('localhost') ? 'localhost' : '.rolelo.com',
       path: "/",
       expires: 365,
       sameSite: "strict",
