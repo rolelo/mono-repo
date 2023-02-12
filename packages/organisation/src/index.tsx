@@ -2,8 +2,8 @@ import {
   ApolloClient, ApolloProvider, createHttpLink, InMemoryCache
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import Amplify from 'common/services/Amplify';
 import { Amplify as AmplifyMain } from 'aws-amplify';
+import Amplify from 'common/services/Amplify';
 import awsExports from 'common/utils/aws-exports';
 import React from 'react';
 import ReactDOM from 'react-dom/client';

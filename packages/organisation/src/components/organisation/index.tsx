@@ -31,6 +31,10 @@ const Organisation = () => {
       <Box sx={{ padding: '2rem' }}>
         <View />
         <RDrawer
+          style={{
+            width: '800px',
+            maxWidth: '80%',
+          }}
           title="Create Organisation"
           subtitle="Organisation"
           extraInformation={

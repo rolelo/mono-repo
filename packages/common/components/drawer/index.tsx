@@ -11,7 +11,7 @@ type Props = {
 } & DrawerProps;
 
 const RDrawer: React.FC<Props> = ({
-  children, subtitle, title, extraInformation, ...rest
+  children, subtitle, title, extraInformation, style, ...rest
 }) => (
   <Drawer
     {...rest}
@@ -21,6 +21,7 @@ const RDrawer: React.FC<Props> = ({
         padding: '2rem',
         boxSizing: 'border-box',
         backgroundColor: theme.palette.secondary.light,
+        ...style,
       },
     }}
   >

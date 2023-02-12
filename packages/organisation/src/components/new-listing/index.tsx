@@ -9,8 +9,9 @@ import {
   ListItem,
   ListItemButton, MenuItem,
   TextField,
+  Select,
+  Typography
 } from "@mui/material";
-import Select from '@mui/material/Select';
 import Backdrop from 'common/components/backdrop';
 import CountriesDropdown from 'common/components/countries-dropdown';
 import { useYupValidationResolver } from 'common/hooks';
@@ -29,6 +30,7 @@ import {
   TechSkills
 } from 'common/models';
 import theme from "common/static/theme";
+import BackdropWithText from 'common/components/backdrop-with-text';
 import React from 'react';
 import CurrencyInput from 'react-currency-input-field';
 import { Controller, useForm } from 'react-hook-form';
@@ -223,7 +225,7 @@ const NewListing: React.FC = () => {
                 <FormControl style={{ minWidth: 300 }} error={Boolean(errors.organisationId)}>
                   <InputLabel id="demo-simple-select-label">Select Your Organisation</InputLabel>
                   <Controller name="organisationId" control={control} render={({
-                    field: { onChange, onBlur, value, name, ref }
+                    field: { onChange, onBlur, ref }
                   }) => (
                     <Select
                       labelId="demo-simple-select-label"
@@ -315,7 +317,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Exprience Level?</InputLabel>
                     <Controller control={control} name="experienceLevel" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -340,7 +342,7 @@ const NewListing: React.FC = () => {
                       control={control}
                       name='techSkills'
                       render={({
-                        field: { onChange, onBlur, value, name, ref }
+                        field: { onChange, onBlur, ref }
                       }) => (
                         <Select
                           multiple
@@ -378,7 +380,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Workplace type?</InputLabel>
                     <Controller control={control} name="workplaceType" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -400,7 +402,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Employment Status?</InputLabel>
                     <Controller control={control} name="employmentStatus" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -422,7 +424,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Work remove allowed?</InputLabel>
                     <Controller control={control} name="workRemoteAllowed" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -458,7 +460,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Health Insurance?</InputLabel>
                     <Controller control={control} name="privateHealthInsurance" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -479,7 +481,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Dental Insurance?</InputLabel>
                     <Controller control={control} name="dentalHealthInsurance" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -500,7 +502,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Vision Insurance?</InputLabel>
                     <Controller control={control} name="visionHealthInsurance" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -521,7 +523,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Life Insurance?</InputLabel>
                     <Controller control={control} name="lifeInsurance" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -542,7 +544,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Wellness Packages (i.e. gym)?</InputLabel>
                     <Controller control={control} name="wellnessPackages" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -563,7 +565,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Free Food and Drinks?</InputLabel>
                     <Controller control={control} name="freeFoodAndDrink" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         multiple
@@ -586,7 +588,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Training & Development?</InputLabel>
                     <Controller control={control} name="trainingAndDevelopment" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -607,7 +609,7 @@ const NewListing: React.FC = () => {
                   <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Work from home package?</InputLabel>
                     <Controller control={control} name="workFromHomePackage" render={({
-                      field: { onChange, onBlur, value, name, ref }
+                      field: { onChange, onBlur, ref }
                     }) => (
                       <Select
                         labelId="demo-simple-select-label"
@@ -709,6 +711,16 @@ const NewListing: React.FC = () => {
         </Box>
       </form>
       <Backdrop open={loading} />
+      <BackdropWithText open={!user?.organisations?.length}>
+        <div style={{ display: "flex", flexDirection: 'column', rowGap: '2rem' }}>
+        <Typography variant='h5' textAlign={"center"}>
+          You currently do not have any organisations,
+          <br />
+          please create one in order to be able to create a listing
+        </Typography>
+        <Button variant="contained" onClick={() => navigation('/organisation')}>Create Organisation</Button>
+        </div >
+      </BackdropWithText>
     </Box>
   )
 }

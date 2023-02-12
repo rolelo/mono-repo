@@ -15,7 +15,7 @@ const PrivateRoute: React.FC<Props> = ({ redirectUrl }) => {
   const { mutate } = useMutation(() => Auth.currentAuthenticatedUser(), {
     onError: () => {
       if (!location.pathname.includes('/auth') && redirectUrl) {
-        window.location.href = `${process.env.AUTH_URL}?redirectUrl=${redirectUrl}`
+        window.location.href = `${process.env.REACT_APP_AUTH_URL}/auth/login?redirectUrl=${redirectUrl}`
       }
     },
   });
