@@ -61,7 +61,6 @@ const Create: React.FC<Props> = ({ callback }) => {
             display={true}
             imageUrl={watch().companyLogo}
             submitImage={(imageUrl: string) => {
-              console.log(imageUrl);
               setValue('companyLogo', imageUrl)
             }}
             clearImage={() => setValue('companyLogo', '')}
