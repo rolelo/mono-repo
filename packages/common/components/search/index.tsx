@@ -34,7 +34,7 @@ const Search: React.FC<Props> = ({ home }) => {
 
   const onSubmit: SubmitHandler<FieldValues> = ({ description }) => {
     if (home && window.top) {
-      window.top.location = `https://${process.env.REACT_APP_CLIENT_URL}/search?searchfield=${description}`;
+      window.top.location = `${process.env.REACT_APP_CLIENT_URL}/search?searchfield=${description}`;
     } else {
       navigate(`/search?searchfield=${description}`);
     }
