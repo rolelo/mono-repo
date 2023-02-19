@@ -39,7 +39,7 @@ spec:
                   name: mongo-mongodb
                   key: mongodb-root-password
             - name: MONGO_URL
-              value: 172.20.118.73
+              value: 172.20.85.9 
             - name: ELASTIC_URL
               value: 172.20.37.122
           imagePullPolicy: {{ .Values.image.pullPolicy }}

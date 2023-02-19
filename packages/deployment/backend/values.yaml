@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: 619680812856.dkr.ecr.eu-west-1.amazonaws.com/dev-registry-clientbackendf728ad9b-kkvu07aaz58s
+  repository: 095812446517.dkr.ecr.eu-west-1.amazonaws.com/prod-registry-clientbackendf728ad9b-ncjcpyyz4mtz
   # pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest
@@ -40,7 +40,7 @@ service:
   type: LoadBalancer
   port: 443
   targetPort: 8080
-  endpoint: dev-api.rolelo.com
+  endpoint: api.rolelo.com
 
 ingress:
   enabled: false
