@@ -8,7 +8,7 @@ phases:
      - aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 095812446517.dkr.ecr.eu-west-1.amazonaws.com
      - docker build -t prod-registry-clientbackendf728ad9b-ncjcpyyz4mtz .
      - docker tag prod-registry-clientbackendf728ad9b-ncjcpyyz4mtz:latest 095812446517.dkr.ecr.eu-west-1.amazonaws.com/prod-registry-clientbackendf728ad9b-ncjcpyyz4mtz:latest
-     - docker push 619680812856.dkr.ecr.eu-west-1.amazonaws.com/dev-registry-clientbackendf728ad9b-kkvu07aaz58s:latesdocker push 095812446517.dkr.ecr.eu-west-1.amazonaws.com/prod-registry-clientbackendf728ad9b-ncjcpyyz4mtz:latest
+     - docker push 095812446517.dkr.ecr.eu-west-1.amazonaws.com/prod-registry-clientbackendf728ad9b-ncjcpyyz4mtz:latest
 artifacts:
   files:
     - '**/*'
