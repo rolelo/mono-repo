@@ -50,7 +50,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: elasticsearch-master-certs
-                  value: ca.crt
+                  key: ca.crt
+            - name: ELASTIC_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: elasticsearch-master-credentials
+                  key: username
+            - name: ELASTIC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: elasticsearch-master-credentials
+                  key: password
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
