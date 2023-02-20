@@ -1,7 +1,16 @@
+const fs = require('fs');
 const { Client } = require("@elastic/elasticsearch");
 
 const client = new Client({
-  node: "http://localhost:9200",
+  node: `https://localhost:9200`,
+  auth: {
+    username: "elastic",
+    password: "Ykbf7mTHszIMLRSC",
+  },
+  tls: {
+    ca: fs.readFileSync('/Users/amir/projects/rolelo/monorepo/certs/ca.crt'),
+    cert: fs.readFileSync('/Users/amir/projects/rolelo/monorepo/certs/tls.crt')
+  },
 });
 
 
@@ -10,4 +19,6 @@ const createIndex = async (indexName) => {
   console.log("Index created");
 };
 
-createIndex("listings");
+createIndex("listings").catch(e => {
+  console.log(e)
+});

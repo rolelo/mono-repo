@@ -39,9 +39,18 @@ spec:
                   name: mongo-mongodb
                   key: mongodb-root-password
             - name: MONGO_URL
-              value: 172.20.85.9 
+              value: 172.20.98.111
             - name: ELASTIC_URL
-              value: 172.20.37.122
+              value: 172.20.26.11
+            - name: CLIENT_ID
+              value: a87m5i33iflh7ohm3513ucf4p 
+            - name: USERPOOL_ID
+              value: eu-west-1_fEieA0sI1
+            - name: ELASTIC_CA
+              valueFrom:
+                secretKeyRef:
+                  name: elasticsearch-master-certs
+                  value: ca.crt
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
