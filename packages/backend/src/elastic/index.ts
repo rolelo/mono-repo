@@ -7,6 +7,7 @@ export const client = new Client({
     password: process.env.ELASTIC_PASSWORD,
   },
   tls: {
-    ca: process.env.ELASTIC_CA
+    ca: process.env.ELASTIC_CA,
+    rejectUnauthorized: false,
   }
 });
