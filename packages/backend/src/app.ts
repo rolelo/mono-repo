@@ -3,7 +3,7 @@ import {
   ApolloServerPluginLandingPageLocalDefault,
 } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
-import AWS from 'aws-sdk';
+import { S3Client } from "@aws-sdk/client-s3";
 import express from 'express';
 import http from 'http';
 import mongoose from 'mongoose';
@@ -12,7 +12,7 @@ import schema from './schema';
 
 const cors = require('cors');
 
-export const s3Client = new AWS.S3({
+export const s3Client = new S3Client({
   region: "eu-west-1",
 });
 

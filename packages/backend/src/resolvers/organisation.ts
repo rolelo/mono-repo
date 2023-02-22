@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { Context, CreateOrganisationInput, Organisation, User } from '../../../common/models';
 import { s3Client } from '../app';
 
@@ -7,7 +8,7 @@ export const resolvers = {
     async createOrganisationS3PreSignedUrl(
       _, { contentType }) {
           const uuid = uuidv4();
-          const { url, fields } = s3Client.createPresignedPost({
+          const { url, fields } = await createPresignedPost(s3Client, {
             Bucket: process.env.BUCKET_NAME,
             Conditions: [
               { acl: "public-read" },
