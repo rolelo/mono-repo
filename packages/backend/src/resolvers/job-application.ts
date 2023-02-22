@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { ApplicantStatus, Context, IApplicant, JobApplicationInput, Listing, User } from '../../../common/models';
 import { s3Client } from '../app';
+import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 
 export const resolvers = {
   Query: {
@@ -27,7 +28,7 @@ export const resolvers = {
   Mutation: {
     async createCVS3PreSignedUrl(_, { contentType }) {
       const uuid = uuidv4();
-      const { url, fields } = s3Client.createPresignedPost({
+      const { url, fields } = await createPresignedPost(s3Client, {
         Bucket: process.env.BUCKET_NAME,
         Conditions: [
           { acl: "public-read" },
@@ -35,9 +36,9 @@ export const resolvers = {
           ["starts-with", "$key", "cv/"],
           ["eq", "$Content-Type", "application/pdf"],
         ],
+        Key: `cv/${uuid}`,
         Fields: {
           acl: "public-read",
-          key: `cv/${uuid}`,
         },
       });
 

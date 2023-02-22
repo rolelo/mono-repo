@@ -16,9 +16,9 @@ export const resolvers = {
               ["starts-with", "$key", "organisation-logos/"],
               ["starts-with", "$Content-Type", "image/"],
             ],
+            Key: `organisation-logos/${uuid}`,
             Fields: {
               acl: "public-read",
-              key: `organisation-logos/${uuid}`,
             },
           });
 
