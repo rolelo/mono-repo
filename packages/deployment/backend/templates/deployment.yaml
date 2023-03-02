@@ -46,6 +46,8 @@ spec:
               value: a87m5i33iflh7ohm3513ucf4p 
             - name: USERPOOL_ID
               value: eu-west-1_fEieA0sI1
+            - name: ELASTIC_PROTOCOL
+              value: https 
             - name: ELASTIC_CA
               valueFrom:
                 secretKeyRef:
