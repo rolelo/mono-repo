@@ -24,6 +24,10 @@ const ListingDrawer: React.FC<Props> = ({ listing, handleClose }) => {
 
   return (
     <Drawer
+        style={{
+        width: '800px',
+        maxWidth: '80%',
+      }}
       title={listing?.title || ''}
       subtitle="Job Listing"
       open={Boolean(listing)}

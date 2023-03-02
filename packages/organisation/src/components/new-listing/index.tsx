@@ -170,6 +170,39 @@ const NewListing: React.FC = () => {
         backgroundColor: 'white',
       }
     }}>
+      <Box sx={{ flex: 1, marginBottom: '2rem' }}>
+        <Accordion expanded={true}>
+          <AccordionSummary>
+            Clone Previous Jobs
+          </AccordionSummary>
+          <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light, padding: 0 }}>
+            {
+              listings.loading
+                ? <CircularProgress />
+                :
+                <List disablePadding>
+                  {
+                    listings.data?.listings.map(l => (
+                      <ListItem
+                        key={l._id}
+                        disablePadding
+                        style={{
+                          color: theme.palette.background.default
+                        }}>
+                        <ListItemButton
+                          sx={{ padding: '2rem', fontSize: '1.4rem' }}
+                          onClick={() => reset(l)}
+                        >
+                          {l.title}
+                        </ListItemButton>
+                      </ListItem>
+                    ))
+                  }
+                </List>
+            }
+          </AccordionDetails>
+        </Accordion>
+      </Box>
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{
@@ -178,39 +211,6 @@ const NewListing: React.FC = () => {
           flexWrap: "wrap",
           columnGap: "2rem"
         }}>
-        <Box sx={{ flex: 1 }}>
-          <Accordion expanded={true}>
-            <AccordionSummary>
-              Clone Previous Jobs
-            </AccordionSummary>
-            <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light, padding: 0 }}>
-              {
-                listings.loading
-                  ? <CircularProgress />
-                  :
-                  <List disablePadding>
-                    {
-                      listings.data?.listings.map(l => (
-                        <ListItem
-                          key={l._id}
-                          disablePadding
-                          style={{
-                            color: theme.palette.background.default
-                          }}>
-                          <ListItemButton
-                            sx={{ padding: '2rem', fontSize: '1.4rem' }}
-                            onClick={() => reset(l)}
-                          >
-                            {l.title}
-                          </ListItemButton>
-                        </ListItem>
-                      ))
-                    }
-                  </List>
-              }
-            </AccordionDetails>
-          </Accordion>
-        </Box>
         <Box sx={{ flex: 3, display: "flex", flexDirection: "column", rowGap: "2rem" }}>
           <Box sx={{ display: 'flex', flexDirection: 'row', rowGrap: '2rem', columnGap: '2rem' }}>
             <Accordion expanded={true}>

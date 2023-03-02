@@ -25,14 +25,14 @@ const Query = `
 const Mutation = `
   type Mutation {
     createProfile(input: ProfileInput!): Profile!
-    createListing(input: ListingInput!): Listing!
+    createListing(input: ListingInput!): Listing! @auth
     createJobApplication(input: JobApplicationInput!): Applicant! @auth
     createUser: User!
     updateUser: User!
     updateApplicantStatus(input: UpdateApplicationStatusInput!): Applicant!
     createCVS3PreSignedUrl(content: String!): SignedUrl!
     createOrganisationS3PreSignedUrl(content: String!): SignedUrl!
-    createOrganisation(input: CreateOrganisationInput!): Organisation!
+    createOrganisation(input: CreateOrganisationInput!): Organisation! @auth
     deleteOrganisation(_id: String!): String!
   }
 `;

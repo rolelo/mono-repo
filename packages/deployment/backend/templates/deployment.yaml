@@ -46,8 +46,13 @@ spec:
               value: a87m5i33iflh7ohm3513ucf4p 
             - name: USERPOOL_ID
               value: eu-west-1_fEieA0sI1
+<<<<<<< HEAD
             - name: BUCKET_NAME
               value: rolelo-s3stack-rolelepublica15da819-etyrxo1cul1
+=======
+            - name: ELASTIC_PROTOCOL
+              value: https 
+>>>>>>> master
             - name: ELASTIC_CA
               valueFrom:
                 secretKeyRef:
