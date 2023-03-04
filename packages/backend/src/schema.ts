@@ -24,7 +24,7 @@ const Query = `
 
 const Mutation = `
   type Mutation {
-    createProfile(input: ProfileInput!): Profile!
+    createProfile(input: ProfileInput!): Profile! @auth
     createListing(input: ListingInput!): Listing! @auth
     createJobApplication(input: JobApplicationInput!): Applicant! @auth
     createUser: User!
