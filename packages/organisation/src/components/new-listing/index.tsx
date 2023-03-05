@@ -296,25 +296,23 @@ const NewListing: React.FC = () => {
               <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light }}>
                 <Box sx={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
                   <TextField label="Job Title" variant="standard" fullWidth {...register('title')} />
-                  <ReactQuill
-                    placeholder="Provide the job description"
-                    theme="snow"
-                    value={watch('description')}
-                    onChange={(val) => setValue('description', val)}
-                    modules={{
-                      toolbar: []
-                    }}
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="Job Description"
+                    multiline
+                    rows={4}
+                    placeholder={'Provide the job description'}
+                    {...register('description')}
                   />
-                  <ReactQuill
-                    placeholder="Provide the job skills description"
-                    theme="snow"
-                    value={watch('skillsDescription')}
-                    onChange={(val) => setValue('skillsDescription', val)}
-                    modules={{
-                      toolbar: []
-                    }}
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="Provide the job skills description"
+                    multiline
+                    rows={4}
+                    placeholder={'Provide the job skills description'}
+                    {...register('skillsDescription')}
                   />
-                  <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                 <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Exprience Level?</InputLabel>
                     <Controller control={control} name="experienceLevel" render={({
                       field: { onChange, onBlur, ref }

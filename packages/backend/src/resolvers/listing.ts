@@ -15,6 +15,7 @@ import {
   UpdateApplicationStatusInput,
   User,
 } from "../../../common/models";
+import { sendEmail } from "../aws/email-queue";
 import { client } from "../elastic";
 
 export const resolvers = {
@@ -198,6 +199,15 @@ export const resolvers = {
           },
         }
       );
+      const { name, email } = (await User.findById(userId)).toObject()
+      await sendEmail({
+        messageBody: JSON.stringify({
+          name,
+          email,
+        }),
+        messageDeduplicationId: jobId,
+        messageGroupId: "RoleloJobApplicationStatusUpdate",
+      });
 
       return {
         status,

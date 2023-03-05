@@ -27,7 +27,14 @@ const JobApplications = () => {
   const gridRef = useRef<AgGridReact>();
 
   const navigate = useNavigate();
-  const [query, { data }] = useLazyQuery<{ jobApplications: IApplicant[] }>(GET_JOB_APPLICATIONS);
+  const [query, { data, startPolling, stopPolling }] = useLazyQuery<{ jobApplications: IApplicant[] }>(GET_JOB_APPLICATIONS);
+
+  useEffect(() => {
+    startPolling(3000);
+    return () => {
+      stopPolling();
+    };
+  }, [startPolling, stopPolling]);
 
   const defaultColDef = useMemo(() => ({
     sortable: true,
@@ -41,7 +48,9 @@ const JobApplications = () => {
     },
     {
       headerName: 'Application Status', field: 'status', cellRenderer: ({ data }: { data: IApplicant }) => (
-        <Chip label={data.status} color={
+        <Chip label={data.status} sx={{
+          borderRadius: '5px'
+        }} color={
           data.status === ApplicantStatus.PENDING
             ? 'default'
             : data.status === ApplicantStatus.REJECTED
