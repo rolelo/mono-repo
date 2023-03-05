@@ -19,7 +19,6 @@ const ChangePassword = () => {
     mode: 'all',
   });
 
-  console.log(user);
   useEffect(() => {
     Auth.currentAuthenticatedUser()
       .then(r => setUser(r));
@@ -30,7 +29,6 @@ const ChangePassword = () => {
     currentPassword,
     newPassword,
   }): Promise<void> => {
-    console.log("in here");
     await Auth.changePassword(user, currentPassword, newPassword)
       .then(() => {
         toast.success('Password successfully change');

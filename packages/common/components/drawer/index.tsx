@@ -21,7 +21,10 @@ const RDrawer: React.FC<Props> = ({
         padding: '2rem',
         boxSizing: 'border-box',
         backgroundColor: theme.palette.secondary.light,
+        width: '800px',
+        maxWidth: '80%',
         ...style,
+
       },
     }}
   >

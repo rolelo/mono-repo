@@ -347,7 +347,7 @@ const Listing: React.FC = () => {
             <Typography variant='body1' fontWeight='bold'>Health Insurance</Typography>
             <DataView>
               <Typography variant='body2'>
-                Dental Health Insurnce:
+                Dental Health Insurance:
               </Typography>
               {
                 data?.clientListing.dentalHealthInsurance
