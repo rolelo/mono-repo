@@ -1,6 +1,7 @@
 import { UnauthorizedError } from "express-jwt";
 import { v4 as uuidv4 } from "uuid";
 import {
+  ApplicantStatus,
   ClientListingsInput,
   Context,
   IApplicant,
@@ -133,8 +134,7 @@ export const resolvers = {
         hits: +(result.hits.total["value"] || 0),
       };
     },
-    async clientAppliedListings(_parent, _args, { sub }: Context) {
-    },
+    async clientAppliedListings(_parent, _args, { sub }: Context) {},
     async jobApplicants(_, { jobId }: JobApplicationInput, { sub }: Context) {
       const job = await Listing.findById(jobId);
       if (job.createdById !== sub) {
@@ -189,17 +189,20 @@ export const resolvers = {
       _,
       {
         input: { jobId, status, userId },
-      }: { input: UpdateApplicationStatusInput }
+      }: { input: UpdateApplicationStatusInput },
+      { sub }: Context
     ) {
-      await Listing.updateOne(
-        { _id: jobId, "applicants.userId": userId },
-        {
-          $set: {
-            "applicants.$.status": status,
-          },
-        }
-      );
-      const { name, email } = (await User.findById(userId)).toObject()
+      const applicantId = userId || sub
+        userId ||
+        (await Listing.updateOne(
+          { _id: jobId, "applicants.userId": applicantId },
+          {
+            $set: {
+              "applicants.$.status": status || ApplicantStatus.REJECTED,
+            },
+          }
+        ));
+      const { name, email } = (await User.findById(applicantId)).toObject();
       await sendEmail({
         messageBody: JSON.stringify({
           name,

@@ -3,6 +3,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import { ApplicantStatus, IApplicant } from 'common/models';
+import { useUpdateApplicantStatus } from 'common/hooks'; 
 import { format } from 'date-fns';
 import { useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +28,10 @@ const JobApplications = () => {
   const gridRef = useRef<AgGridReact>();
 
   const navigate = useNavigate();
-  const [query, { data, startPolling, stopPolling }] = useLazyQuery<{ jobApplications: IApplicant[] }>(GET_JOB_APPLICATIONS);
+  const [query, { data, startPolling, stopPolling }] = useLazyQuery<{
+    jobApplications: IApplicant[]
+  }>(GET_JOB_APPLICATIONS);
+  const { mutation } = useUpdateApplicantStatus();
 
   useEffect(() => {
     startPolling(3000);
@@ -42,8 +46,17 @@ const JobApplications = () => {
   }), []);
   const columnDefs = useMemo<ColDef[]>(() => ([
     {
-      headerName: 'Job', field: 'jobId', cellRenderer: ({ data }: { data: IApplicant }) => (
-        <Button onClick={() => navigate(`/listing/${data.jobId}`)} size="small" variant="contained" color="primary">View Position</Button>
+      headerName: 'Job', field: 'jobId', cellRenderer: ({
+        data }: { data: IApplicant }) => (
+        <Button
+          onClick={
+            () => navigate(`/listing/${data.jobId}`)
+          }
+          size="small"
+          variant="contained"
+          color="primary">
+          View Position
+        </Button>
       )
     },
     {
@@ -65,6 +78,13 @@ const JobApplications = () => {
             size="small"
             variant="contained"
             color="error"
+            onClick={() => mutation({
+              variables: {
+                input: {
+                  jobId: data.jobId!,
+                }
+              }
+            })}
           >
             <CancelIcon />
           </Button>

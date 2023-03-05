@@ -29,7 +29,7 @@ const Mutation = `
     createJobApplication(input: JobApplicationInput!): Applicant! @auth
     createUser: User!
     updateUser: User!
-    updateApplicantStatus(input: UpdateApplicationStatusInput!): Applicant!
+    updateApplicantStatus(input: UpdateApplicationStatusInput!): Applicant! @auth
     createCVS3PreSignedUrl(content: String!): SignedUrl!
     createOrganisationS3PreSignedUrl(content: String!): SignedUrl!
     createOrganisation(input: CreateOrganisationInput!): Organisation! @auth

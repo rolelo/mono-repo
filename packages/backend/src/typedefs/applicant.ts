@@ -4,8 +4,8 @@ input JobApplicationInput {
 }
 input UpdateApplicationStatusInput {
   jobId: String!
-  userId: String!
-  status: ApplicantStatus!
+  userId: String
+  status: ApplicantStatus
 }
   type Applicant {
     id: String!

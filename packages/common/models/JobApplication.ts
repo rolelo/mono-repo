@@ -12,8 +12,8 @@ export enum ApplicantStatus {
 }
 export type UpdateApplicationStatusInput = {
   jobId: string
-  userId: string
-  status: ApplicantStatus
+  userId?: string
+  status?: ApplicantStatus
 }
 export type IApplicant = {
   id: string;

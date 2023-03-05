@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DoneIcon from '@mui/icons-material/Done';
 import { Box, Button, Chip, CircularProgress } from '@mui/material';
@@ -6,7 +6,8 @@ import { ColDef } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
-import { ApplicantStatus, Listing, ListingApplicant, UpdateApplicationStatusInput } from 'common/models';
+import { ApplicantStatus, Listing, ListingApplicant } from 'common/models';
+import { useUpdateApplicantStatus } from 'common/hooks'
 import { format } from 'date-fns';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -38,14 +39,6 @@ query JobApplicants($jobId: String!) {
 }
 `;
 
-const UPDATE_APPLICANT_STATUS = gql`
-mutation UpdateApplicantStatus($input: UpdateApplicationStatusInput!) {
-  updateApplicantStatus(input: $input) {
-    status
-  }
-}
-`
-
 type Props = {
   handleRowClick: (listing: Listing) => void
 }
@@ -64,9 +57,7 @@ const ApplicantsTable: React.FC<Props> = ({ handleRowClick }) => {
       navigate('/listings');
     }
   });
-  const [mutation] = useMutation<
-    { updateApplicantStatus: ListingApplicant },
-    { input: UpdateApplicationStatusInput }>(UPDATE_APPLICANT_STATUS)
+  const { mutation } = useUpdateApplicantStatus()
 
   useEffect(() => {
     startPolling(3000);
