@@ -7,12 +7,10 @@ import {
   FormControlLabel,
   InputLabel, List,
   ListItem,
-  ListItemButton, MenuItem,
-  TextField,
-  Select,
-  Typography
+  ListItemButton, MenuItem, Select, TextField, Typography
 } from "@mui/material";
 import Backdrop from 'common/components/backdrop';
+import BackdropWithText from 'common/components/backdrop-with-text';
 import CountriesDropdown from 'common/components/countries-dropdown';
 import { useYupValidationResolver } from 'common/hooks';
 import GoogleLogo from 'common/logo/google.png';
@@ -30,11 +28,9 @@ import {
   TechSkills
 } from 'common/models';
 import theme from "common/static/theme";
-import BackdropWithText from 'common/components/backdrop-with-text';
 import React from 'react';
 import CurrencyInput from 'react-currency-input-field';
 import { Controller, useForm } from 'react-hook-form';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
