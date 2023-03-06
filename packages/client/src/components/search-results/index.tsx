@@ -210,6 +210,10 @@ const SearchResults = () => {
       <RDrawer
         open={open}
         onClose={() => setOpen(false)}
+        style={{
+          width: '400px',
+          maxWidth: '80%'
+        }}
         title="Filter"
         subtitle=""
       >
