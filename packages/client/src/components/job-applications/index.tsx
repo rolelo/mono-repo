@@ -75,6 +75,7 @@ const JobApplications = () => {
       headerName: 'Reject Application', field: '', cellRenderer: ({ data }: { data: IApplicant }) => (
         <Box sx={{ display: "flex", height: "100%", flexDirection: "row", columnGap: "1rem", alignItems: "center" }}>
           <Button
+            disabled={data.status === ApplicantStatus.REJECTED}
             size="small"
             variant="contained"
             color="error"
