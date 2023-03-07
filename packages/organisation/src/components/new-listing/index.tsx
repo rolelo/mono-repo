@@ -291,7 +291,7 @@ const NewListing: React.FC = () => {
               </AccordionSummary>
               <AccordionDetails sx={{ backgroundColor: theme.palette.secondary.light }}>
                 <Box sx={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
-                  <TextField label="Job Title" variant="standard" fullWidth {...register('title')} />
+                  <TextField label="Job Title" variant="standard" fullWidth {...register('title')} InputLabelProps={{ shrink: true }} />
                   <TextField
                     id="outlined-multiline-static"
                     label="Job Description"
@@ -299,6 +299,7 @@ const NewListing: React.FC = () => {
                     rows={4}
                     placeholder={'Provide the job description'}
                     {...register('description')}
+                    InputLabelProps={{ shrink: true }}
                   />
                   <TextField
                     id="outlined-multiline-static"
@@ -307,6 +308,7 @@ const NewListing: React.FC = () => {
                     rows={4}
                     placeholder={'Provide the job skills description'}
                     {...register('skillsDescription')}
+                    InputLabelProps={{ shrink: true }}
                   />
                  <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Exprience Level?</InputLabel>
@@ -640,6 +642,7 @@ const NewListing: React.FC = () => {
                     variant="standard"
                     fullWidth
                     {...register('rsus')}
+                    InputLabelProps={{ shrink: true }}
                   />
                   <TextField
                     label="Bonus (up to) %"
@@ -647,6 +650,7 @@ const NewListing: React.FC = () => {
                     variant="standard"
                     fullWidth
                     {...register('bonus')}
+                    InputLabelProps={{ shrink: true }}
                   />
                   <CurrencyInput
                     placeholder="Annual Salary"
@@ -666,6 +670,7 @@ const NewListing: React.FC = () => {
                     variant="standard"
                     fullWidth
                     {...register('workingHoursPerWeek')}
+                    InputLabelProps={{ shrink: true }}
                   />
                   <TextField
                     label="Number of holidays"
@@ -673,6 +678,7 @@ const NewListing: React.FC = () => {
                     variant="standard"
                     fullWidth
                     {...register('numberOfHolidays')}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Box>
               </AccordionDetails>

@@ -92,6 +92,11 @@ const Search: React.FC<Props> = ({ home }) => {
             variant='outlined'
             {...register('description', {
               required: true,
+              minLength: {
+                message: "Description too short",
+                value: 2,
+              },
+              validate: (value) => !!value.trim()
             })}
           />
           <Button variant='contained' size='large'

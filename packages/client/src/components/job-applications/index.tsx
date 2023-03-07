@@ -72,7 +72,7 @@ const JobApplications = () => {
       )
     },
     {
-      headerName: 'Action', field: '', cellRenderer: ({ data }: { data: IApplicant }) => (
+      headerName: 'Reject Application', field: '', cellRenderer: ({ data }: { data: IApplicant }) => (
         <Box sx={{ display: "flex", height: "100%", flexDirection: "row", columnGap: "1rem", alignItems: "center" }}>
           <Button
             size="small"

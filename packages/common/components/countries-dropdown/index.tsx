@@ -36,7 +36,9 @@ const CountriesDropdown: React.FC<Props> = ({ register }) => {
       id="combo-box-demo"
       filterOptions={createFilterOptions({ matchFrom: 'any', limit: 50 })}
       options={options}
-      renderInput={(params) => <TextField variant='standard' {...params} label="Location" {...register()} />}
+      renderInput={(params) => <TextField variant='standard' {...params} label="Location" {...register()}
+      InputLabelProps={{ shrink: true }}
+      />}
     />
   )
 }
