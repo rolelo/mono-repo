@@ -48,7 +48,10 @@ export const resolvers = {
       { sub }: Context
     ): Promise<Profile> => {
       const user = await User.findById(sub);
-      user.profile = input;
+      user.profile = {
+        ...user.profile,
+        cv: input.cv || user.profile?.cv
+      };
       await user.save();
       return input;
     },

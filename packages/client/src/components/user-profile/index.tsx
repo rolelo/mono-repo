@@ -140,7 +140,7 @@ const UserProfile: React.FC = () => {
           rightToWorkInUK,
           rightToWorkInUS,
           techSkills,
-          cv: `${process.env.REACT_APP_S3_BUCKET_URL}/cv/${uuid}` || cv,
+          cv: uuid ? `${process.env.REACT_APP_S3_BUCKET_URL}/cv/${uuid}` : cv,
           salaryLookingFor: +salaryLookingFor,
           yearsOfExperience: +yearsOfExperience,
         }
