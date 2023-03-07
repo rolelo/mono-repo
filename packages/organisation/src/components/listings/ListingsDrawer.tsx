@@ -20,7 +20,7 @@ const ListingDrawer: React.FC<Props> = ({ listing, handleClose }) => {
     }
   }, [listing]);
 
-  const listingUrl = `${process.env.CLIENT_URL}/listing/${listing?._id}`;
+  const listingUrl = `${process.env.REACT_APP_CLIENT_URL}/listing/${listing?._id}`;
 
   return (
     <Drawer
