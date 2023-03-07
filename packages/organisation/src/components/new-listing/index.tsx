@@ -97,11 +97,11 @@ const NewListing: React.FC = () => {
   const handleChange = (checked: boolean, advertisingMedium: AdvertisingMedium) => {
     const advertisingMediumsCloned = getValues().advertisingMediums;
     if (!checked) {
-      const index = advertisingMedium.indexOf(advertisingMedium);
+      const index = advertisingMediumsCloned.indexOf(advertisingMedium);
       if (index > -1) {
         advertisingMediumsCloned.splice(index, 1);
+        setValue('advertisingMediums', advertisingMediumsCloned);
       }
-      setValue('advertisingMediums', advertisingMediumsCloned);
     } else {
       advertisingMediumsCloned.push(advertisingMedium);
     }
@@ -310,7 +310,7 @@ const NewListing: React.FC = () => {
                     {...register('skillsDescription')}
                     InputLabelProps={{ shrink: true }}
                   />
-                 <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <FormControl variant="standard" sx={{ minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Exprience Level?</InputLabel>
                     <Controller control={control} name="experienceLevel" render={({
                       field: { onChange, onBlur, ref }
@@ -713,12 +713,12 @@ const NewListing: React.FC = () => {
       <Backdrop open={loading} />
       <BackdropWithText open={!user?.organisations?.length}>
         <div style={{ display: "flex", flexDirection: 'column', rowGap: '2rem' }}>
-        <Typography variant='h5' textAlign={"center"}>
-          You currently do not have any organisations,
-          <br />
-          please create one in order to be able to create a listing
-        </Typography>
-        <Button variant="contained" onClick={() => navigation('/organisation')}>Create Organisation</Button>
+          <Typography variant='h5' textAlign={"center"}>
+            You currently do not have any organisations,
+            <br />
+            please create one in order to be able to create a listing
+          </Typography>
+          <Button variant="contained" onClick={() => navigation('/organisation')}>Create Organisation</Button>
         </div >
       </BackdropWithText>
     </Box>
