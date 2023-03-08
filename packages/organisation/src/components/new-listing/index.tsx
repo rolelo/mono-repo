@@ -28,6 +28,7 @@ import {
   TechSkills
 } from 'common/models';
 import theme from "common/static/theme";
+import { format } from "date-fns";
 import React from 'react';
 import CurrencyInput from 'react-currency-input-field';
 import { Controller, useForm } from 'react-hook-form';
@@ -186,10 +187,19 @@ const NewListing: React.FC = () => {
                           color: theme.palette.background.default
                         }}>
                         <ListItemButton
-                          sx={{ padding: '2rem', fontSize: '1.4rem' }}
+                          sx={{
+                            padding: '2rem',
+                            fontSize: '1.4rem',
+                            width: '100%',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between'
+                          }}
                           onClick={() => reset(l)}
                         >
                           {l.title}
+                          <span style={{ color: theme.palette.grey[500]}}>
+                          {format(new Date(+l.createdDate), "dd/MM/yyyy")}
+                          </span>
                         </ListItemButton>
                       </ListItem>
                     ))

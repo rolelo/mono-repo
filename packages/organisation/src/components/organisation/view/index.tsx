@@ -6,6 +6,8 @@ import { CircularProgress } from '@mui/material';
 import { ColDef } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
+import { Organisation } from 'common/models';
+import { format } from 'date-fns';
 
 const GET_USER_ORGANISATIONS = gql`
 query GetUser {
@@ -47,7 +49,10 @@ const View: React.FC = () => {
     { headerName: 'Owner', field: 'admin.name' },
     { headerName: 'Website', field: 'website' },
     { headerName: 'Email', field: 'email' },
-    { headerName: 'Created Date', field: 'createdDate' },
+    {
+      headerName: 'Created Date', field: 'createdDate', cellRenderer: ({ data }: { data: Organisation }) => {
+          return format(+data.createdDate, 'dd/MM/yyyy')
+    }  },
     { headerName: 'Total Positions', field: 'totalPositions' },
   ]), []);
 

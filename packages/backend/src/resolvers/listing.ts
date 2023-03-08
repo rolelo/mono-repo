@@ -193,6 +193,10 @@ export const resolvers = {
       { sub }: Context
     ) {
       const applicantId = userId || sub
+      const job = await (await Listing.findById(jobId)).toObject();
+      const applicantApplication = job.applicants.find(a => a.userId === applicantId);
+      if (applicantApplication.status === ApplicantStatus.REJECTED)
+        throw Error('You cannot update the status of a rejected application')
       await Listing.updateOne(
         { _id: jobId, "applicants.userId": applicantId },
         {

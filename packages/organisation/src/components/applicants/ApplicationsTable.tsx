@@ -121,6 +121,7 @@ const ApplicantsTable: React.FC<Props> = ({ handleRowClick }) => {
           <Button
             size="small"
             variant="contained"
+            disabled={data?.status === ApplicantStatus.REJECTED}
             color="success"
             onClick={() => handleUpdateStatus(listingId, data.user.id, ApplicantStatus.LISTED)}
           >
@@ -129,6 +130,7 @@ const ApplicantsTable: React.FC<Props> = ({ handleRowClick }) => {
           <Button
             size="small"
             variant="contained"
+            disabled={data?.status === ApplicantStatus.REJECTED}
             color="error"
             onClick={() => handleUpdateStatus(listingId, data.user.id, ApplicantStatus.REJECTED)}
           >
