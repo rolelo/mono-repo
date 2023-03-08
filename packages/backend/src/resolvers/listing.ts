@@ -193,15 +193,14 @@ export const resolvers = {
       { sub }: Context
     ) {
       const applicantId = userId || sub
-        userId ||
-        (await Listing.updateOne(
-          { _id: jobId, "applicants.userId": applicantId },
-          {
-            $set: {
-              "applicants.$.status": status || ApplicantStatus.REJECTED,
-            },
-          }
-        ));
+      await Listing.updateOne(
+        { _id: jobId, "applicants.userId": applicantId },
+        {
+          $set: {
+            "applicants.$.status": status || ApplicantStatus.REJECTED,
+          },
+        }
+      );
       const { name, email } = (await User.findById(applicantId)).toObject();
       await sendEmail({
         messageBody: JSON.stringify({

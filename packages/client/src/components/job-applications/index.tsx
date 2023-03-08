@@ -93,7 +93,7 @@ const JobApplications = () => {
       ),
     },
     { headerName: 'Created Date', field: 'createdDate', tooltipField: 'createdDate' },
-  ]), [navigate]);
+  ]), [mutation, navigate]);
 
   useEffect(() => {
     query();
