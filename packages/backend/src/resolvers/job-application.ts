@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ApplicantStatus, Context, IApplicant, JobApplicationInput, Listing, User } from '../../../common/models';
 import { s3Client } from '../app';
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
+import { sendEmail } from "../aws/email-queue";
 
 export const resolvers = {
   Query: {
@@ -56,9 +57,10 @@ export const resolvers = {
       const applicationId = uuidv4();
       const user = await User.findById(sub);
       const listing = await Listing.findById(jobId);
+      const listingOwnerUser = await (await User.findById(listing.createdById)).toObject()
       const createdDate = Date.now().toString();
       listing.applicants.push({
-        id: uuidv4(),
+        id: applicationId,
         createdDate,
         userId: sub,
         status: ApplicantStatus.PENDING
@@ -70,7 +72,17 @@ export const resolvers = {
       user.jobApplicants.push(listing.id);
 
       await Promise.all([listing.save(), user.save()]);
-
+      await sendEmail({
+        messageBody: JSON.stringify({
+          email: listingOwnerUser.email,
+          name: listing.createdByName,
+          listingTitle: listing.title,
+          listingUrl: listing._id,
+          cv: user.profile.cv,
+        }),
+        messageGroupId: "RoleloNewApplicant",
+        messageDeduplicationId: applicationId,
+      });
       return {
         id: applicationId,
         createdDate,
