@@ -44,16 +44,17 @@ export const resolvers = {
     ): Promise<IUser> => createUser(sub, name, email, phoneNumber),
     createProfile: async (
       _parent,
-      { input }: { input: Profile },
+      { input: { cv, ...rest} }: { input: Profile },
       { sub }: Context
     ): Promise<Profile> => {
       const user = await User.findById(sub);
       user.profile = {
         ...user.profile,
-        cv: input.cv || user.profile?.cv
+        ...rest,
+        cv: cv || user.profile?.cv
       };
       await user.save();
-      return input;
+      return { cv, ...rest };
     },
   },
   User: {

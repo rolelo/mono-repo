@@ -141,7 +141,6 @@ const ApplicantsTable: React.FC<Props> = ({ handleRowClick }) => {
     },
     { headerName: 'Name', field: 'user.name', tooltipField: 'user.name' },
     { headerName: 'Email', field: 'user.email', tooltipField: 'user.email' },
-    { headerName: 'Phone Number', field: 'user.phoneNumber', tooltipField: 'user.phoneNumber' },
     { headerName: 'RTW UK', field: 'user.profile.rightToWorkInUK', tooltipField: 'user.profile.rightToWorkInUK' },
     { headerName: 'RTW EU', field: 'user.profile.rightToWorkInEU', tooltipField: 'user.profile.rightToWorkInEU' },
     { headerName: 'RTW US', field: 'user.profile.rightToWorkInUS', tooltipField: 'user.profile.rightToWorkInUS' },

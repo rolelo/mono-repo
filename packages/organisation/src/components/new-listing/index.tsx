@@ -672,7 +672,9 @@ const NewListing: React.FC = () => {
                       backgroundColor: theme.palette.grey[200],
                       border: 'none',
                     }}
-                    {...register('salary')}
+                    {...register('salary', {
+                      required: true,
+                    })}
                   />
                   <TextField
                     label="Working hours per week"

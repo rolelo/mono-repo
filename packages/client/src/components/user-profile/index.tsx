@@ -39,12 +39,14 @@ const UserProfile: React.FC = () => {
   const [fileUploaded, setFileUploaded] = useState<SignedUrl & { file: File } | null>(null);
   const [mutation] = useMutation<{ createCVS3PreSignedUrl: SignedUrl }>(GET_SIGNED_URL);
   const [submitForm] = useMutation<Profile, { input: ProfileInput }>(CREATE_PROFILE, {
+    awaitRefetchQueries: true,
     onCompleted: () => {
-      toast.success("Job Application submitted successfully, you can view the status of your request via the online portal.")
+      toast.success("Profile updated")
+      setViewOnly(true);
       handleReset();
     },
     onError: (e) => {
-      toast.error(e instanceof Error ? e.message : 'There was an error creating your profile');
+      toast.error(e instanceof Error ? e.message : 'There was an error updating your profile');
     },
     refetchQueries: [GET_USER]
   });
