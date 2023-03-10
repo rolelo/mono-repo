@@ -53,7 +53,7 @@ const DashboardLayout: React.FC = () => {
       <Container>
         <Navigation user={data?.user || null}
           dropdownLinks={[
-            <MenuItem selected={true} key="New Listing" onClick={() => setOpen(true)}>
+            <MenuItem key="New Listing" onClick={() => setOpen(true)}>
               User Profile
             </MenuItem>,
           ]} appbarLinks={[
