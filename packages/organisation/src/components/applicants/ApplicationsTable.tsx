@@ -145,7 +145,13 @@ const ApplicantsTable: React.FC<Props> = ({ handleRowClick }) => {
     { headerName: 'RTW EU', field: 'user.profile.rightToWorkInEU', tooltipField: 'user.profile.rightToWorkInEU' },
     { headerName: 'RTW US', field: 'user.profile.rightToWorkInUS', tooltipField: 'user.profile.rightToWorkInUS' },
     { headerName: 'Country Of Residence', field: 'user.profile.countryOfResidence', tooltipField: 'user.profile.countryOfResidence' },
-    { headerName: 'Expected Salary', field: 'user.profile.salaryLookingFor', tooltipField: 'user.profile.salaryLookingFor' },
+    {
+      headerName: 'Expected Salary', field: 'user.profile.salaryLookingFor', tooltipField: 'user.profile.salaryLookingFor', cellRenderer: ({ data }: { data: ListingApplicant }) => (
+        <span>{data?.user.profile?.salaryLookingFor.toLocaleString('en-gb', {
+          style: 'currency',
+          currency: 'GBP',
+        })}</span>
+      )},
     { headerName: 'Tech Skills', field: 'user.profile.techSkills', tooltipField: 'user.profile.techSkills' },
     { headerName: 'Years of Experience', field: 'user.profile.yearsOfExperience', tooltipField: 'user.profile.yearsOfExperience' },
     { headerName: 'Created Date', field: 'createdDate', tooltipField: 'createdDate' },
