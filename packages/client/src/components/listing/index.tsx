@@ -268,17 +268,32 @@ const Listing: React.FC = () => {
       </LeftPane>
       <div style={{ boxSizing: 'border-box', flex: '1.2', borderRadius: '8px' }}>
         <RightPane sx={{ padding: '2rem', boxSizing: 'border-box', flex: '1.2', borderRadius: '8px' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{
+            display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',
+            '& > div > img': {
+              width: '150px',
+            },
+            '@media(max-width: 450px)': {
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              textAlign: 'right',
+              alignItems: 'center',
+              '> div > img': {
+                width: '75px',
+              },
+            }
+          }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '2rem', alignItems: 'center', }}>
-              <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" width="70px" />
-              <Typography variant='h4' fontWeight="600">{data?.clientListing.title}</Typography>
+              <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" />
             </Box>
             <Box>
+              <Typography variant='h4' fontWeight="600">{data?.clientListing.title}</Typography>
               <Typography variant="h4" fontWeight="bolder">{data?.clientListing.salary.toLocaleString('en-gb', {
                 style: 'currency',
                 currency: 'GBP',
-              })}</Typography>
-              <Typography variant='h6' textAlign="right">Posted {formatDistance(new Date(), new Date(+(data?.clientListing.createdDate || 0)))} ago</Typography>
+              })}
+              </Typography>
+              <Typography variant='h6'>Posted {formatDistance(new Date(), new Date(+(data?.clientListing.createdDate || 0)))} ago</Typography>
             </Box>
           </Box>
           <Box sx={{ display: "flex", flexDirection: "row", columnGap: "1rem", margin: '2rem 0' }}>
