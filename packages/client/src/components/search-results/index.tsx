@@ -1,6 +1,7 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import styled from "@emotion/styled";
-import { Button, TextField, Typography } from '@mui/material';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import { Button, CircularProgress, TextField, Typography } from '@mui/material';
 import RDrawer from "common/components/drawer";
 import { ClientListingsInput, SearchListing } from "common/models";
 import theme from "common/static/theme";
@@ -85,7 +86,7 @@ const GET_LISTINGS = gql`
 const SearchResults = () => {
   const [open, setOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-
+  
   const { handleSubmit, register, watch, setValue, getValues, formState: { isValid, isDirty } } = useForm<ClientListingsInput>({
     mode: 'all',
     defaultValues: {
@@ -96,7 +97,7 @@ const SearchResults = () => {
     }
   });
 
-  const [query, { data }] = useLazyQuery<
+  const [query, { data, loading }] = useLazyQuery<
     { clientListings: SearchListing },
     { input: ClientListingsInput }>(GET_LISTINGS, {
       nextFetchPolicy: 'network-only',
@@ -121,7 +122,7 @@ const SearchResults = () => {
       },
       fetchPolicy: 'cache-and-network',
     })
-  }, [query, searchParams, es, wt, salary, description, el]);
+  }, [description, el, es, query, salary, wt]);
 
   const onSubmit: SubmitHandler<FieldValues> = ({
     description,
@@ -162,7 +163,7 @@ const SearchResults = () => {
           >
             Find your dream job
           </Typography>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={() => handleSubmit(onSubmit)}>
             <TextField
               placeholder='Search for your desired job'
               color="primary"
@@ -198,13 +199,23 @@ const SearchResults = () => {
       </Wrapper>
       <div>
         {
-          data?.clientListings && (
+          loading && (
+            <CircularProgress color="inherit" />
+          )
+        }
+        {
+          !loading && data?.clientListings && data?.clientListings.hits ? (
             <Results
               hits={data.clientListings.hits}
               listings={data.clientListings.listings}
               handleFilter={() => setOpen(true)}
             />
-          )
+          ) : <></>
+        }
+        {
+          !loading && data?.clientListings && !data?.clientListings.hits ? (
+            <NoResultsFound />
+          ) : <></>
         }
       </div>
       <RDrawer
@@ -222,5 +233,26 @@ const SearchResults = () => {
     </>
   );
 };
+
+const NoResultsFound: React.FC = () => (
+  <div style={{
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '4rem',
+  }}>
+    <div style={{ textAlign: 'center' }}>
+      <SentimentVeryDissatisfiedIcon style={{
+        fontSize: '10rem',
+        marginBottom: '2rem',
+      }} />
+      <Typography variant='h5' fontWeight='bold'>
+        There have been no jobs found matching your search critera.
+      </Typography>
+    </div>
+  </div>
+)
 
 export default SearchResults;

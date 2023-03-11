@@ -3,7 +3,7 @@ import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { alpha, Avatar, Box, Button, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import { IUser, JobApplicationInput, ListingForClient } from 'common/models';
+import { EmploymentStatus, ExperienceLevel, IUser, JobApplicationInput, ListingForClient, WorkPlaceType } from 'common/models';
 import theme from 'common/static/theme';
 import { formatDistance } from 'date-fns';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -282,9 +282,9 @@ const Listing: React.FC = () => {
             </Box>
           </Box>
           <Box sx={{ display: "flex", flexDirection: "row", columnGap: "1rem", margin: '2rem 0' }}>
-            <Chip>{data?.clientListing.workplaceType}</Chip>
-            <Chip>{data?.clientListing.employmentStatus}</Chip>
-            <Chip>{data?.clientListing.experienceLevel}</Chip>
+            <Chip>{data?.clientListing.workplaceType && WorkPlaceType[data.clientListing.workplaceType]}</Chip>
+            <Chip>{data?.clientListing.employmentStatus && EmploymentStatus[data.clientListing.employmentStatus as keyof typeof EmploymentStatus]}</Chip>
+            <Chip>{data?.clientListing.experienceLevel && ExperienceLevel[data.clientListing.experienceLevel as keyof typeof ExperienceLevel ]}</Chip>
           </Box>
           <JobInformation>
             <div style={{ flex: 1 }}>

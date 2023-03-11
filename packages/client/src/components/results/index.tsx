@@ -1,6 +1,5 @@
-import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
-import { alpha, Avatar, Button, IconButton, styled, Typography } from "@mui/material";
-import { ClientListing, EmploymentStatusFriendly, ExperienceLevelFriendly, SearchListing, WorkPlaceType } from 'common/models';
+import { alpha, Avatar, Button, styled, Typography } from "@mui/material";
+import { ClientListing, EmploymentStatusFriendly, ExperienceLevel, ExperienceLevelFriendly, SearchListing, WorkPlaceType } from 'common/models';
 import theme from 'common/static/theme';
 import { formatDistance } from "date-fns";
 import React from 'react';
@@ -128,20 +127,17 @@ const Result: React.FC<ClientListing> = ({
       }}>
         <Chip>
           {
-            //@ts-ignore
-            EmploymentStatusFriendly[employmentStatus]
+            EmploymentStatusFriendly[employmentStatus as keyof typeof EmploymentStatusFriendly]
           }
         </Chip>
         <Chip>
           {
-            //@ts-ignore
-            ExperienceLevelFriendly[experienceLevel]
+            ExperienceLevelFriendly[experienceLevel as keyof typeof ExperienceLevel]
           }
         </Chip>
         <Chip>
           {
-            //@ts-ignore
-            WorkPlaceType[workplaceType]
+            WorkPlaceType[workplaceType as keyof typeof WorkPlaceType]
           }
         </Chip>
       </div>
@@ -158,9 +154,9 @@ const Result: React.FC<ClientListing> = ({
         alignItems: 'center',
       }}>
         <p>{formatDistance(new Date(), new Date(+(createdDate || 0)))} ago</p>
-        <IconButton>
+        {/* <IconButton>
           <BookmarkAddOutlinedIcon />
-        </IconButton>
+        </IconButton> */}
       </div>
     </Button >
   )
@@ -174,16 +170,16 @@ const Results: React.FC<Props> = ({ listings, hits, handleFilter }) => {
       width: "100%",
       padding: '0 2rem',
     }}>
-      <div style={{ display: "flex", margin: "2rem", flexDirection: "row", justifyContent: "space-between"}}>
-      <p style={{
-        color: theme.palette.grey[800],
-        fontSize: '1.2rem',
-        fontWeight: 'bold',
-        position: 'relative'
-      }}>
-        {`${hits} Results found`}
-      </p>
-      <Button variant='contained' color='info' onClick={handleFilter}>Filter</Button>
+      <div style={{ display: "flex", margin: "2rem", flexDirection: "row", justifyContent: "space-between" }}>
+        <p style={{
+          color: theme.palette.grey[800],
+          fontSize: '1.2rem',
+          fontWeight: 'bold',
+          position: 'relative'
+        }}>
+          {`${hits} Results found`}
+        </p>
+        <Button variant='contained' color='info' onClick={handleFilter}>Filter</Button>
       </div>
       <div style={{ flexWrap: 'wrap', display: 'flex', flexDirection: 'row', rowGap: '2rem', columnGap: '2rem' }}>
         {listings.map(l => <Result key={l._id} {...l} />)}
@@ -191,5 +187,7 @@ const Results: React.FC<Props> = ({ listings, hits, handleFilter }) => {
     </div>
   )
 }
+
+
 
 export default Results
