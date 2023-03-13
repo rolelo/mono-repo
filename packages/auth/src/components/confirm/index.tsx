@@ -28,6 +28,7 @@ const Confirm: React.FC = () => {
   });
 
   React.useEffect(() => {
+    console.log(Amplify.userSubject.getValue())
     if (!Amplify.userSubject.getValue()) {
       navigate('/');
     } else {

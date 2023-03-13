@@ -1,5 +1,5 @@
 import PrivateRoute from "common/components/private-route";
-import { useRoutes } from 'react-router-dom';
+import { useRoutes, Navigate } from 'react-router-dom';
 import Auth from '../auth';
 import Confirm from '../confirm';
 import Login from '../login';
@@ -37,6 +37,9 @@ const Routes = () => {
           path: '',
           element: <Login />
         }],
+      }, {
+        path: '',
+        element: <Navigate to="/auth" />,
       }],
     },
   ]);
