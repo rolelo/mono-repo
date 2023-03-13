@@ -242,7 +242,7 @@ const Listing: React.FC = () => {
               {
                 data?.clientListing.alreadyApplied
                   ? "You have already applied for this position"
-                  : !user ? 'Please sign in'
+                  : !user ? 'Sign In To Apply'
                     : !user?.profile ? 'Please create a profile'
                       : 'One click apply'
               }
