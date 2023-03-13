@@ -1,15 +1,15 @@
 import styled from '@emotion/styled';
 import {
-  Button, Divider, Fade, TextField, Typography,
+  Button, Divider, Fade, TextField, Typography
 } from '@mui/material';
+import { Auth } from 'aws-amplify';
 import Amplify from 'common/services/Amplify';
-import React, { useEffect } from 'react';
+import React from 'react';
 import GoogleButton from 'react-google-button';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Auth, Hub } from 'aws-amplify';
 
 export const CustomForm = styled('form')({
   width: '100%',
@@ -37,11 +37,24 @@ type TLogin = {
 
 const Login: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const navigator = useNavigate();
   const mutation = useMutation(({ email, password }: TLogin) => Amplify.login(email, password), {
     onSuccess: () => {
       toast.success('Successfully logged in');
     },
-    onError: (error) => {
+    onError: (error, { email }) => {
+      if (error instanceof Error && error.message === `User is not confirmed.`) {
+        navigator('/auth/confirm')
+        Amplify.userSubject.next({
+          codeDeliveryDetails: {
+            Destination: email
+          },
+          user: {
+             getUsername: () => email
+          }
+        } as any)
+      } 
+      console.log(error instanceof Error && error.message)
       toast.error(error instanceof Error ? error.message : 'Login Error');
     },
   });

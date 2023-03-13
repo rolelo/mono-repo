@@ -38,7 +38,7 @@ const Confirm: React.FC = () => {
   return (
     <Fade in timeout={600}>
       <CustomForm>
-        <div>
+        <div style={{ textAlign: 'center' }}>
           <h1>Please check your email</h1>
           <h2 style={{ fontWeight: '400' }}>
             We have sent a code to
