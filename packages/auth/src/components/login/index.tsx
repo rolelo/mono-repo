@@ -40,8 +40,6 @@ const Login: React.FC = () => {
   const mutation = useMutation(({ email, password }: TLogin) => Amplify.login(email, password), {
     onSuccess: () => {
       toast.success('Successfully logged in');
-      const redirectUrl = searchParams.get('redirectUrl');
-      window.location.href = redirectUrl || process.env.REDIRECT_URL!;
     },
     onError: (error) => {
       toast.error(error instanceof Error ? error.message : 'Login Error');
@@ -50,20 +48,6 @@ const Login: React.FC = () => {
   const { handleSubmit, register } = useForm({
     mode: 'onBlur',
   });
-
-  useEffect(() => {
-    const sub = Hub.listen('auth', ({ payload: { event, data } }) => {
-
-      switch (event) {
-        case 'cognitoHostedUI':
-        case 'customOAuthState':
-          console.log(data, process.env.REACT_APP_CLIENT_URL);
-          window.location.href = typeof data === 'string' ? data : process.env.REACT_APP_CLIENT_URL!;
-      }
-    });
-
-    return sub;
-  }, [])
 
   return (
     <Fade in timeout={600}>

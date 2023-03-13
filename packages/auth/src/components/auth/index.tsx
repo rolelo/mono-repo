@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import AppLogo from 'common/logo/logo.png';
 import Amplify from 'common/services/Amplify';
+import { Hub } from 'aws-amplify';
 
 const Container = styled('div')({
   height: '100vh',
@@ -30,8 +31,29 @@ const Wrapper = styled('div')({
 });
 
 const Auth: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   React.useEffect(() => {
+    Hub.listen('auth', ({ payload }) => {
+      const { event, data } = payload;
+      if (event === 'autoSignIn' || event === 'signIn') {
+        // assign user
+        Amplify.userSignedIn.next(true);
+        Amplify.userInfo.next({ ...data.attributes });
+      } else if (event === 'autoSignIn_failure') {
+        Amplify.userSignedIn.next(false);
+      }
+      // redirect to sign in page
+      switch (event) {
+        case 'signIn':
+          const redirectUrl = searchParams.get('redirectUrl');
+          window.location.href = redirectUrl || process.env.REACT_APP_CLIENT_URL!;
+          break;
+        case 'cognitoHostedUI':
+        case 'customOAuthState':
+          window.location.href = typeof data === 'string' ? data : process.env.REACT_APP_CLIENT_URL!;
+      }
+    });
     const subscription = Amplify.userSubject.subscribe((user) => {
       if (user?.userConfirmed === false) navigate('/auth/confirm');
     });
@@ -43,6 +65,7 @@ const Auth: React.FC = () => {
       userSignedInSubscription.unsubscribe();
     };
   }, [navigate]);
+
   return (
     <Container>
       <Wrapper className="box-shadow">

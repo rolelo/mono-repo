@@ -38,18 +38,6 @@ async function signUp({
   return user;
 }
 
-Hub.listen('auth', ({ payload }) => {
-  const { event, data } = payload;
-  if (event === 'autoSignIn' || event === 'signIn') {
-    // assign user
-    userSignedIn.next(true);
-    userInfo.next({ ...data.attributes });
-  } else if (event === 'autoSignIn_failure') {
-    userSignedIn.next(false);
-  }
-  // redirect to sign in page
-});
-
 async function confirmSignUp(email: string, code: string) {
   await Auth.confirmSignUp(email, code);
 }
