@@ -24,7 +24,6 @@ const Result: React.FC<ClientListing> = ({
   employmentStatus,
   workplaceType,
   createdDate,
-  createdByName,
   salary,
   _id,
 }) => {
@@ -49,10 +48,17 @@ const Result: React.FC<ClientListing> = ({
       }}>
       <div style={{
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
+        rowGap: '2rem',
         padding: '2rem',
         paddingBottom: 0,
+        justifyContent: 'space-between',
+        height: '100%'
       }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+        }}>
         <Avatar
           sx={{
             width: '100px',
@@ -69,27 +75,30 @@ const Result: React.FC<ClientListing> = ({
           padding: "0 2rem",
           display: "flex",
           flex: 1,
-          flexDirection: "column",
+          flexDirection: "row",
           columnGap: "1rem",
         }}>
           <div style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between",
           }}>
             <div style={{
               position: 'relative',
-            }}>
+              }}>
+                <div style={{
+                  height: '50px',
+                  overflow: 'hidden',
+                }}>
               <Typography
                 variant="h6"
                 fontWeight="bolder"
                 textAlign='left'
                 style={{
-                  height: 'fit-content',
                   fontSize: '1.4rem',
                 }}>
                 {title}
               </Typography>
+                </div>
               <Typography
                 textAlign='left'
                 variant="subtitle1"
@@ -99,7 +108,7 @@ const Result: React.FC<ClientListing> = ({
                   position: 'relative',
                   height: 'fit-content'
                 }}>
-                {`${organisationName} - ${createdByName}`}
+                {`${organisationName}`}
               </Typography>
               <Typography
                 textAlign='left'
@@ -123,7 +132,6 @@ const Result: React.FC<ClientListing> = ({
         flexDirection: 'row',
         columnGap: '1rem',
         rowGap: '2rem',
-        padding: '2rem',
       }}>
         <Chip>
           {
@@ -140,6 +148,7 @@ const Result: React.FC<ClientListing> = ({
             WorkPlaceType[workplaceType as keyof typeof WorkPlaceType]
           }
         </Chip>
+        </div>
       </div>
       <div style={{
         display: "flex",
