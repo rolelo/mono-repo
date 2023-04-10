@@ -64,7 +64,6 @@ const GET_LISTINGS = gql`
         createdDate
         createdById
         createdByName
-        jobPostingOperationType
         title
         advertisingMediums
         description

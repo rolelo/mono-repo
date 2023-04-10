@@ -38,6 +38,7 @@ const GET_LISTINGS = gql`
       trainingAndDevelopment
       wellnessPackages
       workFromHomePackage
+      visitors
       applicants {
         id
         createdDate

@@ -79,6 +79,7 @@ interface IListing {
   currency: ListingCurrency!
   techSkills: [String]
   salary: Int!
+  visitors: Int!
 }
 input ListingInput {
   organisationId: String
@@ -148,6 +149,7 @@ input ListingInput {
     workFromHomePackage: Boolean!
     applicants: [Applicant]
     alreadyApplied: Boolean
+    visitors: Int!
   }
   type ClientListing implements IListing {
     _id: String
@@ -173,6 +175,7 @@ input ListingInput {
     currency: ListingCurrency!
     techSkills: [String]
     salary: Int!
+    visitors: Int!
   }
   type SearchListing {
     listings: [ClientListing]

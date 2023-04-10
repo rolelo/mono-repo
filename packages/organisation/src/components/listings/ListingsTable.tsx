@@ -27,6 +27,7 @@ const ListingsTable: React.FC<Props> = ({ handleRowClick }) => {
 
   // Each Column Definition results in one Column.
   const columnDefs = useMemo<ColDef[]>(() => ([
+    { headerName: 'Visitors', field: 'visitors', tooltipField: 'visitors' },
     {
       headerName: 'Created Date', field: '', cellRenderer: ({ data }: { data: Listing }) => (
         <Button onClick={() => navigate(`/listings/${data._id}/applicants`)} size="small" variant="contained" color="primary">View Applicants</Button>

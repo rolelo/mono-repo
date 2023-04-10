@@ -47,14 +47,34 @@ export const resolvers = {
       { id },
       { sub }: Context
     ): Promise<ListingForClient> {
-      const listing = (await Listing.findById(id)).toObject();
+      const listing = await Listing.findById(id);
+      const newVisitorCount = listing.visitors + 1;
+      listing.visitors = newVisitorCount;
+
+      await listing.save();
+      await client.updateByQuery({
+        index: "listings",
+        refresh: true,
+        script: {
+          source: "ctx._source = params",
+          params: {
+            visitors: newVisitorCount,
+          },
+        },
+        query: {
+          match: {
+            listingId: id,
+          },
+        },
+      });
+
       const alreadyApplied = Boolean(
         listing.applicants.find((a) => {
           return a.userId === sub;
         })
       );
       return {
-        ...listing,
+        ...listing.toObject(),
         applicants: [],
         alreadyApplied,
       };
@@ -168,6 +188,7 @@ export const resolvers = {
         createdByName: user.name,
         createdById: sub,
         applicants: [],
+        visitors: 0,
         ...listingBase,
       };
 
@@ -192,11 +213,13 @@ export const resolvers = {
       }: { input: UpdateApplicationStatusInput },
       { sub }: Context
     ) {
-      const applicantId = userId || sub
+      const applicantId = userId || sub;
       const job = await (await Listing.findById(jobId)).toObject();
-      const applicantApplication = job.applicants.find(a => a.userId === applicantId);
+      const applicantApplication = job.applicants.find(
+        (a) => a.userId === applicantId
+      );
       if (applicantApplication.status === ApplicantStatus.REJECTED)
-        throw Error('You cannot update the status of a rejected application')
+        throw Error("You cannot update the status of a rejected application");
       await Listing.updateOne(
         { _id: jobId, "applicants.userId": applicantId },
         {

@@ -118,6 +118,7 @@ export interface ListingSchema extends ListingBase {
   createdById: string
   createdByName: string
   applicants: IApplicant[]
+  visitors: number
 }
 
 export type ListingDocument = Omit<ListingSchema, '_id'> & { listingId: string }
@@ -142,6 +143,7 @@ export interface Listing extends ListingBase {
   createdById: string
   createdByName: string
   applicants: ListingApplicant[]
+  visitors: number
 }
 export interface ListingForClient extends Listing {
   alreadyApplied: boolean
@@ -212,6 +214,7 @@ const listingSchema = new Schema<ListingSchema>({
   trainingAndDevelopment: { type: Boolean, required: true },
   wellnessPackages: { type: Boolean, required: true },
   workFromHomePackage: { type: Boolean, required: true },
+  visitors: { type: Number, required: true, default: 0 }
 });
 export const Listing: Model<ListingSchema> = model(
   "Listing",
