@@ -56,7 +56,7 @@ export const resolvers = {
         index: "listings",
         refresh: true,
         script: {
-          source: "ctx._source = params",
+          source: "ctx._source.visitors = params.visitors",
           params: {
             visitors: newVisitorCount,
           },
