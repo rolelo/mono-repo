@@ -1,7 +1,7 @@
 import { gql, useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import { alpha, Avatar, Box, Button, Typography } from '@mui/material';
+import { alpha, Avatar, Box, Button, CircularProgress, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import { EmploymentStatus, ExperienceLevel, IUser, JobApplicationInput, ListingForClient, WorkPlaceType } from 'common/models';
 import theme from 'common/static/theme';
@@ -155,7 +155,7 @@ const Listing: React.FC = () => {
   const user = useReactiveVar(userVar);
   const { id } = useParams();
   const nav = useNavigate();
-  const { data } = useQuery<{ clientListing: ListingForClient }>(GET_LISTING, {
+  const { data, loading } = useQuery<{ clientListing: ListingForClient }>(GET_LISTING, {
     variables: {
       id,
     },
@@ -172,6 +172,9 @@ const Listing: React.FC = () => {
       toast.error(e instanceof Error ? e.message : 'Something went wrong with applying for position');
     }
   });
+
+  if (loading) return <CircularProgress />;
+
   return (
     <Wrapper>
       <LeftPane>
