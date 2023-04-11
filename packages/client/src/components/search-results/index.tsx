@@ -85,7 +85,7 @@ const GET_LISTINGS = gql`
 const SearchResults = () => {
   const [open, setOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   const { handleSubmit, register, watch, setValue, getValues, formState: { isValid, isDirty } } = useForm<ClientListingsInput>({
     mode: 'all',
     defaultValues: {
@@ -250,6 +250,14 @@ const NoResultsFound: React.FC = () => (
       <Typography variant='h5' fontWeight='bold'>
         There have been no jobs found matching your search critera.
       </Typography>
+      <a
+        href={`${process.env.REACT_APP_CLIENT_URL}/search`}
+        style={{
+          fontSize: '2rem',
+        }}
+      >
+        View Jobs
+      </a>
     </div>
   </div>
 )

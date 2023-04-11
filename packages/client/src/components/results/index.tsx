@@ -59,95 +59,98 @@ const Result: React.FC<ClientListing> = ({
           display: 'flex',
           flexDirection: 'row',
         }}>
-        <Avatar
-          sx={{
-            width: '100px',
-            height: '100px',
-            '& > img': {
-              backgroundColor: theme.palette.grey[200],
-              borderRadius: '0.8rem',
-            }
-          }}
-          color='primary'
-          variant='rounded'
-          src={organisationLogo} />
-        <div style={{
-          padding: "0 2rem",
-          display: "flex",
-          flex: 1,
-          flexDirection: "row",
-          columnGap: "1rem",
-        }}>
+          <Avatar
+            sx={{
+              width: '100px',
+              height: '100px',
+              '& > img': {
+                width: '100px',
+                height: '100px',
+                padding: '10px',
+                backgroundColor: theme.palette.grey[200],
+                borderRadius: '0.8rem',
+              }
+            }}
+            color='primary'
+            variant='rounded'
+            src={organisationLogo} />
           <div style={{
+            padding: "0 2rem",
             display: "flex",
+            flex: 1,
             flexDirection: "row",
+            columnGap: "1rem",
           }}>
             <div style={{
-              position: 'relative',
+              display: "flex",
+              flexDirection: "row",
+            }}>
+              <div style={{
+                position: 'relative',
               }}>
                 <div style={{
                   height: '50px',
                   overflow: 'hidden',
                 }}>
-              <Typography
-                variant="h6"
-                fontWeight="bolder"
-                textAlign='left'
-                style={{
-                  fontSize: '1.4rem',
-                }}>
-                {title}
-              </Typography>
+                  <Typography
+                    variant="h6"
+                    fontWeight="bolder"
+                    textAlign='left'
+                    style={{
+                      fontSize: '1.4rem',
+                    }}>
+                    {title}
+                  </Typography>
                 </div>
-              <Typography
-                textAlign='left'
-                variant="subtitle1"
-                fontWeight="bold"
-                style={{
-                  color: theme.palette.grey[500],
-                  position: 'relative',
-                  height: 'fit-content'
-                }}>
-                {`${organisationName}`}
-              </Typography>
-              <Typography
-                textAlign='left'
-                variant="subtitle1"
-                fontWeight="bold"
-                style={{
-                  position: 'relative',
-                  height: 'fit-content'
-                }}>
-                {salary.toLocaleString('en-gb', {
-                  style: 'currency',
-                  currency: 'GBP',
-                })}
-              </Typography>
+                <Typography
+                  textAlign='left'
+                  variant="subtitle1"
+                  fontWeight="bold"
+                  style={{
+                    color: theme.palette.grey[500],
+                    position: 'relative',
+                    height: 'fit-content'
+                  }}>
+                  {`${organisationName}`}
+                </Typography>
+                <Typography
+                  textAlign='left'
+                  variant="subtitle1"
+                  fontWeight="bold"
+                  style={{
+                    position: 'relative',
+                    height: 'fit-content'
+                  }}>
+                  {salary.toLocaleString('en-gb', {
+                    style: 'currency',
+                    currency: 'GBP',
+                  })}
+                </Typography>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        columnGap: '1rem',
-        rowGap: '2rem',
-      }}>
-        <Chip>
-          {
-            EmploymentStatusFriendly[employmentStatus as keyof typeof EmploymentStatusFriendly]
-          }
-        </Chip>
-        <Chip>
-          {
-            ExperienceLevelFriendly[experienceLevel as keyof typeof ExperienceLevel]
-          }
-        </Chip>
-        <Chip>
-          {
-            WorkPlaceType[workplaceType as keyof typeof WorkPlaceType]
-          }
-        </Chip>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          columnGap: '1rem',
+          rowGap: '2rem',
+        }}>
+          <Chip>
+            {
+              EmploymentStatusFriendly[employmentStatus as keyof typeof EmploymentStatusFriendly]
+            }
+          </Chip>
+          <Chip>
+            {
+              ExperienceLevelFriendly[experienceLevel as keyof typeof ExperienceLevel]
+            }
+          </Chip>
+          <Chip>
+            {
+              WorkPlaceType[workplaceType as keyof typeof WorkPlaceType]
+            }
+          </Chip>
         </div>
       </div>
       <div style={{

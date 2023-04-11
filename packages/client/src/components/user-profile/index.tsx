@@ -104,11 +104,11 @@ const UserProfile: React.FC = () => {
       const { url, fields, file, uuid } = fileUploaded;
       const formData = new FormData();
 
-      formData.append('Content-Type', file.type);
       const fieldsParsed = JSON.parse(fields);
       Object.entries(fieldsParsed).forEach(([k, v]: any) => {
         formData.append(k, v);
       });
+      formData.append('Content-Type', file.type);
       formData.append('file', file);
       await axios(url, {
         method: 'POST',
@@ -118,6 +118,7 @@ const UserProfile: React.FC = () => {
       return uuid;
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Something went wrong when trying to upload your file');
+      throw e
     }
   }
   const onSubmit: SubmitHandler<ProfileInput> = async ({
@@ -125,7 +126,6 @@ const UserProfile: React.FC = () => {
     rightToWorkInEU,
     rightToWorkInUK,
     rightToWorkInUS,
-    cv,
     salaryLookingFor,
     techSkills,
     yearsOfExperience
@@ -142,7 +142,7 @@ const UserProfile: React.FC = () => {
           rightToWorkInUK,
           rightToWorkInUS,
           techSkills,
-          cv: uuid ? `${process.env.REACT_APP_S3_BUCKET_URL}/cv/${uuid}` : cv,
+          cv: uuid ? `${process.env.REACT_APP_S3_BUCKET_URL}/cv/${uuid}` : user?.profile?.cv || '',
           salaryLookingFor: +salaryLookingFor,
           yearsOfExperience: +yearsOfExperience,
         }
@@ -304,7 +304,7 @@ const UserProfile: React.FC = () => {
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
           <FormControl fullWidth>
-            <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-amount">Desired Salary</InputLabel>
             <OutlinedInput
               id="outlined-adornment-amount"
               {...register('salaryLookingFor')}
