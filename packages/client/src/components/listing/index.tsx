@@ -286,8 +286,8 @@ const Listing: React.FC = () => {
               },
             }
           }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '2rem', alignItems: 'center', }}>
-              <img src={data?.clientListing.organisationLogo} alt="Organisation Logo" />
+            <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '2rem', marginRight: '2rem', alignItems: 'center', }}>
+              <img style={{ borderRadius: '2rem' }}  src={data?.clientListing.organisationLogo} alt="Organisation Logo" />
             </Box>
             <Box>
               <Typography variant='h4' fontWeight="600">{data?.clientListing.title}</Typography>

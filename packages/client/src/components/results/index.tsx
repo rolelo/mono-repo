@@ -65,8 +65,7 @@ const Result: React.FC<ClientListing> = ({
               height: '100px',
               '& > img': {
                 width: '100px',
-                height: '100px',
-                padding: '10px',
+                padding: '20px',
                 backgroundColor: theme.palette.grey[200],
                 borderRadius: '0.8rem',
               }
