@@ -63,10 +63,11 @@ const Result: React.FC<ClientListing> = ({
             sx={{
               width: '100px',
               height: '100px',
+              padding: '16px',
+              borderRadius: '0.8rem',
+              backgroundColor: theme.palette.grey[200],
               '& > img': {
                 width: '100px',
-                padding: '20px',
-                backgroundColor: theme.palette.grey[200],
                 borderRadius: '0.8rem',
               }
             }}
