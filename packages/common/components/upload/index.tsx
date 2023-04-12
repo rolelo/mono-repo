@@ -80,6 +80,9 @@ const ImageUpload: React.FC<Props> = ({
           width: '100px',
           height: '100px',
           marginRight: '2rem',
+          '& img': {
+            width: '80%',
+          }
         }}
         color='primary'
         variant='rounded'

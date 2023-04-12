@@ -20,6 +20,7 @@ const GET_USER = gql`
         website,
         email,
         companyDescription
+        companyLogo
       }
     }
   }

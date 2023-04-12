@@ -186,7 +186,6 @@ const Listing: React.FC = () => {
         </Box>
         <Box>
           <div style={{ display: "flex", flexDirection: "row", columnGap: "2rem" }}>
-            <Avatar />
             <div>
               <Typography
                 variant="body1"
@@ -281,13 +280,27 @@ const Listing: React.FC = () => {
               justifyContent: 'space-between',
               textAlign: 'right',
               alignItems: 'center',
-              '> div > img': {
+              '> div > div': {
                 width: '75px',
+                height: '75px'
               },
             }
           }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '2rem', marginRight: '2rem', alignItems: 'center', }}>
-              <img style={{ borderRadius: '2rem' }}  src={data?.clientListing.organisationLogo} alt="Organisation Logo" />
+              <Avatar
+                sx={{
+                  width: '150px',
+                  height: '150px',
+                  padding: '16px',
+                  borderRadius: '0.8rem',
+                  backgroundColor: theme.palette.grey[200],
+                  '& > img': {
+                    width: '80%',
+                    borderRadius: '0.8rem',
+                  }
+                }}
+                src={data?.clientListing.organisationLogo} alt="Organisation Logo"
+              />
             </Box>
             <Box>
               <Typography variant='h4' fontWeight="600">{data?.clientListing.title}</Typography>
@@ -302,7 +315,7 @@ const Listing: React.FC = () => {
           <Box sx={{ display: "flex", flexDirection: "row", columnGap: "1rem", margin: '2rem 0' }}>
             <Chip>{data?.clientListing.workplaceType && WorkPlaceType[data.clientListing.workplaceType]}</Chip>
             <Chip>{data?.clientListing.employmentStatus && EmploymentStatus[data.clientListing.employmentStatus as keyof typeof EmploymentStatus]}</Chip>
-            <Chip>{data?.clientListing.experienceLevel && ExperienceLevel[data.clientListing.experienceLevel as keyof typeof ExperienceLevel ]}</Chip>
+            <Chip>{data?.clientListing.experienceLevel && ExperienceLevel[data.clientListing.experienceLevel as keyof typeof ExperienceLevel]}</Chip>
           </Box>
           <JobInformation>
             <div style={{ flex: 1 }}>

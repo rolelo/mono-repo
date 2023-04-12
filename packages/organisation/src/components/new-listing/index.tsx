@@ -1,5 +1,6 @@
 import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Avatar } from '@mui/material'
 import {
   Accordion, AccordionDetails, AccordionSummary, Box,
   Button,
@@ -197,8 +198,8 @@ const NewListing: React.FC = () => {
                           onClick={() => reset(l)}
                         >
                           {l.title}
-                          <span style={{ color: theme.palette.grey[500]}}>
-                          {format(new Date(+l.createdDate), "dd/MM/yyyy")}
+                          <span style={{ color: theme.palette.grey[500] }}>
+                            {format(new Date(+l.createdDate), "dd/MM/yyyy")}
                           </span>
                         </ListItemButton>
                       </ListItem>
@@ -244,7 +245,19 @@ const NewListing: React.FC = () => {
                       onChange={onChange}
                       ref={ref}
                     >
-                      {user?.organisations.map(({ _id, name }) => (<MenuItem key={_id} value={_id}>{name}</MenuItem>))}
+                      {user?.organisations.map(({ _id, name, companyLogo }) => (
+                        <MenuItem key={_id} value={_id}>
+                          <div style={{ display: 'flex', flexDirection: 'row', columnGap: '1rem', alignItems: 'center' }}>
+                          <Avatar src={companyLogo} sx={{
+                            marginRight: '1rem', borderRadius: '0.8rem',
+                            '& img': {
+                              width: '80%',
+                            }
+                          }} />
+                          {name}
+                          </div>
+                        </MenuItem>
+                      ))}
                     </Select>
                   )} />
                 </FormControl>
