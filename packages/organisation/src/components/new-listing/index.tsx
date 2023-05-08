@@ -1,22 +1,21 @@
 import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Avatar } from '@mui/material'
 import {
-  Accordion, AccordionDetails, AccordionSummary, Box,
+  Accordion, AccordionDetails, AccordionSummary, Avatar, Box,
   Button,
   Checkbox, CircularProgress, FormControl,
   FormControlLabel,
   InputLabel, List,
   ListItem,
   ListItemButton, MenuItem, Select, TextField, Typography
-} from "@mui/material";
+} from '@mui/material';
 import Backdrop from 'common/components/backdrop';
 import BackdropWithText from 'common/components/backdrop-with-text';
 import CountriesDropdown from 'common/components/countries-dropdown';
 import { useYupValidationResolver } from 'common/hooks';
+import LinkedInLogo from 'common/logo/LI-In-Bug.png';
 import GoogleLogo from 'common/logo/google.png';
 import IndeedLogo from 'common/logo/indeed.png';
-import LinkedInLogo from 'common/logo/LI-In-Bug.png';
 import {
   AdvertisingMedium,
   EmploymentStatus,

@@ -3,7 +3,18 @@ import React, { useMemo } from 'react';
 import { useQuery } from 'react-query';
 
 const getCountriesAndCities = async () => {
-  const response = await fetch('https://countriesnow.space/api/v0.1/countries');
+  const response = await fetch('https://countriesnow.space/api/v0.1/countries/cities', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    referrerPolicy: 'no-referrer',
+    redirect: "follow",
+    body: JSON.stringify({
+      country: 'United Kingdom',
+    }),
+  });
   const { data } = await response.json();
   return data;
 }
@@ -22,11 +33,9 @@ const CountriesDropdown: React.FC<Props> = ({ register }) => {
     
     const flattenedData: { label: string, value: string }[] = [];
     for (let i = 0; i <= data.length - 1; i++) { 
-      const country = data[i].country;
-      data[i].cities.forEach((city) => {
-        const label = `${country}, ${city}`;
-        flattenedData.push({ label, value: label })
-      })
+      const cities = data[i];
+      const label = `${cities}, United Kingdom`
+      flattenedData.push({ label, value: label })
     }
   
     return flattenedData;
